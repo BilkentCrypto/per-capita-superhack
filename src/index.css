@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.svg-trigger {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: transform 400ms;
+    user-select: none;
+}
+.svg-trigger path {
+    fill: none;
+    transition: stroke-dasharray 400ms, stroke-dashoffset 400ms;
+    stroke: #333;
+    strokeWidth: 5;
+    strokeLinecap: round;
+}
+.svg-trigger path:nth-child(1) {
+    stroke-dasharray: 40 160;
+}
+.menu-open .svg-trigger path:nth-child(1) {
+    stroke-dashoffset: -64px;
+}
+.svg-trigger path:nth-child(2) {
+    stroke-dasharray: 40 142;
+    transform-origin: 50%;
+    transition: transform 400ms;
+}
+.menu-open .svg-trigger path:nth-child(2) {
+    transform: rotate(90deg);
+}
+.svg-trigger path:nth-child(3) {
+    stroke-dasharray: 40 85;
+    transform-origin: 50%;
+    transition: transform 400ms, stroke-dashoffset 400ms;
+}
+.menu-open .svg-trigger path:nth-child(3) {
+    stroke-dashoffset: -64px;
+}
+.menu-open .svg-trigger {
+    transform: rotate(45deg);
+}
+
+.menu-open #navbar-default {
+    @apply block;
+}
