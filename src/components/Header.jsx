@@ -8,7 +8,7 @@ const Header = () => {
   const location = useLocation();
   return (
     <header className={isNavExpanded ? 'menu-open' : ''}>
-      <nav className="border-gray-200 px-2 sm:px-4 py-2.5 primary-menu left-0 rigt-0 z-20 fixed w-full bg-white border-b">
+      <nav className="border-gray-200 px-2 sm:px-4 py-2.5 primary-menu left-0 rigt-0 z-20 fixed w-full bg-black border-b">
         <div className="container flex flex-wrap justify-between items-center mx-auto">
           <Link
             to="/"
@@ -18,8 +18,8 @@ const Header = () => {
             }}
           >
             <img src="/logo.svg" alt="MonoCarbon" width="30" height="60" className="mr-4" />
-            <span className="self-center text-xl font-bold whitespace-nowrap">
-            Project_Name
+            <span className="self-center text-xl text-white font-bold whitespace-nowrap">
+              Project_Name
             </span>
           </Link>
           <button
@@ -46,8 +46,8 @@ const Header = () => {
                   to="/"
                   className={
                     location.pathname === '/'
-                      ? 'block py-2 pr-4 pl-3 md:p-0'
-                      : 'block py-2 pr-4 pl-3 text-gray-400 md:border-0 md:p-0'
+                      ? 'block py-2 pr-4 text-white font-semibold pl-3 md:p-0'
+                      : 'block py-2 pr-4 pl-3 text-gray-400 font-semibold md:border-0 md:p-0'
                   }
                   onClick={() => {
                     setIsNavExpanded(false);
@@ -76,8 +76,8 @@ const Header = () => {
                   to="/INO"
                   className={
                     location.pathname === '/INO'
-                      ? 'block py-2 pr-4 pl-3 md:p-0'
-                      : 'block py-2 pr-4 pl-3 text-gray-400 md:border-0 md:p-0'
+                      ? 'block py-2 pr-4 pl-3 text-white font-semibold md:p-0'
+                      : 'block py-2 pr-4 pl-3 text-gray-400 font-semibold md:border-0 md:p-0'
                   }
                   onClick={() => {
                     setIsNavExpanded(false);
@@ -91,8 +91,8 @@ const Header = () => {
                   to="/CreateNewNIO"
                   className={
                     location.pathname === '/CreateNewNIO'
-                      ? 'block py-2 pr-4 pl-3 md:p-0'
-                      : 'block py-2 pr-4 pl-3 text-gray-400 md:border-0 md:p-0'
+                      ? 'block py-2 pr-4 pl-3 text-white font-semibold md:p-0'
+                      : 'block py-2 pr-4 pl-3 text-gray-400 font-semibold md:border-0 md:p-0'
                   }
                   onClick={() => {
                     setIsNavExpanded(false);

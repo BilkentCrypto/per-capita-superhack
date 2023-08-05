@@ -3,21 +3,23 @@ import React, { useState, useEffect } from 'react';
 import SvgIcon from '../components/SvgIcon';
 import { retireNft } from '../utils/web3/carbonMarket';
 
-const NftCard = ({ id, price }) => {
+const NftCard = ({ id, price, description, name }) => {
   const [nftData, setNftData] = useState({});
 
   const fetchNftData = async (id) => {
     setNftData({
       id: id,
-      name: 'Collection #' + id,
-      cert_id: id * 52,
+      name: name,
+      description: description,
+      remaining_time: id * 52,
+      price: price,
       image: '/nft.jpeg',
     });
   };
 
-  const retire = async () => {
-      await retireNft(nftData.id);
-  };
+  // const retire = async () => {
+  //     await retireNft(nftData.id);
+  // };
 
   useEffect(() => {
     fetchNftData(id);
@@ -27,7 +29,7 @@ const NftCard = ({ id, price }) => {
     <div className="flex w-full items-center justify-center shadow-2xl">
       <div className="w-full  overflow-hidden rounded-md max-w-sm p-2 flex flex-col">
         <div className="flex items-center justify-center p-2 text-center border-b border-gray-200">
-          <h3 className="text-left text-lg text-black font-semibold text-center">
+          <h3 className=" text-lg text-black font-semibold text-center">
             {nftData.name}
           </h3>
         </div>
@@ -52,12 +54,12 @@ const NftCard = ({ id, price }) => {
             <span>{price}</span>
           </div>
         </div>
-        <div className="w-full text-gray-50">
+        <div className="w-full font-semibold text-gray-50">
           <button
-            onClick={retire}
-            className="w-full flex justify-center items-center rounded bg-[#2a2a2a] p-4 hover:bg-[#F9FAFB] hover:text-black"
+            onClick={null}
+            className="w-full flex justify-center items-center rounded bg-[#2a2a2a] p-4 hover:bg-[#2f1cffd6] hover:text-white"
           >
-            Retire
+            Join
           </button>
         </div>
       </div>

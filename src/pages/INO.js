@@ -2,30 +2,13 @@ import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import NftCard from '../components/NftCard';
 import { getNftList } from '../utils/web3/carbonMarket';
-import { tokenToValue } from '../utils/web3/certificate';
+
 
 function INO() {
   const [query] = useSearchParams();
   const [selectedProvider, setSelectedProvider] = useState(query.get('provider') || '');
   const [nftIDs, setNftIDs] = useState([]);
-
-  const listedNfts = [
-    {
-      id: 11,
-      provider: 'bis',
-      price: 3000,
-    },
-    {
-      id: 9,
-      provider: 'gns',
-      price: 1400,
-    },
-    {
-      id: 202,
-      provider: 'gns',
-      price: 2000,
-    },
-  ];
+  console.log(nftIDs);
 
   const providers = [
     {
@@ -42,15 +25,33 @@ function INO() {
     }
   ];
 
+  const listedNfts = [
+    {
+      id: 1,
+      provider: 'A',
+      price: 3000,
+    },
+    {
+      id: 2,
+      provider: 'G',
+      price: 1400,
+    },
+    {
+      id: 3,
+      provider: 'M',
+      price: 2000,
+    },
+  ];
+  
+
 const asyncGet =  async () =>{
   const nfts = await getNftList();
   let modifiedNfts = [];
-  for(let i=0; i<nfts.length; i++){
-    const price = await tokenToValue(nfts[i]);
+  for(let i=4; i<nfts.length; i++){
     modifiedNfts.push({
-      id: Number(nfts[i]),
-      provider: 'akb',
-      price: Number(price)/10**18
+      id: i,
+      provider: 'G',
+      price: nfts[i].price
     })
   }
   return modifiedNfts.concat(listedNfts);
@@ -73,18 +74,18 @@ const asyncGet =  async () =>{
               <div className="px-3 py-4 overflow-y-auto rounded bg-gray-50 shadow-2xl">
                 <ul className="space-y-2">
                   <li>
-                    <h2 className="p-2 text-lg font-bold">Providers</h2>
+                    <h2 className="p-2 text-lg font-bold">Current INO</h2>
                   </li>
                   <li>
                     <Link
                       to="/INO"
                       className={
-                        'flex items-center p-2 text-gray-900 rounded-lg' +
+                        'flex items-center p-2 bg-gray-50 rounded-lg' +
                         (selectedProvider === '' ? 'hover:bg-gray-100' : '')
                       }
                       onClick={() => setSelectedProvider('')}
                     >
-                      <span className="ml-3">All</span>
+                      <span className="ml-3">Joined INO </span>
                     </Link>
                   </li>
                   {providers.map((provider) => (
