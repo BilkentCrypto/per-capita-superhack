@@ -12,7 +12,7 @@
 .svg-trigger path {
     fill: none;
     transition: stroke-dasharray 400ms, stroke-dashoffset 400ms;
-    stroke: #333;
+    stroke: #ffffff;
     strokeWidth: 5;
     strokeLinecap: round;
 }

@@ -1,5 +1,4 @@
 import { useParams } from 'react-router-dom';
-import Card from '../components/card';
 
 const Detail = () => {
   const { id } = useParams();

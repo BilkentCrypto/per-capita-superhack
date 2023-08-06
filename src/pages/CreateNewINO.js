@@ -9,9 +9,9 @@ const CreateNewNIO = () => {
 
   return (
     <section className=" flex w- items-center justify-center">
-      <div className=" mt-20 items-center overflow-hidden shadow-2xl border-2 border-gray-100 rounded-xl mb-5">
+      <div className=" mt-20  items-center overflow-hidden shadow-2xl border-2 border-gray-100 rounded-xl mb-5">
         <div className="p-10">
-          <div className="border-b mt-10 w-full">
+          <div className="border-b w-full">
             <h1 className="text-xl font-bold text-center pb-2">Create New INO</h1>
           </div>
           <p className="pt-3">Name of the Project</p>
@@ -25,7 +25,7 @@ const CreateNewNIO = () => {
           <p className="pt-3">Description</p>
           <input
             type="text"
-            className="block p-5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Describe the project"
             required
             onChange={(e) => exChange(e)}

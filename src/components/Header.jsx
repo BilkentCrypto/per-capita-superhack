@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import { Link, useLocation } from 'react-router-dom';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
@@ -8,7 +7,7 @@ const Header = () => {
   const location = useLocation();
   return (
     <header className={isNavExpanded ? 'menu-open' : ''}>
-      <nav className="border-black  px-2 sm:px-4 py-2.5 primary-menu left-0 rigt-0 z-20 fixed w-full bg-black border-b">
+      <nav className="border-black px-2 sm:px-4 py-2.5 primary-menu left-0 rigt-0 z-20 fixed w-full bg-black border-b">
         <div className="container flex flex-wrap justify-between items-center mx-auto">
           <Link
             to="/"
@@ -17,7 +16,7 @@ const Header = () => {
               setIsNavExpanded(false);
             }}
           >
-            
+
             <span className="self-center text-xl text-white font-bold font-custom whitespace-nowrap">
               PerCapita
             </span>
@@ -25,7 +24,7 @@ const Header = () => {
           <button
             data-collapse-toggle="navbar-default"
             type="button"
-            className="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden focus:outline-none"
+            className="inline-flex fill-white items-center p-2 ml-3 text-sm  rounded-lg md:hidden focus:outline-none"
             aria-controls="navbar-default"
             aria-expanded="false"
             onClick={() => {
@@ -33,7 +32,7 @@ const Header = () => {
             }}
           >
             <span className="sr-only">Open main menu</span>
-            <svg className="svg-trigger" viewBox="0 0 100 100">
+            <svg className="svg-trigger fill-current text-white" viewBox="0 0 100 100">
               <path d="m 30,33 h 40 c 3.722839,0 7.5,3.126468 7.5,8.578427 0,5.451959 -2.727029,8.421573 -7.5,8.421573 h -20"></path>
               <path d="m 30,50 h 40"></path>
               <path d="m 70,67 h -40 c 0,0 -7.5,-0.802118 -7.5,-8.365747 0,-7.563629 7.5,-8.634253 7.5,-8.634253 h 20"></path>
@@ -132,7 +131,7 @@ const Header = () => {
                 </Link>
               </li> */}
               <li>
-                <ConnectButton className="bg-[#7316ff]"/>
+                <ConnectButton className="bg-[#7316ff]" />
               </li>
             </ul>
           </div>
