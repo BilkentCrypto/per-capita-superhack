@@ -1,12 +1,19 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import NftCard from '../components/NftCard';
-import { getNftList } from '../utils/web3/carbonMarket';
+import { readContract, writeContract } from '@wagmi/core';
+
+import contractAddresses from '../utils/addresses.json';
+import mainContractAbi from '../utils/MainAbi.json';
+import { parseGwei } from 'viem';
+
 
 function INO() {
   const [query] = useSearchParams();
   const [selectedProvider, setSelectedProvider] = useState(query.get('provider') || '');
   const [nftIDs, setNftIDs] = useState([]);
+
+  const [testData, setTestData] = useState();
 
   console.log(nftIDs);
 
@@ -43,34 +50,49 @@ function INO() {
     },
   ];
 
-  const asyncGet = async () => {
-    const nfts = await getNftList();
-    let modifiedNfts = [];
-    for (let i = 4; i < nfts.length; i++) {
-      modifiedNfts.push({
-        id: i,
-        provider: 'G',
-        price: nfts[i].price,
-      });
-    }
-    return modifiedNfts.concat(listedNfts);
-  };
 
-  useEffect(() => {
-    asyncGet().then((i) => {
-      setNftIDs(i);
-    });
-  }, []);
+  //wagmi test
+  const readTest = async () => {
+    const newData = await readContract({
+      address: contractAddresses.Main,
+      abi: mainContractAbi,
+      functionName: 'marketplaces',
+      args: [3]
+    })
+    setTestData(newData);
+  }
+  console.log("data", testData);
+
+  const writeTest = async () => {
+    try {
+      const { hash } = await writeContract({
+        address: contractAddresses.Main,
+        abi: mainContractAbi,
+        functionName: 'beParticipant',
+        args: [3],
+        value: '10000000000',
+      });
+
+      console.log("hash", hash);
+    } catch (e) {
+      console.log("error on write", e);
+    }
+
+  }
+
 
   return (
     <section className="w-full bg-bg-[#02050E] pt-24 md:pt-32 md:min-h-screen relative flex flex-col">
       <div className="container w-full flex bg-red">
         <div className="w-full flex flex-wrap">
           <div className="w-full">
-            <div  className="px-2 py-5 mb-10 items-center">
+            <button onClick={() => readTest()}>Read Button</button>
+            {testData && <div>{testData.toString()}</div>}
+            <button onClick={() => writeTest()}>Write Button</button>
+            <div className="px-2 py-5 mb-10 items-center">
               <div className=" overflow-y-auto rounded-full shadow-zinc-500 shadow-2xl">
                 <ul className="space-y-2">
-                 
+
                   <li className="flex justify-between bg-white rounded-full">
                     <Link
                       to="/INO"

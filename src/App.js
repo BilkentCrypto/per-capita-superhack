@@ -1,7 +1,7 @@
 function App() {
   return (
     <div>
-      <h1 className="underline">Project_Name</h1>
+      <h1 className="underline">PerCapita</h1>
     </div>
   );
 }

@@ -17,7 +17,7 @@ const Header = () => {
             }}
           >
 
-            <span className="self-center text-xl text-white font-bold font-custom whitespace-nowrap">
+            <span className="self-center text-3xl text-white font-bold font-custom whitespace-nowrap">
               PerCapita
             </span>
           </Link>
@@ -55,21 +55,7 @@ const Header = () => {
                   Home
                 </Link>
               </li>
-              {/* <li>
-                <Link
-                  to="/exchange"
-                  className={
-                    location.pathname === '/exchange'
-                      ? 'block py-2 pr-4 pl-3 md:p-0'
-                      : 'block py-2 pr-4 pl-3 text-gray-400 md:border-0 md:p-0'
-                  }
-                  onClick={() => {
-                    setIsNavExpanded(false);
-                  }}
-                >
-                  Exchange
-                </Link>
-              </li> */}
+            
               <li>
                 <Link
                   to="/INO"
@@ -100,36 +86,7 @@ const Header = () => {
                   CreateNewNIO
                 </Link>
               </li>
-              {/* <li>
-                <Link
-                  to="/voting"
-                  className={
-                    location.pathname === '/voting'
-                      ? 'block py-2 pr-4 pl-3 md:p-0'
-                      : 'block py-2 pr-4 pl-3 text-gray-400 md:border-0 md:p-0'
-                  }
-                  onClick={() => {
-                    setIsNavExpanded(false);
-                  }}
-                >
-                  Voting
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/staking"
-                  className={
-                    location.pathname === '/staking'
-                      ? 'block py-2 pr-4 pl-3 md:p-0'
-                      : 'block py-2 pr-4 pl-3 text-gray-400 md:border-0 md:p-0'
-                  }
-                  onClick={() => {
-                    setIsNavExpanded(false);
-                  }}
-                >
-                  Staking
-                </Link>
-              </li> */}
+            
               <li>
                 <ConnectButton className="bg-[#7316ff]" />
               </li>

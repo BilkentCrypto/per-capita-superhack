@@ -3,9 +3,20 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import Layout from './components/Layout';
 import "@rainbow-me/rainbowkit/styles.css";
-import { getDefaultWallets, RainbowKitProvider,lightTheme} from "@rainbow-me/rainbowkit";
-import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
+import { getDefaultWallets, RainbowKitProvider,darkTheme} from "@rainbow-me/rainbowkit";
+
+import { configureChains, createConfig, WagmiConfig } from 'wagmi';
+import {
+  mainnet,
+  polygon,
+  optimism,
+  arbitrum,
+  zora,
+  optimismGoerli,
+} from 'wagmi/chains';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { publicProvider } from 'wagmi/providers/public';
+
 // pages
 import Home from './pages/home.js';
 // import Exchange from './pages/exchange.js';
@@ -20,49 +31,31 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-const MantleNetwork = {
-  id: 5001,
-  name: 'Mantle',
-  network: 'Mantle',
-  iconUrl: 'https://example.com/icon.svg',
-  iconBackground: '#fff',
-  nativeCurrency: {
-    decimals: 18,
-    name: 'Mantle',
-    symbol: 'MNT',
-  },
-  rpcUrls: {
-    default: 'https://rpc.testnet.mantle.xyz',
-  },
-  blockExplorers: {
-    default: { name: 'Mantlescan', url: 'https://explorer.testnet.mantle.xyz' },
-  },
-  testnet: true,
-};
 
-
-//avalancheFUJIChain
-
-const { chains, provider } = configureChains(
-  [MantleNetwork],
-  [jsonRpcProvider({ rpc: chain => ({ http: chain.rpcUrls.default }) })]
+//WAGMI
+const { chains, publicClient } = configureChains(
+  [optimismGoerli],
+  [
+    alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_KEY }),
+    publicProvider()
+  ]
 );
-
 const { connectors } = getDefaultWallets({
-  appName: "Project_Name",
+  appName: 'Per Capita',
+  projectId: 'ebbc27c89ea63989fd5cb0ef3d1a49cd',
   chains
 });
 
-const wagmiClient = createClient({
+const wagmiConfig = createConfig({
   autoConnect: true,
   connectors,
-  provider
-});
+  publicClient
+})
 
 
 root.render(
-  <WagmiConfig client={wagmiClient}>
-    <RainbowKitProvider chains={chains} theme={lightTheme()} coolMode >
+  <WagmiConfig config={wagmiConfig}>
+    <RainbowKitProvider chains={chains} theme={darkTheme()}>
       <React.StrictMode>
         <Router>
           <Layout>

@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import SvgIcon from '../components/SvgIcon';
-import { retireNft } from '../utils/web3/carbonMarket';
 
 const NftCard = ({ id, price, description, name }) => {
   const [nftData, setNftData] = useState({});
@@ -17,9 +16,7 @@ const NftCard = ({ id, price, description, name }) => {
     });
   };
 
-  // const retire = async () => {
-  //     await retireNft(nftData.id);
-  // };
+
 
   useEffect(() => {
     fetchNftData(id);
