@@ -80,6 +80,29 @@ function INO() {
 
   }
 
+  const getSeedTest = async () => {
+    try {
+      const requiredGas = await readContract({
+        address: contractAddresses.Main,
+        abi: mainContractAbi,
+        functionName: 'getRequiredGasForHyperlane'
+      })
+
+      const { hash } = await writeContract({
+        address: contractAddresses.Main,
+        abi: mainContractAbi,
+        functionName: 'sendVRFRequest',
+        args: [32617125],
+        value: requiredGas,
+      });
+
+      console.log("hash", hash);
+    } catch (e) {
+      console.log("error on write", e);
+    }
+
+  }
+
 
   return (
     <section className="w-full bg-bg-[#02050E] pt-24 md:pt-32 md:min-h-screen relative flex flex-col">
@@ -89,6 +112,7 @@ function INO() {
             <button onClick={() => readTest()}>Read Button</button>
             {testData && <div>{testData.toString()}</div>}
             <button onClick={() => writeTest()}>Write Button</button>
+            <button onClick={() => getSeedTest()}>Get Random Seed Test</button>
             <div className="px-2 py-5 mb-10 items-center">
               <div className=" overflow-y-auto rounded-full shadow-zinc-500 shadow-2xl">
                 <ul className="space-y-2">

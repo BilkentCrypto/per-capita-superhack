@@ -61,7 +61,7 @@
 		],
 		"name": "executeGiveaway",
 		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -266,7 +266,7 @@
 		],
 		"name": "sendVRFRequest",
 		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -532,6 +532,19 @@
 			}
 		],
 		"name": "getGiveawayResult",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getRequiredGasForHyperlane",
 		"outputs": [
 			{
 				"internalType": "uint256",
