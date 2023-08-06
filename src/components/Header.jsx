@@ -8,7 +8,7 @@ const Header = () => {
   const location = useLocation();
   return (
     <header className={isNavExpanded ? 'menu-open' : ''}>
-      <nav className="border-gray-200 px-2 sm:px-4 py-2.5 primary-menu left-0 rigt-0 z-20 fixed w-full bg-black border-b">
+      <nav className="border-black  px-2 sm:px-4 py-2.5 primary-menu left-0 rigt-0 z-20 fixed w-full bg-black border-b">
         <div className="container flex flex-wrap justify-between items-center mx-auto">
           <Link
             to="/"
@@ -17,9 +17,9 @@ const Header = () => {
               setIsNavExpanded(false);
             }}
           >
-            <img src="/logo.svg" alt="MonoCarbon" width="30" height="60" className="mr-4" />
-            <span className="self-center text-xl text-white font-bold whitespace-nowrap">
-              Project_Name
+            
+            <span className="self-center text-xl text-white font-bold font-custom whitespace-nowrap">
+              PerCapita
             </span>
           </Link>
           <button
@@ -132,7 +132,7 @@ const Header = () => {
                 </Link>
               </li> */}
               <li>
-                <ConnectButton/>
+                <ConnectButton className="bg-[#7316ff]"/>
               </li>
             </ul>
           </div>

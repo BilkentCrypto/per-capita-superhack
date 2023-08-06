@@ -7,7 +7,11 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        custom: ['MyCustomFont', 'sans'], // 'sans' as fallback font
+      },
+    },
     container: {
       center: true,
     },

@@ -3,17 +3,17 @@ import { Link, useSearchParams } from 'react-router-dom';
 import NftCard from '../components/NftCard';
 import { getNftList } from '../utils/web3/carbonMarket';
 
-
 function INO() {
   const [query] = useSearchParams();
   const [selectedProvider, setSelectedProvider] = useState(query.get('provider') || '');
   const [nftIDs, setNftIDs] = useState([]);
+
   console.log(nftIDs);
 
   const providers = [
     {
       id: 'A',
-      name: 'Art',
+      name: 'Joined INO',
     },
     {
       id: 'G',
@@ -21,8 +21,8 @@ function INO() {
     },
     {
       id: 'M',
-      name: 'Membership'
-    }
+      name: 'Membership',
+    },
   ];
 
   const listedNfts = [
@@ -42,72 +42,60 @@ function INO() {
       price: 2000,
     },
   ];
-  
 
-const asyncGet =  async () =>{
-  const nfts = await getNftList();
-  let modifiedNfts = [];
-  for(let i=4; i<nfts.length; i++){
-    modifiedNfts.push({
-      id: i,
-      provider: 'G',
-      price: nfts[i].price
-    })
-  }
-  return modifiedNfts.concat(listedNfts);
-  // setNftIDs(modifiedNfts.concat(listedNfts));
-}
+  const asyncGet = async () => {
+    const nfts = await getNftList();
+    let modifiedNfts = [];
+    for (let i = 4; i < nfts.length; i++) {
+      modifiedNfts.push({
+        id: i,
+        provider: 'G',
+        price: nfts[i].price,
+      });
+    }
+    return modifiedNfts.concat(listedNfts);
+  };
 
   useEffect(() => {
-    asyncGet().then((i) =>{
+    asyncGet().then((i) => {
       setNftIDs(i);
     });
-
-  }, [])
+  }, []);
 
   return (
-    <section className="w-full pt-24 md:pt-32 md:min-h-screen relative flex flex-col ">
+    <section className="w-full bg-bg-[#02050E] pt-24 md:pt-32 md:min-h-screen relative flex flex-col">
       <div className="container w-full flex bg-red">
         <div className="w-full flex flex-wrap">
-          <div className="w-full md:w-3/12">
-            <aside aria-label="Sidebar" className="px-5">
-              <div className="px-3 py-4 overflow-y-auto rounded bg-gray-50 shadow-2xl">
+          <div className="w-full">
+            <div  className="px-2 py-5 mb-10 items-center">
+              <div className=" overflow-y-auto rounded-full shadow-zinc-500 shadow-2xl">
                 <ul className="space-y-2">
-                  <li>
-                    <h2 className="p-2 text-lg font-bold">Current INO</h2>
-                  </li>
-                  <li>
+                 
+                  <li className="flex justify-between bg-white rounded-full">
                     <Link
                       to="/INO"
-                      className={
-                        'flex items-center p-2 bg-gray-50 rounded-lg' +
-                        (selectedProvider === '' ? 'hover:bg-gray-100' : '')
-                      }
+                      className={`px-4 py-2 rounded-lg font-medium ${selectedProvider === '' ? 'bg-gray-200 rounded-3xl ' : ''}`}
                       onClick={() => setSelectedProvider('')}
                     >
-                      <span className="ml-3">Joined INO </span>
+                      Current INO
                     </Link>
-                  </li>
-                  {providers.map((provider) => (
-                    <li key={provider.id}>
+                    {providers.map((provider) => (
                       <Link
+                        key={provider.id}
                         to={`/INO?provider=${provider.id}`}
-                        className={
-                          'flex items-center p-2 text-gray-900 rounded-lg' +
-                          (selectedProvider === provider ? 'hover:bg-gray-100' : '')
-                        }
+                        className={`px-4 py-2 font-medium rounded-lg ${selectedProvider === provider.id ? 'bg-gray-200 rounded-3xl' : ''}`}
                         onClick={() => setSelectedProvider(provider.id)}
                       >
-                        <span className="ml-3">{provider.name}</span>
+                        {provider.name}
                       </Link>
-                    </li>
-                  ))}
+                    ))}
+                  </li>
                 </ul>
               </div>
-            </aside>
+            </div>
           </div>
-          <div className="w-full md:w-9/12">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
+          <div className="w-full">
+            <div className="grid mt-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
               {nftIDs
                 .filter((nft) => {
                   return selectedProvider === '' ? 'all' : nft.provider === selectedProvider;

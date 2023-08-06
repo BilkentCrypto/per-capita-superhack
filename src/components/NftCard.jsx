@@ -26,8 +26,8 @@ const NftCard = ({ id, price, description, name }) => {
   }, [id]);
 
   return (
-    <div className="flex w-full items-center justify-center shadow-2xl">
-      <div className="w-full  overflow-hidden rounded-md max-w-sm p-2 flex flex-col">
+    <div className="flex w-full bg-white items-center justify-center rounded-2xl shadow-xl">
+      <div className="w-full  overflow-hidden rounded-3xl max-w-sm p-5 flex flex-col">
         <div className="flex items-center justify-center p-2 text-center border-b border-gray-200">
           <h3 className=" text-lg text-black font-semibold text-center">
             {nftData.name}
@@ -47,7 +47,7 @@ const NftCard = ({ id, price, description, name }) => {
             <span className="mr-auto">Price:</span>
             <div className="flex items-center justify-center">
               <span className="text-lg mr-3 text-black"> {nftData.price}</span>
-              <div className="flex items-center justify-center rounded-full w-8 h-8">
+              <div className="flex items-center justify-center rounded-2xl w-8 h-8">
                 <SvgIcon icon="CARBON" className="w-5 h-5" />
               </div>
             </div>
@@ -57,7 +57,7 @@ const NftCard = ({ id, price, description, name }) => {
         <div className="w-full font-semibold text-gray-50">
           <button
             onClick={null}
-            className="w-full flex justify-center items-center rounded bg-[#2a2a2a] p-4 hover:bg-[#2f1cffd6] hover:text-white"
+            className="w-full flex justify-center items-center rounded-2xl bg-[#2a2a2a] p-4 hover:bg-[#7316ff] hover:text-white"
           >
             Join
           </button>
