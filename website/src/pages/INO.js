@@ -11,7 +11,6 @@ import moment from 'moment';
 import { useContractInfiniteReads, paginatedIndexesConfig, useAccount } from 'wagmi';
 
 
-
 function INO() {
   const [query] = useSearchParams();
   const [selectedProvider, setSelectedProvider] = useState(query.get('provider') || '');

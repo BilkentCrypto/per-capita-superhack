@@ -8,13 +8,15 @@ import { convertToImage, getFile, getUri } from '../utils/getWeb3';
 import { writeContract, readContract, waitForTransaction } from '@wagmi/core';
 import TrackEvents from './TrackEvents';
 import { formatEther } from 'viem';
+import DetailFooter from '../components/DetailFooter';
+import Image from '../assets/Image.png'
 
 const EventsModal = ({ id }) => {
   const [showModal, setShowModal] = useState(false);
   return (
     <>
       <button
-        className="bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        className="w-[275px] h-16 p-4 font-semibold bg-purple-600 hover:bg-purple-700  rounded-lg border text-white border-blue-600 justify-center items-start gap-2.5 inline-flex"
         type="button"
         onClick={() => setShowModal(true)}
       >
@@ -44,7 +46,7 @@ const EventsModal = ({ id }) => {
                 </div>
                 {/*body*/}
                 <div className="relative p-6 flex-auto">
-                    <TrackEvents id={id}/>
+                  <TrackEvents id={id} />
                 </div>
                 {/*footer*/}
                 <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
@@ -110,7 +112,7 @@ const Detail = () => {
     watch: true,
   })
 
-  
+
   const requiredGasRequest = useContractRead({
     address: contractAddresses.Main,
     abi: mainContractAbi,
@@ -159,7 +161,7 @@ const Detail = () => {
 
   }
 
-  
+
   const executeGiveaway = async () => {
     try {
       const requiredGas = await readContract({
@@ -205,50 +207,52 @@ const Detail = () => {
 
   }
 
-  
+
 
 
   return (
-    <section className="w-full min-h-screen flex justify-center items-center">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-        <div className="flex flex-col md:flex-row gap-4">
+    <section className="w-full min-h-screen bg-black flex justify-center items-center">
+      <div className="w-full  max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <div className="flex md:mt-20 mt-20 flex-col md:flex-row gap-4">
           <div className=" p-4 flex items-center justify-center w-full md:w-1/2"> {/* Change to w-full md:w-1/2 */}
             {/* Left Card */}
-            <div className="w-48 md:w-56 mt-8 p-2 bg-white shadow-md rounded-lg mx-auto">
+            <div className="w-[585px] h-[508px] p-2 shadow-md rounded-3xl mx-auto">
               <img
-                src={image} // Reduced image size to 200x200
+                src={Image} // Reduced image size to 200x200
                 alt={collectionData?.name}
-                className="w-full h-48 md:h-56 object-cover rounded-t-lg"
+                className="w-full h-full rounded-3xl object-contain"
               />
             </div>
+
           </div>
-          <div className=" p-4 flex items-center justify-center w-full md:w-1/2"> {/* Change to w-full md:w-1/2 */}
+          <div className=" mt-15 p-4 flex items-center justify-center w-full md:w-1/2"> {/* Change to w-full md:w-1/2 */}
             {/* Right Card */}
-            <div className="w-full p-4 bg-white shadow-md rounded-lg">
-              <h1 className="text-xl font-bold text-center mb-4">Collection #{id}</h1>
+            <div className=" max-w-[585px] w-full h-[485px] rounded-3xl mx-auto p-2 bg-black shadow-md">
+              <h1 className="text-white text-5xl font-bold capitalize leading-[63.98px]">Collection #{id}</h1>
               <ul className="space-y-2">
-                <li className="flex justify-between py-2">
-                  <span className="font-bold">Name:</span>
-                  <span>{collectionData?.name}</span>
+                <li className="px-1 flex justify-between py-2">
+                  <span className='text-white text-2xl font-bold'>{collectionData?.name}</span>
                 </li>
-                <li className="flex justify-between py-2">
-                  <span className="font-bold">Description:</span>
-                  <span>{collectionData?.description}</span>
+                <li className="flex px-1 justify-between py-1">
+                  <span className='w-[574px] text-slate-400 text-base font-normal leading-loose'>{collectionData?.description}</span>
                 </li>
-                <li className="flex justify-between py-2">
-                  <span className="font-bold">Remaining Time:</span>
+                <li className="flex flex-col px-1 text-white py-1">
+                  <span className="font-bold text-slate-400">Remaining Time</span>
                   <span>{moment.unix(collectionData?.giveawayTime.toString()).toString()}</span>
                 </li>
+                <li className="flex flex-col px-1 text-white py-1">
+                  <span className="font-bold text-slate-400 ">Join Price</span>
+                  <span className="text-white font-semibold">{formatEther(collectionData?.price)} ETH</span>
+                </li>
+
               </ul>
-              <div className="flex items-center justify-center mt-5">
+              <div className="flex items-start gap-5 justify-start mt-5">
                 {!isParticipated && collectionData?.giveawayTime > moment().unix() ? <button
                   onClick={handleBeParticipant}
-                  className="flex items-center text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-3xl text-lg align-center"
+                  className="w-[275px] h-16 p-4 bg-blue-600 rounded-lg justify-center items-start gap-2.5 inline-flex text-white hover:bg-indigo-600 text-lg align-center"
                 >
-                  <span className="mr-2 font-semibold">Join</span>
-                  <span className="bg-white flex items-center rounded-3xl px-2 py-1">
-                    <span className="text-black font-semibold">{formatEther( collectionData?.price)} ETH</span>
-                  </span>
+                  <span className=" font-semibold">Join</span>
+                
                 </button> : null}
 
                 {collectionData?.giveawayTime < moment().unix() && !collectionData?.isDistributed ? <button
@@ -257,7 +261,7 @@ const Detail = () => {
                 >
                   <span className="mr-2 font-semibold">Execute</span>
                   <span className="bg-white flex items-center rounded-3xl px-2 py-1">
-                    <span className="text-black font-semibold">{formatEther( requiredGas)} ETH</span>
+                    <span className="text-black font-semibold">{formatEther(requiredGas)} ETH</span>
                   </span>
                 </button> : null}
 
@@ -267,7 +271,7 @@ const Detail = () => {
                 >
                   <span className="mr-2 font-semibold">Claim Deposit</span>
                   <span className="bg-white flex items-center rounded-3xl px-2 py-1">
-                    <span className="text-black font-semibold">{formatEther( collectionData?.price)} ETH</span>
+                    <span className="text-black font-semibold">{formatEther(collectionData?.price)} ETH</span>
                   </span>
                 </button> : null}
 
@@ -281,13 +285,17 @@ const Detail = () => {
                   </span>
                 </button> : null}
 
-                <EventsModal id ={id}/>
+                <EventsModal id={id} />
               </div>
-
+             
             </div>
 
           </div>
-        </div>
+        </div> 
+        
+        <div className="flex justify-center  space-x-4 md:mt-20">
+            <DetailFooter/>
+            </div>
       </div>
     </section>
   );
