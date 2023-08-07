@@ -5,7 +5,10 @@ import { readContract, writeContract } from '@wagmi/core';
 
 import contractAddresses from '../utils/addresses.json';
 import mainContractAbi from '../utils/MainAbi.json';
-import { parseGwei } from 'viem';
+import { formatEther, parseGwei } from 'viem';
+import { formatUnits } from 'viem';
+import { BeParticipantTest } from './BeParticipantTest';
+
 
 
 function INO() {
@@ -57,11 +60,14 @@ function INO() {
       address: contractAddresses.Main,
       abi: mainContractAbi,
       functionName: 'marketplaces',
-      args: [3]
+      args: [1]
     })
+    console.log(formatUnits(newData?.[5], 18).toString());
     setTestData(newData);
   }
   console.log("data", testData);
+ 
+
 
   const writeTest = async () => {
     try {
@@ -113,6 +119,7 @@ function INO() {
             {testData && <div>{testData.toString()}</div>}
             <button onClick={() => writeTest()}>Write Button</button>
             <button onClick={() => getSeedTest()}>Get Random Seed Test</button>
+            <BeParticipantTest/>
             <div className="px-2 py-5 mb-10 items-center">
               <div className=" overflow-y-auto rounded-full shadow-zinc-500 shadow-2xl">
                 <ul className="space-y-2">

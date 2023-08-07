@@ -1,7 +1,36 @@
 import Typed from 'react-typed';
+import { useEffect, useState } from 'react';
 import Card from './Card';
+import contractAddresses from '../utils/addresses.json';
+import mainContractAbi from '../utils/MainAbi.json';
+import { formatEther, parseGwei } from 'viem';
+import { formatUnits } from 'viem';
+import { readContract, writeContract } from '@wagmi/core';
+
+
 
 function Home() {
+  const [priceData, setPrice] = useState();
+  const [nameData, setName] = useState();
+
+  
+  const readTest = async () => {
+    const newData = await readContract({
+      address: contractAddresses.Main,
+      abi: mainContractAbi,
+      functionName: 'marketplaces',
+      args: [1]
+    })
+    console.log(formatUnits(newData?.[5], 18).toString());
+    setPrice(formatUnits(newData?.[5], 18).toString());
+    setName((newData?.[1]).toString());
+
+    //setTestData(newData);
+  }
+  useEffect(() => {
+    readTest();
+  });
+  
   return (
     <>
       <section className="w-full pt-24 md:pt-0 md:h-screen bg-[#02050E] relative flex flex-col md:flex-row justify-center items-center">
@@ -27,7 +56,8 @@ function Home() {
         </div>
         <div className="lg:max-w-lg lg:w-5/12 md:w-1/2 w-5/6 mb-6 md:mt-10 max-w-[400px]">
           <div style={{ width: '100%', maxWidth: '400px', height: '400px' }}>
-            <Card imageUrl="./images/IMG.png" price="$99.99" nftName="Hamlet NFT" />
+            <Card imageUrl="./images/IMG.png" price={priceData} nftName={nameData} />
+
           </div>
         </div>
       </section>

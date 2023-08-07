@@ -10,7 +10,7 @@ const Card = ({ imageUrl, nftName, price }) => {
       />
       <div className="w-full flex items-center justify-between">
         <p className="text-white text-left text-xl font-medium">{nftName}</p>
-        <p className="text-white text-base font-medium">{price}</p>
+        <p className="text-white flex text-base font-medium gap-2">{price} <p>ETH </p></p>
       </div>
       <div className="flex items-center">
         <button className="bg-[#7316ff] mt-2 text-white text-base font-medium px-4 py-2 rounded-lg">
