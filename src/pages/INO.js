@@ -7,6 +7,7 @@ import mainContractAbi from '../utils/MainAbi.json';
 import { formatEther, parseGwei } from 'viem';
 import { formatUnits } from 'viem';
 import { BeParticipantTest } from './BeParticipantTest';
+import Card from '../components/Card';
 
 
 
@@ -52,8 +53,10 @@ function INO() {
     },
   ];
 
+  const [priceData, setPrice] = useState();
+  const [nameData, setName] = useState();
 
-  //wagmi test
+  
   const readTest = async () => {
     const newData = await readContract({
       address: contractAddresses.Main,
@@ -61,10 +64,17 @@ function INO() {
       functionName: 'marketplaces',
       args: [1]
     })
-    console.log(formatUnits(newData?.[5], 18).toString());
-    setTestData(newData);
+    console.log(formatUnits(newData?.[6], 18).toString());
+    setPrice(formatUnits(newData?.[6], 18).toString());
+    setName((newData?.[1]).toString());
+
+    //setTestData(newData);
   }
-  console.log("data", testData);
+  useEffect(() => {
+    readTest();
+  });
+  //wagmi test
+  
  
 
 
@@ -148,13 +158,10 @@ function INO() {
           </div>
           <div className="w-full">
             <div className="grid mt-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-              {nftIDs
-                .filter((nft) => {
-                  return selectedProvider === '' ? 'all' : nft.provider === selectedProvider;
-                })
-                .map((listedNft) => {
-                  return <NftCard id={listedNft.id} price={listedNft.price} key={listedNft.id} />;
-                })}
+            <Card imageUrl="./images/IMG.png" price={priceData} nftName={nameData} />
+            <Card imageUrl="./images/IMG.png" price={priceData} nftName={nameData} />
+            <Card imageUrl="./images/IMG.png" price={priceData} nftName={nameData} />
+            <Card imageUrl="./images/IMG.png" price={priceData} nftName={nameData} />
             </div>
           </div>
         </div>

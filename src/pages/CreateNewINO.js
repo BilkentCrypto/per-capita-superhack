@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { writeContract } from '@wagmi/core';
 import contractAddresses from '../utils/addresses.json';
 import mainContractAbi from '../utils/MainAbi.json';
+import { parseEther } from 'viem';
 
 const CreateNewNIO = () => {
   const [marketplaceURI, setMarketplaceURI] = useState(''); //sets name
@@ -43,6 +44,10 @@ const CreateNewNIO = () => {
 
   const handleGiveawayTime = (e) => {
     setGiveawayTime(e.target.value);
+    var dateObj = new Date(giveawayTime);
+    var epochTime = dateObj.getTime();
+    epochTime = Math.floor(epochTime / 1000);
+    console.log(epochTime);
   };
 
   const handleContract = (e) => {
@@ -50,7 +55,7 @@ const CreateNewNIO = () => {
   };
 
   const handlePrice = (e) => {
-    setPrice(e.target.value);
+    setPrice(parseEther(e.target.value));
   };
 
   const handleTo = (e) => {
@@ -83,9 +88,10 @@ const CreateNewNIO = () => {
           />
           <p className="pt-3">Giveaway Time</p>
           <input
-            type="text"
+            type="datetime-local" 
+            id="meeting-time"
             className="block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Giveaway deadline"
+            label="Giveaway deadline"
             required
             onChange={(e) => handleGiveawayTime(e)}
           />
@@ -97,12 +103,12 @@ const CreateNewNIO = () => {
             required
             onChange={(e) => handleContract(e)}
           />
-          <p className="pt-2 font">NFT Price</p>
+          <p className="pt-2 font">NFT Price (in ETH)</p>
 
           <input
             type="text"
             className="block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Price"
+            placeholder="Price in ETH"
             required
             onChange={(e) => handlePrice(e)}
           />
