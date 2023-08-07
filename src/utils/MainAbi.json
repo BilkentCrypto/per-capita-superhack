@@ -2,71 +2,6 @@
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "marketplaceId",
-				"type": "uint256"
-			}
-		],
-		"name": "addAllNFTstoMarketplace",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "marketplaceId",
-				"type": "uint256"
-			}
-		],
-		"name": "beParticipant",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "marketplaceId",
-				"type": "uint256"
-			}
-		],
-		"name": "claimNFT",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "marketplaceId",
-				"type": "uint256"
-			}
-		],
-		"name": "claimPrice",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "marketplaceId",
-				"type": "uint256"
-			}
-		],
-		"name": "executeGiveaway",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
 				"internalType": "address",
 				"name": "_L1_VRF_RECEIVER_ADDRESS",
 				"type": "address"
@@ -81,12 +16,17 @@
 		"type": "constructor"
 	},
 	{
+		"inputs": [],
+		"name": "InvalidNullifier",
+		"type": "error"
+	},
+	{
 		"anonymous": false,
 		"inputs": [
 			{
 				"indexed": true,
 				"internalType": "string",
-				"name": "uri",
+				"name": "name",
 				"type": "string"
 			},
 			{
@@ -98,39 +38,6 @@
 		],
 		"name": "CollectionCreated",
 		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_marketplaceURI",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_giveawayTime",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "_contractAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_price",
-				"type": "uint256"
-			},
-			{
-				"internalType": "address",
-				"name": "_transferPricesTo",
-				"type": "address"
-			}
-		],
-		"name": "createGiveawayMarketplace",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -178,40 +85,6 @@
 		"type": "event"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "operator",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "from",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "tokenId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bytes",
-				"name": "data",
-				"type": "bytes"
-			}
-		],
-		"name": "onERC721Received",
-		"outputs": [
-			{
-				"internalType": "bytes4",
-				"name": "",
-				"type": "bytes4"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -244,6 +117,56 @@
 		"type": "event"
 	},
 	{
+		"inputs": [],
+		"name": "L1_VRF_RECEIVER_ADDRESS",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "L2_VRF_BROADCAST_ADDRESS",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "NFTsOfMarketplaces",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -251,53 +174,7 @@
 				"type": "uint256"
 			}
 		],
-		"name": "renounceOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "marketplaceID",
-				"type": "uint256"
-			}
-		],
-		"name": "sendVRFRequest",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes",
-				"name": "parameters",
-				"type": "bytes"
-			}
-		],
-		"name": "submitMock",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes",
-				"name": "parameters",
-				"type": "bytes"
-			}
-		],
-		"name": "submitRandomSeed",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "withdraw",
+		"name": "addAllNFTstoMarketplace",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -322,6 +199,111 @@
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "marketplaceId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "root",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "nullifierHash",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256[8]",
+				"name": "proof",
+				"type": "uint256[8]"
+			}
+		],
+		"name": "beParticipant",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "marketplaceId",
+				"type": "uint256"
+			}
+		],
+		"name": "claimNFT",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "marketplaceId",
+				"type": "uint256"
+			}
+		],
+		"name": "claimPrice",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_description",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_giveawayTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_contractAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_price",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_transferPricesTo",
+				"type": "address"
+			}
+		],
+		"name": "createGiveawayMarketplace",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "marketplaceId",
+				"type": "uint256"
+			}
+		],
+		"name": "executeGiveaway",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "fetchAllMarketplaces",
 		"outputs": [
@@ -334,7 +316,12 @@
 					},
 					{
 						"internalType": "string",
-						"name": "marketplaceURI",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
 						"type": "string"
 					},
 					{
@@ -410,7 +397,12 @@
 					},
 					{
 						"internalType": "string",
-						"name": "marketplaceURI",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
 						"type": "string"
 					},
 					{
@@ -556,32 +548,6 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "L1_VRF_RECEIVER_ADDRESS",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "L2_VRF_BROADCAST_ADDRESS",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -598,7 +564,12 @@
 			},
 			{
 				"internalType": "string",
-				"name": "marketplaceURI",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "description",
 				"type": "string"
 			},
 			{
@@ -679,25 +650,35 @@
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
 			},
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "tokenId",
 				"type": "uint256"
+			},
+			{
+				"internalType": "bytes",
+				"name": "data",
+				"type": "bytes"
 			}
 		],
-		"name": "NFTsOfMarketplaces",
+		"name": "onERC721Received",
 		"outputs": [
 			{
-				"internalType": "uint256",
+				"internalType": "bytes4",
 				"name": "",
-				"type": "uint256"
+				"type": "bytes4"
 			}
 		],
-		"stateMutability": "view",
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -732,6 +713,99 @@
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "marketplaceId",
+				"type": "uint256"
+			}
+		],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "marketplaceID",
+				"type": "uint256"
+			}
+		],
+		"name": "sendVRFRequest",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes",
+				"name": "parameters",
+				"type": "bytes"
+			}
+		],
+		"name": "submitMock",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bytes",
+				"name": "parameters",
+				"type": "bytes"
+			}
+		],
+		"name": "submitRandomSeed",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "marketplaceId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "root",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "nullifierHash",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256[8]",
+				"name": "proof",
+				"type": "uint256[8]"
+			}
+		],
+		"name": "verifyTest",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "withdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]
