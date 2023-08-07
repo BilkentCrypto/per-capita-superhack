@@ -18,13 +18,13 @@ import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 
 // pages
-import Home from './pages/home.js';
+import Home from './pages/home';
 // import Exchange from './pages/exchange.js';
-import INO from './pages/INO.js';
-import Detail from './pages/detail.js';
-import CreateNewNIO from './pages/CreateNewINO.js';
-import TrackEvents from './pages/trackEvents.js';
-import Error from './pages/error.js';
+import INO from './pages/INO';
+import Detail from './pages/detail';
+import CreateNewNIO from './pages/CreateNewINO';
+import TrackEvents from './pages/TrackEvents';
+import Error from './pages/error';
 // import Voting from './pages/voting.js';
 // import Staking from './pages/staking.js';
 
