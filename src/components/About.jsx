@@ -1,3 +1,4 @@
+// About.js
 import React from 'react';
 import AboutCard from '../components/AboutCard';
 
@@ -7,7 +8,7 @@ const About = () => {
       <h1 className="text-4xl mt-15 hidden md:block px-10 ml-10 md:text-5xl font-bold text-white mb-8 md:mt-0">
         Join and Create NFT Distribution
       </h1>
-      <div className="flex flex-col md:flex-row justify-center gap-6 w-full max-w-7xl mx-auto px-4 items-center">
+      <div className="flex flex-wrap justify-center gap-4 w-full max-w-7xl mx-auto px-4 items-center">
         <AboutCard
           logo="./images/nft.png"
           title="Use WorldCoin"
@@ -29,3 +30,4 @@ const About = () => {
 };
 
 export default About;
+

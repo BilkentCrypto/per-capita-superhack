@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import NftCard from '../components/NftCard';
 import { readContract, writeContract } from '@wagmi/core';
-
 import contractAddresses from '../utils/addresses.json';
 import mainContractAbi from '../utils/MainAbi.json';
 import { formatEther, parseGwei } from 'viem';

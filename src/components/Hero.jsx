@@ -21,8 +21,8 @@ function Home() {
       functionName: 'marketplaces',
       args: [1]
     })
-    console.log(formatUnits(newData?.[5], 18).toString());
-    setPrice(formatUnits(newData?.[5], 18).toString());
+    console.log(formatUnits(newData?.[6], 18).toString());
+    setPrice(formatUnits(newData?.[6], 18).toString());
     setName((newData?.[1]).toString());
 
     //setTestData(newData);
@@ -39,7 +39,7 @@ function Home() {
             NFT distribution that is{' '}
           </h1>
           <Typed
-            className="py-3 max-w[200px] text-5xl md:text-4xl lg:text-[5.5rem] xl:text-[6.5rem] 2xl:text-7xl md:max-w-[400px] bg-clip-text font-extrabold  text-transparent bg-gradient-to-r from-[#7316ff] to-[#f813e1]"
+            className="py-3 max-w[200px] text-5xl md:text-6xl bg-clip-text font-extrabold  text-transparent bg-gradient-to-r from-[#7316ff] to-[#f813e1]"
             strings={['fair.', 'decentralized.', 'fast.']}
             typeSpeed={120}
             backSpeed={140}

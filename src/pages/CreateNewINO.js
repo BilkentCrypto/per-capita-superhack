@@ -1,11 +1,62 @@
 import { useState } from 'react';
+import { writeContract } from '@wagmi/core';
+import contractAddresses from '../utils/addresses.json';
+import mainContractAbi from '../utils/MainAbi.json';
 
 const CreateNewNIO = () => {
-  const [ex, setEx] = useState('');
+  const [marketplaceURI, setMarketplaceURI] = useState(''); //sets name
+  const [description, setDescription] = useState('');
+  const [giveawayTime, setGiveawayTime] = useState('');
+  const [contractAddr, setContractAddr] = useState('');
+  const [price, setPrice] = useState('');
+  const [to, setTo] = useState('');
 
-  const exChange = (e) => {
-    setEx(e.target.value);
+  const createNewINO = async () => {
+    try {
+      const { hash } = await writeContract({
+        address: contractAddresses.Main,
+        abi: mainContractAbi,
+        functionName: 'createGiveawayMarketplace',
+        args: [
+          marketplaceURI,
+          description,
+          giveawayTime,
+          contractAddr,
+          price,
+          to
+        ]
+      });
+      console.log(hash);
+    } catch (e) {
+      console.log(marketplaceURI)
+      console.log("error on creating new INO!", e);
+    }
+  }
+
+  const handleMarketplace = (e) => {
+    setMarketplaceURI(e.target.value);
   };
+
+  const handleDescription = (e) => {
+    setDescription(e.target.value);
+  };
+
+  const handleGiveawayTime = (e) => {
+    setGiveawayTime(e.target.value);
+  };
+
+  const handleContract = (e) => {
+    setContractAddr(e.target.value);
+  };
+
+  const handlePrice = (e) => {
+    setPrice(e.target.value);
+  };
+
+  const handleTo = (e) => {
+    setTo(e.target.value);
+  };
+
 
   return (
     <section className=" flex w- items-center justify-center">
@@ -20,15 +71,23 @@ const CreateNewNIO = () => {
             className="block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Project's Name"
             required
-            onChange={(e) => exChange(e)}
+            onChange={(e) => handleMarketplace(e)}
           />
           <p className="pt-3">Description</p>
           <input
             type="text"
             className="block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Describe the project"
+            placeholder="Project's description"
             required
-            onChange={(e) => exChange(e)}
+            onChange={(e) => handleDescription(e)}
+          />
+          <p className="pt-3">Giveaway Time</p>
+          <input
+            type="text"
+            className="block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Giveaway deadline"
+            required
+            onChange={(e) => handleGiveawayTime(e)}
           />
           <p className="pt-3">NFT Contract Address</p>
           <input
@@ -36,7 +95,7 @@ const CreateNewNIO = () => {
             className="block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Contract Address"
             required
-            onChange={(e) => exChange(e)}
+            onChange={(e) => handleContract(e)}
           />
           <p className="pt-2 font">NFT Price</p>
 
@@ -45,11 +104,21 @@ const CreateNewNIO = () => {
             className="block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Price"
             required
-            onChange={(e) => exChange(e)}
+            onChange={(e) => handlePrice(e)}
+          />
+
+          <p className="pt-2 font">Fund Collector address</p>
+
+          <input
+            type="text"
+            className="block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Funded Address"
+            required
+            onChange={(e) => handleTo(e)}
           />
           <button
-            onClick={null}
-            className="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg align-center w-full mt-5"
+            onClick={() => createNewINO()}
+            className="text-white bg-[#7316ff] border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg align-center w-full mt-5"
           >
             Create
           </button>
