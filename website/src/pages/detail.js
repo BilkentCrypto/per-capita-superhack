@@ -57,13 +57,7 @@ const EventsModal = ({ id }) => {
                   >
                     Close
                   </button>
-                  <button
-                    className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Save Changes
-                  </button>
+                
                 </div>
               </div>
             </div>
@@ -123,6 +117,7 @@ const Detail = () => {
 
   const collectionData = contractRead.data;
 
+
   const giveawayResult = giveawayResultRequest.data;
 
   const NFTs = fetchNFTsOfMarketplaceRequest.data;
@@ -132,7 +127,7 @@ const Detail = () => {
   const participantNonce = participantData?.[1];
   const isClaimed = participantData?.[2];
 
-  console.log("data", collectionData)
+  //console.log("data", collectionData)
 
 
   const [image, setImage] = useState();
@@ -240,9 +235,10 @@ const Detail = () => {
                   <span className="font-bold text-slate-400">Remaining Time</span>
                   <span>{moment.unix(collectionData?.giveawayTime.toString()).toString()}</span>
                 </li>
+                
                 <li className="flex flex-col px-1 text-white py-1">
                   <span className="font-bold text-slate-400 ">Join Price</span>
-                  <span className="text-white font-semibold">{formatEther(collectionData?.price)} ETH</span>
+                  { collectionData && <span className="text-white font-semibold"> {formatEther(collectionData?.price)} ETH</span> }
                 </li>
 
               </ul>
@@ -255,7 +251,7 @@ const Detail = () => {
                 
                 </button> : null}
 
-                {collectionData?.giveawayTime < moment().unix() && !collectionData?.isDistributed ? <button
+                { requiredGas && collectionData?.giveawayTime < moment().unix() && !collectionData?.isDistributed ? <button
                   onClick={executeGiveaway}
                   className="flex items-center text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-3xl text-lg align-center"
                 >
@@ -265,7 +261,7 @@ const Detail = () => {
                   </span>
                 </button> : null}
 
-                {collectionData?.randomSeed > 0 && !isClaimed && isParticipated && giveawayResult >= NFTs?.length ? <button
+                { collectionData && collectionData?.randomSeed > 0 && !isClaimed && isParticipated && giveawayResult >= NFTs?.length ? <button
                   onClick={claimDeposit}
                   className="flex items-center text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-3xl text-lg align-center"
                 >
@@ -275,13 +271,13 @@ const Detail = () => {
                   </span>
                 </button> : null}
 
-                {collectionData?.randomSeed > 0 && !isClaimed && isParticipated && giveawayResult < NFTs?.length ? <button
+                {giveawayResult && collectionData?.randomSeed > 0 && !isClaimed && isParticipated && giveawayResult < NFTs?.length ? <button
                   onClick={claimDeposit}
                   className="flex items-center text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-3xl text-lg align-center"
                 >
                   <span className="mr-2 font-semibold">Claim NFT</span>
                   <span className="bg-white flex items-center rounded-3xl px-2 py-1">
-                    <span className="text-black font-semibold">{giveawayResult.toString()} eth</span>
+                    <span className="text-black font-semibold">{giveawayResult?.toString()} eth</span>
                   </span>
                 </button> : null}
 
