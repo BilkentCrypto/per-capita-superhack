@@ -1,41 +1,75 @@
 import { useState } from 'react';
-import { writeContract } from '@wagmi/core';
+import { writeContract, waitForTransaction } from '@wagmi/core';
 import contractAddresses from '../utils/addresses.json';
 import mainContractAbi from '../utils/MainAbi.json';
-import { parseEther } from 'viem';
+import { decodeEventLog, parseEther } from 'viem';
+import { useAccount } from 'wagmi';
+import { useNavigate } from 'react-router-dom';
+import { alchemy } from '../utils/getAlchemy.js'
+import { storeFile, getFile, storeUri } from '../utils/getWeb3';
 
 const CreateNewNIO = () => {
-  const [marketplaceURI, setMarketplaceURI] = useState(''); //sets name
+  const [name, setName] = useState(''); //sets name
   const [description, setDescription] = useState('');
   const [giveawayTime, setGiveawayTime] = useState('');
   const [contractAddr, setContractAddr] = useState('');
   const [price, setPrice] = useState('');
-  const [to, setTo] = useState('');
+
+
+  const [selectedFile, setSelectedFile] = useState();
+  const [image, setImage] = useState(null)
+  const [isFilePicked, setIsFilePicked] = useState(false);
+
+  const accountData = useAccount();
+  const navigate = useNavigate();
 
   const createNewINO = async () => {
     try {
+
+      const imageCid = await storeFile(selectedFile)
+
       const { hash } = await writeContract({
         address: contractAddresses.Main,
         abi: mainContractAbi,
         functionName: 'createGiveawayMarketplace',
         args: [
-          marketplaceURI,
+          imageCid,
+          name,
           description,
           giveawayTime,
           contractAddr,
           price,
-          to
+          accountData.address
         ]
       });
       console.log(hash);
+      const transactionResult = await waitForTransaction({
+        hash: hash,
+      })
+
+
+      const topic = decodeEventLog({
+        abi: mainContractAbi,
+        data: transactionResult.logs[0].data,
+        topics: transactionResult.logs[0].topics
+      });
+      const id = topic.args.collectionId;
+      navigate(`/detail/${id}`)
+
     } catch (e) {
-      console.log(marketplaceURI)
       console.log("error on creating new INO!", e);
     }
   }
 
-  const handleMarketplace = (e) => {
-    setMarketplaceURI(e.target.value);
+  
+  const changeHandler = (event) => {
+      setSelectedFile(event.target.files[0]);
+      setImage(URL.createObjectURL(event.target.files[0]));
+      setIsFilePicked(true);
+  };
+
+  const handleName = (e) => {
+    setName(e.target.value);
   };
 
   const handleDescription = (e) => {
@@ -43,11 +77,10 @@ const CreateNewNIO = () => {
   };
 
   const handleGiveawayTime = (e) => {
-    setGiveawayTime(e.target.value);
-    var dateObj = new Date(giveawayTime);
-    var epochTime = dateObj.getTime();
+    const dateObj = new Date(e.target.value);
+    let epochTime = dateObj.getTime();
     epochTime = Math.floor(epochTime / 1000);
-    console.log(epochTime);
+    setGiveawayTime(epochTime)
   };
 
   const handleContract = (e) => {
@@ -58,9 +91,8 @@ const CreateNewNIO = () => {
     setPrice(parseEther(e.target.value));
   };
 
-  const handleTo = (e) => {
-    setTo(e.target.value);
-  };
+
+
 
 
   return (
@@ -76,7 +108,7 @@ const CreateNewNIO = () => {
             className="block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Project's Name"
             required
-            onChange={(e) => handleMarketplace(e)}
+            onChange={(e) => handleName(e)}
           />
           <p className="pt-3">Description</p>
           <input
@@ -86,9 +118,20 @@ const CreateNewNIO = () => {
             required
             onChange={(e) => handleDescription(e)}
           />
+          <div>
+            <input type="file" name="file" onChange={changeHandler} />
+            {isFilePicked ? (
+              <div>
+                <p>Filename: {selectedFile.name}</p>
+                <img alt="Preview Image" src={image} />
+              </div>
+            ) : (
+              <p>Please select a file</p>
+            )}
+          </div>
           <p className="pt-3">Giveaway Time</p>
           <input
-            type="datetime-local" 
+            type="datetime-local"
             id="meeting-time"
             className="block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             label="Giveaway deadline"
@@ -113,15 +156,6 @@ const CreateNewNIO = () => {
             onChange={(e) => handlePrice(e)}
           />
 
-          <p className="pt-2 font">Fund Collector address</p>
-
-          <input
-            type="text"
-            className="block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Funded Address"
-            required
-            onChange={(e) => handleTo(e)}
-          />
           <button
             onClick={() => createNewINO()}
             className="text-white bg-[#7316ff] border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg align-center w-full mt-5"

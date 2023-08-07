@@ -6,30 +6,21 @@ import mainContractAbi from '../utils/MainAbi.json';
 import { formatEther, parseGwei } from 'viem';
 import { formatUnits } from 'viem';
 import { readContract, writeContract } from '@wagmi/core';
+import { useContractRead } from 'wagmi';
 
 
 
 function Home() {
-  const [priceData, setPrice] = useState();
-  const [nameData, setName] = useState();
 
-  
-  const readTest = async () => {
-    const newData = await readContract({
-      address: contractAddresses.Main,
-      abi: mainContractAbi,
-      functionName: 'marketplaces',
-      args: [1]
-    })
-    console.log(formatUnits(newData?.[6], 18).toString());
-    setPrice(formatUnits(newData?.[6], 18).toString());
-    setName((newData?.[1]).toString());
 
-    //setTestData(newData);
-  }
-  useEffect(() => {
-    readTest();
-  });
+  const readContract = useContractRead({
+    address: contractAddresses.Main,
+    abi: mainContractAbi,
+    functionName: 'fetchMarketplace',
+    args: [1]
+  }) 
+
+  const collectionData = readContract.data;
   
   return (
     <>
@@ -56,7 +47,7 @@ function Home() {
         </div>
         <div className="lg:max-w-lg lg:w-5/12 md:w-1/2 w-5/6 mb-6 md:mt-10 max-w-[400px]">
           <div style={{ width: '100%', maxWidth: '400px', height: '400px' }}>
-            <Card imageUrl="./images/IMG.png" price={priceData} nftName={nameData} />
+            {collectionData && <Card imageUri={collectionData.imageUri} name={collectionData.name} contractAddress={ collectionData.contractAddress} price={formatEther(collectionData.price)} id={1} />}
 
           </div>
         </div>

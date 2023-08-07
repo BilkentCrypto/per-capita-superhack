@@ -23,6 +23,7 @@ import Home from './pages/home.js';
 import INO from './pages/INO.js';
 import Detail from './pages/detail.js';
 import CreateNewNIO from './pages/CreateNewINO.js';
+import TrackEvents from './pages/trackEvents.js';
 import Error from './pages/error.js';
 // import Voting from './pages/voting.js';
 // import Staking from './pages/staking.js';
@@ -64,6 +65,7 @@ root.render(
               {/* <Route path="/exchange" element={<Exchange />}></Route> */}
               <Route path="/INO" element={<INO />}></Route>
               <Route path="/CreateNewNIO" element={<CreateNewNIO />}></Route>
+              <Route path="/track" element={<TrackEvents />}></Route>
               <Route path="/detail/:id" element={<Detail />}></Route>
               {/* <Route path="/voting" element={<Voting />}></Route>
               <Route path="/staking" element={<Staking />}></Route> */}

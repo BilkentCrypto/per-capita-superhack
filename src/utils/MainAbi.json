@@ -234,6 +234,19 @@
 				"type": "uint256"
 			}
 		],
+		"name": "beParticipantMock",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "marketplaceId",
+				"type": "uint256"
+			}
+		],
 		"name": "claimNFT",
 		"outputs": [],
 		"stateMutability": "nonpayable",
@@ -254,6 +267,11 @@
 	},
 	{
 		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_imageUri",
+				"type": "string"
+			},
 			{
 				"internalType": "string",
 				"name": "_name",
@@ -313,6 +331,11 @@
 						"internalType": "enum PerCapita.MarketplaceType",
 						"name": "marketType",
 						"type": "uint8"
+					},
+					{
+						"internalType": "string",
+						"name": "imageUri",
+						"type": "string"
 					},
 					{
 						"internalType": "string",
@@ -394,6 +417,11 @@
 						"internalType": "enum PerCapita.MarketplaceType",
 						"name": "marketType",
 						"type": "uint8"
+					},
+					{
+						"internalType": "string",
+						"name": "imageUri",
+						"type": "string"
 					},
 					{
 						"internalType": "string",
@@ -561,6 +589,11 @@
 				"internalType": "enum PerCapita.MarketplaceType",
 				"name": "marketType",
 				"type": "uint8"
+			},
+			{
+				"internalType": "string",
+				"name": "imageUri",
+				"type": "string"
 			},
 			{
 				"internalType": "string",
