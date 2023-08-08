@@ -290,7 +290,7 @@ const Detail = () => {
         </div> 
         
         <div className="flex justify-center  space-x-4 md:mt-20">
-            <DetailFooter/>
+            <DetailFooter collectionAddress={collectionData.contractAddress}/>
             </div>
       </div>
     </section>

@@ -18,7 +18,7 @@ const TrackEvents = ({id}) => {
   const [randomSentToL2, setRandomSentToL2] = useState();
   const [giveawayDone, setGiveawayDone] = useState();
 
-  const marketplaceID = id ? id : 732 ;
+  const marketplaceID = id ? id : 733 ;
 
   //const L1Hyperlane = "0xD45b26D61c41D731adCd661831CEc173D23A4012";
   //const L2Hyperlane = "0x3A51C234065016fD1612856b5456e7164858768e";
@@ -81,103 +81,9 @@ const TrackEvents = ({id}) => {
   }
 
 
-  async function getLogs() {
-    let logs;
-
-    logs = await publicClientL2.getLogs({
-      address: contractAddresses.L2,
-      event: parseAbiItem(RandomnessRequestSentToL1),
-      args: {
-        collectionId: marketplaceID
-      },
-      fromBlock: 'earliest',
-      toBlock: 'latest'
-    })
-    console.log("logs", logs)
-    if (logs.length != 0) {
-      getL2Data(logs, setVrfRequestL1);
-    }
-    else {
-      return;
-    }
-
-
-
-    logs = await publicClientL1.getLogs({
-      address: contractAddresses.L1,
-      event: parseAbiItem(RandomnessRequestedFromVRF),
-      args: {
-        collectionId: marketplaceID
-      },
-      fromBlock: 'earliest',
-      toBlock: 'latest'
-    })
-
-    if (logs.length != 0) {
-      getL1Data(logs, setVrfRequestSentL1);
-    }
-    else {
-      return;
-    }
-
-
-    logs = await publicClientL1.getLogs({
-      address: contractAddresses.L1,
-      event: parseAbiItem(RandomnessGenerated),
-      args: {
-        collectionId: marketplaceID
-      },
-      fromBlock: 'earliest',
-      toBlock: 'latest'
-    })
-    if (logs.length != 0) {
-      getL1Data(logs, setRandomGenerated);
-    }
-    else {
-      return;
-    }
-
-    logs = await publicClientL1.getLogs({
-      address: contractAddresses.L1,
-      event: parseAbiItem(RandomnessSentToL2),
-      args: {
-        collectionId: marketplaceID
-      },
-      fromBlock: 'earliest',
-      toBlock: 'latest'
-    })
-    if (logs.length != 0) {
-      getL1Data(logs, setRandomSentToL2);
-    }
-    else {
-      return;
-    }
-
-
-    logs = await publicClientL2.getLogs({
-      address: contractAddresses.Main,
-      event: parseAbiItem(GiveawayDone),
-      args: {
-        collectionId: marketplaceID
-      },
-      fromBlock: 'earliest',
-      toBlock: 'latest'
-    })
-    console.log("done", logs)
-    if (logs.length != 0) {
-      getL2Data(logs, setGiveawayDone);
-    }
-    else {
-      return;
-    }
-
-
-  }
-
   useEffect(() => {
 
     // ********** EVENT TRACKING **********
-    getLogs();
 
     const requestToL1 = publicClientL2.watchEvent({
       address: contractAddresses.L2,
@@ -254,19 +160,19 @@ const TrackEvents = ({id}) => {
         <button onClick={() => getSeedTest()}>Get Random Seed Test Button</button>
 
         <span className="text-2xl text-black">Sent L2-L1 message with hyperlane {vrfRequestL1 ? "true" + " " + moment.unix(vrfRequestL1.timestamp.toString()).toDate() : "false"}
-          {vrfRequestL1 && <a href={L2Explorer + vrfRequestL1.transactionHash}>Go to transaction</a>}
+          {vrfRequestL1 && <a href={L2Explorer + vrfRequestL1.transactionHash}  target="_blank">Go to transaction</a>}
         </span>
         <span className="text-2xl text-black">VRF Requested from Chainlink: {vrfRequestSentL1 ? "true" + " " + moment.unix(vrfRequestSentL1.timestamp.toString()).toDate() : "false"}
-        {vrfRequestSentL1 && <a href={L1Explorer + vrfRequestSentL1.transactionHash}>Go to transaction</a>}
+        {vrfRequestSentL1 && <a href={L1Explorer + vrfRequestSentL1.transactionHash} target="_blank">Go to transaction</a>}
         </span>
         <span className="text-2xl text-black">Randomness Received From Chainlink: {randomGenerated ? "true" + " " + moment.unix(randomGenerated.timestamp.toString()).toDate() : "false"}
-          {randomGenerated && <a href={L1Explorer + randomGenerated.transactionHash}>Go to transaction</a>}
+          {randomGenerated && <a href={L1Explorer + randomGenerated.transactionHash} target="_blank">Go to transaction</a>}
         </span>
         <span className="text-2xl text-black">Random Sent L1 to L2: {randomSentToL2 ? "true" + " " + moment.unix(randomSentToL2.timestamp.toString()).toDate() : "false"}
-          {randomSentToL2 && <a href={L1Explorer + randomSentToL2.transactionHash}>Go to transaction</a>}
+          {randomSentToL2 && <a href={L1Explorer + randomSentToL2.transactionHash} target="_blank">Go to transaction</a>}
         </span>
         <span className="text-2xl text-black">Giveaway Seed Saved: {giveawayDone ? "true" + " " + moment.unix(giveawayDone.timestamp.toString()).toDate() : "false"}
-          {giveawayDone && <a href={L2Explorer + giveawayDone.transactionHash}>Go to transaction</a>}
+          {giveawayDone && <a href={L2Explorer + giveawayDone.transactionHash} target="_blank">Go to transaction</a>}
         </span>
       </div>
     </div>
