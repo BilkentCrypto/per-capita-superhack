@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity >=0.8.2 <0.9.0;
+pragma solidity 0.8.15;
 
 
 //L2 Hyperlane - 0x01CEb6fD0ad99000A7Fd95EC65AE5947Db3d7784
 contract L2VRFHyperlaneBroadcaster {
 
-    address mainContractAddress;
-    
+    address public mainContractAddress;
+    address public hyperlaneReceiver;
 
-    address hyperlaneReceiver;
+    event RandomnessRequestSentToL1(uint256 indexed collectionId);
 
     uint number;
     uint256 gasAmount = 600000;
@@ -46,7 +46,7 @@ contract L2VRFHyperlaneBroadcaster {
             abi.encode(collectionId)
         );
 
-//test
+
         // Get the required payment from the IGP.
         uint256 quote = igp.quoteGasPayment(
             goerliDomain,
@@ -60,6 +60,7 @@ contract L2VRFHyperlaneBroadcaster {
             address(this) // refunds are returned to this contract
         );
 
+        emit RandomnessRequestSentToL1(collectionId);
     }
 
     function setMainContractAddressOnce(address newMainAddress) external { //set to once

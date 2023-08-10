@@ -4,6 +4,8 @@ pragma solidity >=0.8.2 <0.9.0;
 
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
+import "@chainlink/contracts/src/v0.8/AutomationCompatible.sol";
+
 
 interface IMessageRecipient {
     function handle(
@@ -11,10 +13,6 @@ interface IMessageRecipient {
         bytes32 _sender,
         bytes calldata _body
     ) external;
-}
-
-interface IVRFManager {
-    function requestRandomWords() external;
 }
 
 interface Messenger {
@@ -26,13 +24,14 @@ interface Messenger {
 }
 
 //Ege - VRF Subscription ID: 13173
-//L1 - 0x4319989CBeBA6d369cbefD0FA70C5b9094cCe42E
-//0x9Cf76c2F9c2aAaaAE7d3546BFcd8e904C7468890
-contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2 {
+contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatibleInterface {
 
-    address L2HyperlaneBroadcaster;
-    address mainContractAddress;
+    address public L2HyperlaneBroadcaster;
+    address public mainContractAddress;
 
+    event RandomNumberRequested(uint indexed collectionId);
+    event RandomNumberGenerated(uint indexed collectionId);
+    event RandomSentToL2(uint indexed collectionId);
 
     //OPTIMISM
     address constant MESSENGER_ADDRESS = 0x5086d1eEF304eb5284A0f6720f79403b4e9bE294;
@@ -43,7 +42,7 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2 {
     //CHAINLINK
     uint64 s_subscriptionId;
     bytes32 keyHash = 0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15; 
-    uint32 callbackGasLimit = 300000;
+    uint32 callbackGasLimit = 350000;
     uint16 requestConfirmations = 3;
     uint32 numWords = 1;
     VRFCoordinatorV2Interface COORDINATOR;
@@ -105,6 +104,7 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2 {
         );
 
         requestIdToCollectionId[requestId] = collectionId;
+        emit RandomNumberRequested(collectionId);
     }
 
  
@@ -117,6 +117,18 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2 {
 
         pendingCollections.push(collectionId);
         collectionIdToSeed[collectionId] = randomNumber;
+        emit RandomNumberGenerated(collectionId);
+    }
+
+
+    function checkUpkeep(bytes calldata /* checkData */) external view override returns (bool upkeepNeeded, bytes memory performData) {
+        upkeepNeeded = pendingCollections.length > 0;
+        performData = "";
+        
+    }
+
+    function performUpkeep(bytes calldata /* performData */) external override {
+        storeToL2();  
     }
 
 
@@ -126,22 +138,37 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2 {
         require(pendingCollections.length > 0, "no pending seed");
 
         while(pendingCollections.length > 0) {
-            uint collectionId = pendingCollections[pendingCollections.length - 1];
+            uint256 collectionId = pendingCollections[pendingCollections.length - 1];
             pendingCollections.pop();
-            uint seed = collectionIdToSeed[collectionId];
+            uint256 seed = collectionIdToSeed[collectionId];
 
             messenger.sendMessage(
             mainContractAddress,
             abi.encodeWithSignature(
-                "submitRandomSeed(uint256, uint256)",
-                collectionId, seed
+                "submitMock(bytes)",
+                abi.encode(collectionId, seed)
             ),
-            300000 // use whatever gas limit you want
-            );
+            900000 // use whatever gas limit you want
+            ); 
 
+            emit RandomSentToL2(collectionId);
         }
+    }
 
 
-}
+//mock code for fast trying
+        //Stores the random number in main contract in Optimism Goerli
+     function storeToL2Mock(uint256 collectionId, uint256 seed ) public { // şimdilik verimsiz yapıyorum belki hepsini tekte yollayabiliriz
+            messenger.sendMessage(
+            mainContractAddress,
+            abi.encodeWithSignature(
+                "submitMock(bytes)",
+                abi.encode(collectionId, seed)
+            ),
+            900000 // use whatever gas limit you want
+            ); 
+
+            
+    }
 
 }
