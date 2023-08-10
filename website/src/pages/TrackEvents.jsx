@@ -155,28 +155,40 @@ const TrackEvents = ({id}) => {
   }, []);
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="flex flex-col items-center gap-4 justify-center">
-        <button onClick={() => getSeedTest()}>Get Random Seed Test Button</button>
-
-        <span className="text-2xl text-black">Sent L2-L1 message with hyperlane {vrfRequestL1 ? "true" + " " + moment.unix(vrfRequestL1.timestamp.toString()).toDate() : "false"}
-          {vrfRequestL1 && <a href={L2Explorer + vrfRequestL1.transactionHash}  target="_blank">Go to transaction</a>}
+    <div className="flex items-center justify-center">
+      <div className="flex flex-col items-start gap-4 justify-center">
+        <button
+          onClick={() => getSeedTest()}
+          className="text-white border border-white rounded px-3 py-2"
+        >
+          Get Random Seed
+        </button>
+  
+        <span className="text-base text-white">
+          Sent L2-L1 message with hyperlane: {vrfRequestL1 ? "true " + moment.unix(vrfRequestL1.timestamp.toString()).toDate() : <span className="text-red-500">false</span>}
+          {vrfRequestL1 && <a href={L2Explorer + vrfRequestL1.transactionHash} target="_blank" className="text-blue-400 ml-2">Go to transaction</a>}
         </span>
-        <span className="text-2xl text-black">VRF Requested from Chainlink: {vrfRequestSentL1 ? "true" + " " + moment.unix(vrfRequestSentL1.timestamp.toString()).toDate() : "false"}
-        {vrfRequestSentL1 && <a href={L1Explorer + vrfRequestSentL1.transactionHash} target="_blank">Go to transaction</a>}
+        <span className="text-base text-white">
+          VRF Requested from Chainlink: {vrfRequestSentL1 ? "true " + moment.unix(vrfRequestSentL1.timestamp.toString()).toDate() : <span className="text-red-500">false</span>}
+          {vrfRequestSentL1 && <a href={L1Explorer + vrfRequestSentL1.transactionHash} target="_blank" className="text-blue-400 ml-2">Go to transaction</a>}
         </span>
-        <span className="text-2xl text-black">Randomness Received From Chainlink: {randomGenerated ? "true" + " " + moment.unix(randomGenerated.timestamp.toString()).toDate() : "false"}
-          {randomGenerated && <a href={L1Explorer + randomGenerated.transactionHash} target="_blank">Go to transaction</a>}
+        <span className="text-base text-white">
+          Randomness Received From Chainlink: {randomGenerated ? "true " + moment.unix(randomGenerated.timestamp.toString()).toDate() : <span className="text-red-500">false</span>}
+          {randomGenerated && <a href={L1Explorer + randomGenerated.transactionHash} target="_blank" className="text-blue-400 ml-2">Go to transaction</a>}
         </span>
-        <span className="text-2xl text-black">Random Sent L1 to L2: {randomSentToL2 ? "true" + " " + moment.unix(randomSentToL2.timestamp.toString()).toDate() : "false"}
-          {randomSentToL2 && <a href={L1Explorer + randomSentToL2.transactionHash} target="_blank">Go to transaction</a>}
+        <span className="text-base text-white">
+          Random Sent L1 to L2: {randomSentToL2 ? "true " + moment.unix(randomSentToL2.timestamp.toString()).toDate() : <span className="text-red-500">false</span>}
+          {randomSentToL2 && <a href={L1Explorer + randomSentToL2.transactionHash} target="_blank" className="text-blue-400 ml-2">Go to transaction</a>}
         </span>
-        <span className="text-2xl text-black">Giveaway Seed Saved: {giveawayDone ? "true" + " " + moment.unix(giveawayDone.timestamp.toString()).toDate() : "false"}
-          {giveawayDone && <a href={L2Explorer + giveawayDone.transactionHash} target="_blank">Go to transaction</a>}
+        <span className="text-base text-white">
+          Giveaway Seed Saved: {giveawayDone ? "true " + moment.unix(giveawayDone.timestamp.toString()).toDate() : <span className="text-red-500">false</span>}
+          {giveawayDone && <a href={L2Explorer + giveawayDone.transactionHash} target="_blank" className="text-blue-400 ml-2">Go to transaction</a>}
         </span>
       </div>
     </div>
   );
+  
+  
 }
 
 export default TrackEvents;

@@ -110,19 +110,19 @@ if(selectedProvider === 'myCollections')
 
 
   return (
-    <section className="w-full bg-bg-[#02050E] pt-24 md:pt-32 md:min-h-screen relative flex flex-col">
+    <section className="w-full h-full bg-black pt-24 md:pt-32 md:min-h-screen relative flex flex-col">
       <div className="container w-full flex bg-red">
         <div className="w-full flex flex-wrap">
           <div className="w-full">
             <BeParticipantTest />
             <div className="px-2 py-5 mb-10 items-center">
-              <div className=" overflow-y-auto rounded-full shadow-zinc-500 shadow-2xl">
+              <div className=" overflow-y-auto rounded-lg shadow-zinc-700 shadow-2xl">
                 <ul className="space-y-2">
 
-                  <li className="flex justify-between bg-white rounded-full">
+                  <li className="flex justify-between text-white bg-blue-700 g">
                     <Link
                       to="/INO"
-                      className={`px-4 py-2 rounded-lg font-medium ${selectedProvider === '' ? 'bg-gray-200 rounded-3xl ' : ''}`}
+                      className={`px-4 py-2 rounded-lg font-medium ${selectedProvider === '' ? 'bg-blue-800 rounded-3xl ' : ''}`}
                       onClick={() => setSelectedProvider('')}
                     >
                       Active INOs
@@ -131,7 +131,7 @@ if(selectedProvider === 'myCollections')
                       <Link
                         key={provider.id}
                         to={`/INO?provider=${provider.id}`}
-                        className={`px-4 py-2 font-medium rounded-lg ${selectedProvider === provider.id ? 'bg-gray-200 rounded-3xl' : ''}`}
+                        className={`px-4 py-2 font-medium rounded-lg ${selectedProvider === provider.id ? 'bg-blue-800 rounded-3xl' : ''}`}
                         onClick={() => setSelectedProvider(provider.id)}
                       >
                         {provider.name}

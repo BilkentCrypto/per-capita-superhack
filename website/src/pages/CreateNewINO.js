@@ -96,7 +96,7 @@ const CreateNewNIO = () => {
 
 
   return (
-    <section className=" flex w- items-center justify-center">
+    <section className=" flex  items-center justify-center">
       <div className=" mt-20  items-center overflow-hidden shadow-2xl border-2 border-gray-100 rounded-xl mb-5">
         <div className="p-10">
           <div className="border-b w-full">
@@ -121,9 +121,11 @@ const CreateNewNIO = () => {
           <div>
             <input type="file" name="file" onChange={changeHandler} />
             {isFilePicked ? (
-              <div>
+              <div className='flex flex-col items-center justify-center'>
                 <p>Filename: {selectedFile.name}</p>
-                <img alt="Preview Image" src={image} />
+                <img alt="Preview Image" 
+                className='h-[200px] object-contain' 
+                src={image} />
               </div>
             ) : (
               <p>Please select a file</p>
