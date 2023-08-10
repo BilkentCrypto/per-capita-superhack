@@ -137,22 +137,22 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatib
 
         require(pendingCollections.length > 0, "no pending seed");
 
-        while(pendingCollections.length > 0) {
-            uint256 collectionId = pendingCollections[pendingCollections.length - 1];
-            pendingCollections.pop();
-            uint256 seed = collectionIdToSeed[collectionId];
+    //it can be done with while again but gas is increasing fast, hesaplamamız lazım, it should be calculated
+        uint256 collectionId = pendingCollections[pendingCollections.length - 1];
+        pendingCollections.pop();
+        uint256 seed = collectionIdToSeed[collectionId];
 
-            messenger.sendMessage(
-            mainContractAddress,
-            abi.encodeWithSignature(
-                "submitMock(bytes)",
-                abi.encode(collectionId, seed)
-            ),
-            900000 // use whatever gas limit you want
-            ); 
+        messenger.sendMessage(
+        mainContractAddress,
+        abi.encodeWithSignature(
+            "submitRandomSeed(bytes)",
+            abi.encode(collectionId, seed)
+        ),
+        900000 // use whatever gas limit you want
+        ); 
 
-            emit RandomSentToL2(collectionId);
-        }
+        emit RandomSentToL2(collectionId);
+    
     }
 
 

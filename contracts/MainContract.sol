@@ -5,11 +5,11 @@ pragma solidity ^0.8.10;
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-//import { ByteHasher } from './libraries/ByteHasher.sol';
-//import { ISemaphore } from './libraries/ISemaphore.sol';
+import { ByteHasher } from './libraries/ByteHasher.sol';
+import { IWorldID } from './libraries/IWorldID.sol';
 
 contract PerCapita is IERC721Receiver {
-    //using ByteHasher for bytes;
+    using ByteHasher for bytes;
 
     address public L2_VRF_BROADCAST_ADDRESS;
     L2VRFHyperlaneBroadcaster hyperlaneBroadcaster;
@@ -17,7 +17,14 @@ contract PerCapita is IERC721Receiver {
     address public L1_VRF_RECEIVER_ADDRESS; 
 
 
-    event CollectionCreated(string indexed uri, uint256 indexed collectionId);
+    //HYPERLANE 
+    IInterchainGasPaymaster igp = IInterchainGasPaymaster(
+        0x8f9C3888bFC8a5B25AED115A82eCbb788b196d2a
+    );
+    uint256 hyperlaneGas = 600000;
+    uint32 constant goerliDomain = 5;
+
+    event CollectionCreated(string indexed name, uint256 indexed collectionId);
     event ParticipantAdded(address indexed participant, uint256 indexed collectionId);
     event GiveawayExecuting(uint256 indexed collectionId);
     event GiveawayExecuted(uint256 indexed collectionId);
@@ -32,8 +39,12 @@ contract PerCapita is IERC721Receiver {
     Marketplace[] public marketplaces;
     
 
-    //ISemaphore internal immutable semaphore;
-    //mapping(uint256 => bool) internal nullifierHashes;
+    //WORLD_ID
+    error InvalidNullifier();
+    address WORLD_ID_ADDRESS = 0xFc1315089316FcFe586a8E0a92873c258De8aaC1;
+    IWorldID internal immutable worldId;
+    uint256 internal immutable groupId = 1;
+    mapping(uint256 => bool) internal nullifierHashes;
 
     enum MarketplaceType {
         NULL,
@@ -45,8 +56,7 @@ contract PerCapita is IERC721Receiver {
     uint constant EXECUTOR_REWARD_MAX_LIMIT = 10; //divisor
     uint constant EXECUTOR_REWARD_INCREASE_FACTOR = 1000; //divisor
     
-    //address constant SEMAPHORE_ADDRESS = 0x330C8452C879506f313D1565702560435b0fee4C;
-    //uint constant SEMAPHORE_GROUP_ID = 1;
+
 
 
 
@@ -63,7 +73,8 @@ contract PerCapita is IERC721Receiver {
 
     struct Marketplace {
         MarketplaceType marketType;
-        string marketplaceURI;
+        string name;
+        string description;
         uint256 giveawayTime;
         address owner;
         address contractAddress;
@@ -76,18 +87,20 @@ contract PerCapita is IERC721Receiver {
     }
 
     constructor( address _L1_VRF_RECEIVER_ADDRESS, address _L2_VRF_BROADCAST_ADDRESS) {
+        L2_VRF_BROADCAST_ADDRESS = _L2_VRF_BROADCAST_ADDRESS;
+        L1_VRF_RECEIVER_ADDRESS = _L1_VRF_RECEIVER_ADDRESS;
         marketplaces.push();
         //semaphore = ISemaphore(SEMAPHORE_ADDRESS);
         hyperlaneBroadcaster = L2VRFHyperlaneBroadcaster(L2_VRF_BROADCAST_ADDRESS);
+        worldId = IWorldID(WORLD_ID_ADDRESS);
         ovmL2CrossDomainMessenger = L2CrossDomainMessenger(ovmL2CrossDomainMessengerAddress);
-        L2_VRF_BROADCAST_ADDRESS = _L2_VRF_BROADCAST_ADDRESS;
-        L1_VRF_RECEIVER_ADDRESS = _L1_VRF_RECEIVER_ADDRESS;
     }
 
 
 
     function createGiveawayMarketplace ( 
-        string calldata _marketplaceURI, 
+        string calldata _name,
+        string calldata _description, 
         uint256 _giveawayTime, 
         address _contractAddress, 
         uint256 _price, 
@@ -99,7 +112,8 @@ contract PerCapita is IERC721Receiver {
         marketplaces.push( Marketplace(
                 {
                 marketType: MarketplaceType.NFT_GIVEAWAY,
-                marketplaceURI: _marketplaceURI,
+                name: _name,
+                description: _description,
                 giveawayTime: _giveawayTime,
                 owner: msgSender,
                 contractAddress: _contractAddress,
@@ -115,7 +129,7 @@ contract PerCapita is IERC721Receiver {
         uint marketplaceID = marketplaces.length; 
         //ID sıfır olmasın, L1'deki kontratta mappingte tutuyoruz, sıkıntı çıkmasın.
         //Websitede ID meselesini ayarlarız.
-        emit CollectionCreated(_marketplaceURI, marketplaceID);
+        emit CollectionCreated(_name, marketplaceID - 1);
     } 
 
 /*
@@ -123,13 +137,14 @@ actionId: abi.encode( contractAddress, marketplaceId )
 signal: abi.encode(receiver) (current metamask wallet address)
 */
         function beParticipant( 
-            uint marketplaceId
-            //uint256 root,
-            //uint256 nullifierHash,
-            //uint256[8] calldata proof
+            uint marketplaceId,
+            uint256 root,
+            uint256 nullifierHash,
+            uint256[8] calldata proof
             ) external payable {
 
-        //require( nullifierHashes[ nullifierHash ], "reused nullifier");
+        require( nullifierHashes[ nullifierHash ], "reused nullifier");
+        //if (nullifierHashes[nullifierHash]) revert InvalidNullifier();
 
         Marketplace memory marketplace = marketplaces[ marketplaceId ];
         require( marketplace.marketType == MarketplaceType.NFT_GIVEAWAY, "not giveaway" );
@@ -143,19 +158,19 @@ signal: abi.encode(receiver) (current metamask wallet address)
         uint msgValue = msg.value;
         require( msgValue >= marketplace.price, "not enough ethers" );
 
-/*
-        semaphore.verifyProof(
+
+        worldId.verifyProof(
             root,
-            SEMAPHORE_GROUP_ID,
+            groupId,
             abi.encodePacked( msgSender ).hashToField(),
             nullifierHash,
             abi.encodePacked( address(this), marketplaceId ).hashToField(),
             proof
         );
-*/
+        nullifierHashes[ nullifierHash ] = true;
+
 
         marketplaces[ marketplaceId ].pool += msgValue;
-        //nullifierHashes[ nullifierHash ] = true;
         participants[ marketplaceId ][ msgSender ].isParticipated = true;
         participants[ marketplaceId ][ msgSender ].nonce = marketplace.participantNumber;
         ++marketplaces[ marketplaceId ].participantNumber;
@@ -163,7 +178,7 @@ signal: abi.encode(receiver) (current metamask wallet address)
         emit ParticipantAdded(msg.sender, marketplaceId);
     }
 
-/*
+
         function verifyTest( 
             uint256 marketplaceId,
             uint256 root,
@@ -171,19 +186,19 @@ signal: abi.encode(receiver) (current metamask wallet address)
             uint256[8] calldata proof
         ) external view returns( bool ) {
 
-        semaphore.verifyProof(
+
+        worldId.verifyProof(
             root,
-            SEMAPHORE_GROUP_ID,
-            abi.encodePacked( 0x2d6ADf049756DE7430f5cF040674E9901CC805Cf ).hashToField(),
+            groupId,
+            abi.encodePacked( msg.sender ).hashToField(),
             nullifierHash,
-            abi.encodePacked( 0xa4f7245336B78B4DB9E726c0aE2b4B39b856A111 ,marketplaceId ).hashToField(),
+            abi.encodePacked( address(this), marketplaceId ).hashToField(),
             proof
         );
   
             return true;
         }
 
-        /*
 
     //used chainlink for test only
     /*
@@ -215,11 +230,19 @@ signal: abi.encode(receiver) (current metamask wallet address)
     }
 
 
-    function executeGiveaway( uint marketplaceId ) external {
+    function getRequiredGasForHyperlane() public view returns(uint256) {
+        return igp.quoteGasPayment(
+            goerliDomain,
+            hyperlaneGas
+        );
+    } 
+
+    function executeGiveaway( uint marketplaceId ) external payable {
         Marketplace memory marketplace = marketplaces[ marketplaceId ];
         require( marketplace.marketType == MarketplaceType.NFT_GIVEAWAY, "not giveaway" );
         require( block.timestamp > marketplace.giveawayTime, "participation not ended" );
         require( marketplace.isDistributed == false, "already distributed" );
+        require( msg.value >= getRequiredGasForHyperlane(), "not enough gas for hyperlane" );
 
         marketplaces[ marketplaceId ].isDistributed = true;
         //marketplaces[ marketplaceId ].randomSeed = getRandomNumber();
@@ -236,13 +259,14 @@ signal: abi.encode(receiver) (current metamask wallet address)
         payable( msg.sender ).transfer( reward );
         balance[ marketplace.transferPricesTo ] += lockedPool - reward;
 
-        hyperlaneBroadcaster.getRandomSeed(marketplaceId);
+        hyperlaneBroadcaster.getRandomSeed{value: msg.value}(marketplaceId);
         
         emit GiveawayExecuting(marketplaceId);
     }
 
-    function sendVRFRequest(uint marketplaceID) public {
-        hyperlaneBroadcaster.getRandomSeed(marketplaceID);
+    function sendVRFRequest(uint marketplaceID) external payable { //DELETE FOR PRODUCTION
+    require( msg.value >= getRequiredGasForHyperlane(), "not enough gas for hyperlane" );
+        hyperlaneBroadcaster.getRandomSeed{value: msg.value}(marketplaceID);
     }
 
     modifier onlyL1Receiver {
@@ -418,10 +442,41 @@ signal: abi.encode(receiver) (current metamask wallet address)
 }
 
 interface L2VRFHyperlaneBroadcaster {
-    function getRandomSeed(uint collectionId) external;
+    function getRandomSeed(uint collectionId) external payable;
 }
 
 interface L2CrossDomainMessenger {
     function xDomainMessageSender() external returns (address);
 }
 
+interface IInterchainGasPaymaster {
+
+
+    /**
+     * @notice Deposits msg.value as a payment for the relaying of a message
+     * to its destination chain.
+     * @dev Overpayment will result in a refund of native tokens to the _refundAddress.
+     * Callers should be aware that this may present reentrancy issues.
+     * @param _messageId The ID of the message to pay for.
+     * @param _destinationDomain The domain of the message's destination chain.
+     * @param _gasAmount The amount of destination gas to pay for.
+     * @param _refundAddress The address to refund any overpayment to.
+     */
+    function payForGas(
+        bytes32 _messageId,
+        uint32 _destinationDomain,
+        uint256 _gasAmount,
+        address _refundAddress
+    ) external payable;
+
+    /**
+     * @notice Quotes the amount of native tokens to pay for interchain gas.
+     * @param _destinationDomain The domain of the message's destination chain.
+     * @param _gasAmount The amount of destination gas to pay for.
+     * @return The amount of native tokens required to pay for interchain gas.
+     */
+    function quoteGasPayment(uint32 _destinationDomain, uint256 _gasAmount)
+        external
+        view
+        returns (uint256);
+}

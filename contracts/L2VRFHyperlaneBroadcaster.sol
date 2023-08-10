@@ -38,7 +38,7 @@ contract L2VRFHyperlaneBroadcaster {
         _;    
     }
 
-    function getRandomSeed(uint collectionId) external onlyMainContract {
+    function getRandomSeed(uint collectionId) external payable onlyMainContract {
 
         bytes32 messageId = IMailbox(optimismMailbox).dispatch(
             goerliDomain,
@@ -47,17 +47,20 @@ contract L2VRFHyperlaneBroadcaster {
         );
 
 
+/*
         // Get the required payment from the IGP.
         uint256 quote = igp.quoteGasPayment(
             goerliDomain,
             gasAmount
         );
+*/
+
         // Pay from the contract's balance
-        igp.payForGas{ value: quote }(
+        igp.payForGas{ value: msg.value }(
             messageId, // The ID of the message that was just dispatched
             goerliDomain, // The destination domain of the message
             gasAmount,
-            address(this) // refunds are returned to this contract
+            address(tx.origin) // refunds are returned to transaction executer
         );
 
         emit RandomnessRequestSentToL1(collectionId);
