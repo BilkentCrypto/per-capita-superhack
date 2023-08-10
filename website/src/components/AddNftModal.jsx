@@ -4,8 +4,11 @@ import { alchemy } from '../utils/getAlchemy';
 import { useAccount } from 'wagmi';
 import NftCard from './NftCard';
 import ModalNftCard from './ModalNftCard';
+import { writeContract } from '@wagmi/core'
+import contractAddresses from '../utils/addresses.json';
+import mainContractAbi from '../utils/MainAbi.json';
 
-const AddNftModal = ({ images, onClose, collectionAddress }) => {
+const AddNftModal = ({ onClose, collectionAddress, marketplaceId }) => {
   const [selectedImages, setSelectedImages] = useState([]);
   const [isButtonClicked, setIsButtonClicked] = useState(false);
   const [myNfts, setMyNfts] = useState([]);
@@ -13,47 +16,57 @@ const AddNftModal = ({ images, onClose, collectionAddress }) => {
   const { address } = useAccount();
 
   const fetchNfts = async () => {
+    if(address) {
     console.log(collectionAddress)
     const newMyNfts = await alchemy.nft.getNftsForOwner(address, {contractAddresses: [collectionAddress] });
     console.log("nfts", newMyNfts)
     setMyNfts(newMyNfts.ownedNfts);
   }
-
+  }
   useEffect( () => {
-    if(address) {
-      fetchNfts();
-    }
 
+  fetchNfts();
+ 
   }, [address] )
 
 
-  const handleImageClick = (index) => {
-    const isSelected = selectedImages.includes(index);
+  const handleImageClick = (id) => {
+    const isSelected = selectedImages.includes(id);
 
     if (isSelected) {
-      setSelectedImages(selectedImages.filter((selected) => selected !== index));
+      setSelectedImages(selectedImages.filter((selected) => selected !== id));
     } else {
-      setSelectedImages([...selectedImages, index]);
+      setSelectedImages([...selectedImages, id]);
     }
+    
   };
+  console.log("selected", selectedImages)
 
   const handleSelectAll = () => {
     if (isButtonClicked) {
       setSelectedImages([]);
       setIsButtonClicked(false);
     } else {
-      setSelectedImages([...Array(images.length).keys()]);
+      setSelectedImages( myNfts.map( value =>  value.tokenId ) );
       setIsButtonClicked(true);
     }
   };
 
-  const handleConfirm = () => {
+
+
+  const handleConfirm = async () => {
     console.log("Confirmed images:", selectedImages);
+    const { hash } = await writeContract({
+      address: contractAddresses.Main,
+      abi: mainContractAbi,
+      functionName: 'addAllNFTstoMarketplace',
+      args: [marketplaceId, selectedImages],
+    });
   };
 
 console.log(myNfts)
   const nftComponents = myNfts.map( (value) => {
-    return <ModalNftCard key={value.tokenId} title={value.title} imageUrl={value.media[0].gateway}/>
+    return <ModalNftCard key={value.tokenId} selected={ selectedImages.includes(value.tokenId) } onClick={() => handleImageClick(value.tokenId)} title={value.title} imageUrl={value.media[0].gateway}/>
   } )
   console.log("comps", nftComponents)
 
@@ -65,13 +78,13 @@ console.log(myNfts)
         </div>
         <div className="text-white text-xl text-center font-bold mb-4">Add Your NFTs</div>
         <button
-          className={`w-full py-2 mt-2 mb-4 text-white rounded-lg ${isButtonClicked ? 'bg-red-600' : 'bg-blue-600'}`}
+          className={`w-56 py-2 mt-2 mb-4 mx-4 self-start font-semibold text-white rounded-lg ${isButtonClicked ? 'bg-rose-800  hover:bg-rose-700' : 'bg-indigo-800 hover:bg-indigo-700'}`}
           onClick={handleSelectAll}
         >
           {isButtonClicked ? 'Unselect All' : 'Select All'}
         </button>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 h-[60%] w-fit mb-6 rounded-lg overflow-y-scroll overflow-x-hidden scrollbar-thin scrollbar-thumb-blue-600 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 h-[60%] w-fit mb-6 rounded-lg overflow-y-scroll overflow-x-hidden scrollbar-thin scrollbar-thumb-blue-600 gap-8">
         {nftComponents}
         </div>
         <button className="w-[80%] py-2 bg-purple-800 font-semibold text-white hover:bg-purple-700 rounded-lg" onClick={handleConfirm}>

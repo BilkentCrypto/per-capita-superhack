@@ -121,9 +121,11 @@ const CreateNewNIO = () => {
           <div>
             <input type="file" name="file" onChange={changeHandler} />
             {isFilePicked ? (
-              <div>
+              <div className='flex flex-col items-center justify-center'>
                 <p>Filename: {selectedFile.name}</p>
-                <img alt="Preview Image" src={image} />
+                <img alt="Preview Image" 
+                className='h-[200px] object-contain' 
+                src={image} />
               </div>
             ) : (
               <p>Please select a file</p>

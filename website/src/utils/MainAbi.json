@@ -172,6 +172,11 @@
 				"internalType": "uint256",
 				"name": "marketplaceId",
 				"type": "uint256"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "ids",
+				"type": "uint256[]"
 			}
 		],
 		"name": "addAllNFTstoMarketplace",

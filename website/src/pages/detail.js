@@ -16,7 +16,7 @@ const EventsModal = ({ id }) => {
   return (
     <>
       <button
-        className="w-[275px] h-16 p-4 font-semibold bg-purple-600 hover:bg-purple-700  rounded-lg border text-white border-blue-600 justify-center items-start gap-2.5 inline-flex"
+        className="w-[275px] h-16 p-4 font-semibold bg-purple-600 hover:bg-purple-700  rounded-lg border text-white border-purple-600 justify-center items-start gap-2.5 inline-flex"
         type="button"
         onClick={() => setShowModal(true)}
       >
@@ -113,6 +113,7 @@ const Detail = () => {
     functionName: 'getRequiredGasForHyperlane',
   })
 
+
   const requiredGas = requiredGasRequest.data;
 
   const collectionData = contractRead.data;
@@ -126,6 +127,8 @@ const Detail = () => {
   const isParticipated = participantData?.[0];
   const participantNonce = participantData?.[1];
   const isClaimed = participantData?.[2];
+ 
+
 
   //console.log("data", collectionData)
 
@@ -290,7 +293,7 @@ const Detail = () => {
         </div> 
         
         <div className="flex justify-center  space-x-4 md:mt-20">
-            <DetailFooter collectionAddress={collectionData.contractAddress}/>
+            <DetailFooter collectionAddress={collectionData?.contractAddress} marketplaceId={id} nftIds={NFTs}/>
             </div>
       </div>
     </section>
