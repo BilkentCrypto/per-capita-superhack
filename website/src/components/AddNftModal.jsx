@@ -55,13 +55,16 @@ const AddNftModal = ({ onClose, collectionAddress, marketplaceId }) => {
 
 
   const handleConfirm = async () => {
+    
     console.log("Confirmed images:", selectedImages);
     const { hash } = await writeContract({
       address: contractAddresses.Main,
       abi: mainContractAbi,
       functionName: 'addAllNFTstoMarketplace',
       args: [marketplaceId, selectedImages],
+      watch: true,
     });
+    onClose();
   };
 
 console.log(myNfts)

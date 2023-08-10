@@ -16,7 +16,7 @@ const EventsModal = ({ id }) => {
   return (
     <>
       <button
-        className="w-[275px] h-16 p-4 font-semibold bg-purple-600 hover:bg-purple-700  rounded-lg border text-white border-purple-600 justify-center items-start gap-2.5 inline-flex"
+        className="w-[275px] h-16 p-4 font-semibold bg-purple-600 hover:bg-purple-700 rounded-lg border text-white border-purple-600 justify-center items-start gap-2.5 inline-flex"
         type="button"
         onClick={() => setShowModal(true)}
       >
@@ -25,48 +25,46 @@ const EventsModal = ({ id }) => {
       {showModal ? (
         <>
           <div
-            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+            className="justify-center mt-32  w-[500px] h-[500px] mx-auto items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50"
           >
-            <div className="relative w-auto my-6 mx-auto max-w-3xl">
+            <div className="relative ">
               {/*content*/}
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full h-full bg-gray-700 outline-none focus:outline-none">
                 {/*header*/}
-                <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                  <h3 className="text-3xl font-semibold">
-                    Modal Title
+                <div className="flex items-start justify-between p-5   rounded-t">
+                  <h3 className="text-2xl text-white font-semibold">
+                    Track Events
                   </h3>
                   <button
-                    className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                    className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-xl leading-none font-semibold outline-none focus:outline-none"
                     onClick={() => setShowModal(false)}
                   >
-                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                      ×
-                    </span>
+                    ×
                   </button>
                 </div>
                 {/*body*/}
-                <div className="relative p-6 flex-auto">
+                <div className="relative p-6 text-white flex-auto">
                   <TrackEvents id={id} />
                 </div>
                 {/*footer*/}
-                <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+                <div className="flex items-center justify-end p-6  rounded-b">
                   <button
-                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    className="border-red-500 border hover:bg-red-500 text-white rounded-lg hover:text-white background-transparent font-bold uppercase px-4 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
                     onClick={() => setShowModal(false)}
                   >
                     Close
                   </button>
-                
                 </div>
               </div>
             </div>
           </div>
-          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+          <div className="opacity-50 fixed inset-0 z-40 bg-black"></div>
         </>
       ) : null}
     </>
   );
+
 }
 
 const Detail = () => {
@@ -113,11 +111,20 @@ const Detail = () => {
     functionName: 'getRequiredGasForHyperlane',
   })
 
+  const balanceRequest = useContractRead({
+    address: contractAddresses.Main,
+    abi: mainContractAbi,
+    functionName: 'balance',
+    args: [address],
+    watch: true,
+  })
+
 
   const requiredGas = requiredGasRequest.data;
 
   const collectionData = contractRead.data;
 
+  const balance = balanceRequest.data;
 
   const giveawayResult = giveawayResultRequest.data;
 
@@ -127,7 +134,7 @@ const Detail = () => {
   const isParticipated = participantData?.[0];
   const participantNonce = participantData?.[1];
   const isClaimed = participantData?.[2];
- 
+
 
 
   //console.log("data", collectionData)
@@ -205,8 +212,18 @@ const Detail = () => {
 
   }
 
+  const withdraw = async () => {
+
+    const { hash } = await writeContract({
+      address: contractAddresses.Main,
+      abi: mainContractAbi,
+      functionName: 'withdraw',
+    });
+
+  }
 
 
+  console.log("test", giveawayResult, collectionData?.randomSeed > 0, isClaimed, isParticipated, giveawayResult, NFTs?.length)
 
   return (
     <section className="w-full min-h-screen bg-black flex justify-center items-center">
@@ -238,10 +255,10 @@ const Detail = () => {
                   <span className="font-bold text-slate-400">Remaining Time</span>
                   <span>{moment.unix(collectionData?.giveawayTime.toString()).toString()}</span>
                 </li>
-                
+
                 <li className="flex flex-col px-1 text-white py-1">
                   <span className="font-bold text-slate-400 ">Join Price</span>
-                  { collectionData && <span className="text-white font-semibold"> {formatEther(collectionData?.price)} ETH</span> }
+                  {collectionData && <span className="text-white font-semibold"> {formatEther(collectionData?.price)} ETH</span>}
                 </li>
 
               </ul>
@@ -251,10 +268,10 @@ const Detail = () => {
                   className="w-[275px] h-16 p-4 bg-blue-600 rounded-lg justify-center items-start gap-2.5 inline-flex text-white hover:bg-indigo-600 text-lg align-center"
                 >
                   <span className=" font-semibold">Join</span>
-                
+
                 </button> : null}
 
-                { requiredGas && collectionData?.giveawayTime < moment().unix() && !collectionData?.isDistributed ? <button
+                {requiredGas && collectionData?.giveawayTime < moment().unix() && !collectionData?.isDistributed ? <button
                   onClick={executeGiveaway}
                   className="flex items-center text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-3xl text-lg align-center"
                 >
@@ -264,7 +281,7 @@ const Detail = () => {
                   </span>
                 </button> : null}
 
-                { collectionData && collectionData?.randomSeed > 0 && !isClaimed && isParticipated && giveawayResult >= NFTs?.length ? <button
+                {collectionData && collectionData?.randomSeed > 0 && !isClaimed && isParticipated && giveawayResult >= NFTs?.length ? <button
                   onClick={claimDeposit}
                   className="flex items-center text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-3xl text-lg align-center"
                 >
@@ -274,27 +291,35 @@ const Detail = () => {
                   </span>
                 </button> : null}
 
-                {giveawayResult && collectionData?.randomSeed > 0 && !isClaimed && isParticipated && giveawayResult < NFTs?.length ? <button
-                  onClick={claimDeposit}
+                {giveawayResult?.toString() && collectionData?.randomSeed > 0 && !isClaimed && isParticipated && giveawayResult < NFTs?.length ? <button
+                  onClick={claimNFT}
                   className="flex items-center text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-3xl text-lg align-center"
                 >
                   <span className="mr-2 font-semibold">Claim NFT</span>
+
+                </button> : null}
+
+                {collectionData?.owner == address && collectionData?.randomSeed > 0 ? <button
+                  onClick={withdraw}
+                  className="flex items-center text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-3xl text-lg align-center"
+                >
+                  <span className="mr-2 font-semibold">Withdraw Deposits</span>
                   <span className="bg-white flex items-center rounded-3xl px-2 py-1">
-                    <span className="text-black font-semibold">{giveawayResult?.toString()} eth</span>
+                    <span className="text-black font-semibold">{formatEther(balance)} eth</span>
                   </span>
                 </button> : null}
 
                 <EventsModal id={id} />
               </div>
-             
+
             </div>
 
           </div>
-        </div> 
-        
+        </div>
+
         <div className="flex justify-center  space-x-4 md:mt-20">
-            <DetailFooter collectionAddress={collectionData?.contractAddress} marketplaceId={id} nftIds={NFTs}/>
-            </div>
+          <DetailFooter isPast={collectionData?.giveawayTime < moment().unix()} collectionAddress={collectionData?.contractAddress} marketplaceId={id} nftIds={NFTs} isOwner={collectionData?.owner == address} />
+        </div>
       </div>
     </section>
   );

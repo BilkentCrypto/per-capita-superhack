@@ -3,9 +3,9 @@ import React from 'react';
 const ModalNftCard = ({ title, imageUrl, selected, onClick }) => {
     return (
             <div className= { !selected ?
-                "shadow-xl m-4 w-48 h-48 bg-gray-700 rounded-3xl flex flex-col items-center justify-center border-gray-600 border-4 hover:scale-[1.05] hover:cursor-pointer"
+                "select-none shadow-xl m-4 w-48 h-48 bg-gray-700 rounded-3xl flex flex-col items-center justify-center border-gray-600 border-4 hover:scale-[1.05] hover:cursor-pointer"
                 :
-                "shadow-xl m-4 w-48 h-48 bg-gray-700 rounded-3xl flex flex-col items-center justify-center border-rose-900 border-4 scale-[1.05]  hover:cursor-pointer"
+                "select-none shadow-xl m-4 w-48 h-48 bg-gray-700 rounded-3xl flex flex-col items-center justify-center border-rose-900 border-4 scale-[1.05]  hover:cursor-pointer"
             }
             onClick={onClick}
             >
