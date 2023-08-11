@@ -1,3 +1,4 @@
 contracts/libraries/artifacts
 artifacts
 contracts/artifacts
+.deps
