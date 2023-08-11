@@ -19,7 +19,7 @@ contract PerCapita is IERC721Receiver {
 
     //HYPERLANE 
     IInterchainGasPaymaster igp = IInterchainGasPaymaster(
-        0x8f9C3888bFC8a5B25AED115A82eCbb788b196d2a
+        0xb32687e14558C96d5a4C907003327A932356B42b
     );
     uint256 hyperlaneGas = 600000;
     uint32 constant goerliDomain = 5;
@@ -41,10 +41,10 @@ contract PerCapita is IERC721Receiver {
 
     //WORLD_ID
     error InvalidNullifier();
-    address WORLD_ID_ADDRESS = 0xFc1315089316FcFe586a8E0a92873c258De8aaC1;
+    address WORLD_ID_ADDRESS = 0x11cA3127182f7583EfC416a8771BD4d11Fae4334;
     IWorldID internal immutable worldId;
     uint256 internal immutable groupId = 1;
-    mapping(uint256 => bool) internal nullifierHashes;
+    mapping(uint256 => bool) public nullifierHashes;
 
     enum MarketplaceType {
         NULL,
@@ -73,6 +73,7 @@ contract PerCapita is IERC721Receiver {
 
     struct Marketplace {
         MarketplaceType marketType;
+        string imageUri;
         string name;
         string description;
         uint256 giveawayTime;
@@ -99,8 +100,9 @@ contract PerCapita is IERC721Receiver {
 
 
     function createGiveawayMarketplace ( 
+        string calldata _imageUri, 
         string calldata _name,
-        string calldata _description, 
+        string calldata _description,
         uint256 _giveawayTime, 
         address _contractAddress, 
         uint256 _price, 
@@ -112,6 +114,7 @@ contract PerCapita is IERC721Receiver {
         marketplaces.push( Marketplace(
                 {
                 marketType: MarketplaceType.NFT_GIVEAWAY,
+                imageUri: _imageUri,
                 name: _name,
                 description: _description,
                 giveawayTime: _giveawayTime,
@@ -143,7 +146,7 @@ signal: abi.encode(receiver) (current metamask wallet address)
             uint256[8] calldata proof
             ) external payable {
 
-        require( nullifierHashes[ nullifierHash ], "reused nullifier");
+        require( nullifierHashes[ nullifierHash ] == false, "reused nullifier");
         //if (nullifierHashes[nullifierHash]) revert InvalidNullifier();
 
         Marketplace memory marketplace = marketplaces[ marketplaceId ];
@@ -157,6 +160,7 @@ signal: abi.encode(receiver) (current metamask wallet address)
 
         uint msgValue = msg.value;
         require( msgValue >= marketplace.price, "not enough ethers" );
+
 
 
         worldId.verifyProof(
@@ -179,6 +183,35 @@ signal: abi.encode(receiver) (current metamask wallet address)
     }
 
 
+    //For Test
+            function beParticipantMock( 
+            uint marketplaceId
+            ) external payable {
+
+
+        Marketplace memory marketplace = marketplaces[ marketplaceId ];
+        require( marketplace.marketType == MarketplaceType.NFT_GIVEAWAY, "not giveaway" );
+        require( block.timestamp < marketplace.giveawayTime, "participation ended" );
+
+        address msgSender = msg.sender;
+        Participant memory participant = participants[ marketplaceId ][ msgSender ];
+        
+        require( participant.isParticipated == false, "already participated with this address" );
+
+        uint msgValue = msg.value;
+        require( msgValue >= marketplace.price, "not enough ethers" );
+
+
+
+        marketplaces[ marketplaceId ].pool += msgValue;
+        participants[ marketplaceId ][ msgSender ].isParticipated = true;
+        participants[ marketplaceId ][ msgSender ].nonce = marketplace.participantNumber;
+        ++marketplaces[ marketplaceId ].participantNumber;
+
+        emit ParticipantAdded(msg.sender, marketplaceId);
+    }
+
+
         function verifyTest( 
             uint256 marketplaceId,
             uint256 root,
@@ -186,7 +219,11 @@ signal: abi.encode(receiver) (current metamask wallet address)
             uint256[8] calldata proof
         ) external view returns( bool ) {
 
-
+/*
+        uint256 externalNullifierHash = abi
+        .encodePacked(abi.encodePacked(_appId).hashToField(), _action)
+        .hashToField();
+*/
         worldId.verifyProof(
             root,
             groupId,
@@ -398,7 +435,7 @@ signal: abi.encode(receiver) (current metamask wallet address)
 
 
 //first approve from the erc721 contract in the frontend 
-    function addAllNFTstoMarketplace( uint256 marketplaceId ) external {
+    function addAllNFTstoMarketplace( uint256 marketplaceId, uint256[] calldata ids ) external {
         require( marketplaceId < marketplaces.length && marketplaceId > 0, "invalid id" );
         address msgSender = msg.sender; 
 
@@ -409,17 +446,15 @@ signal: abi.encode(receiver) (current metamask wallet address)
 
         address contractAddress = marketplace.contractAddress;
 
-        uint totalSupply = IERC721Enumerable( contractAddress ).totalSupply();
+        for( uint i = 0; i < ids.length; i++ ) {
+            uint256 current = ids[i];
+            IERC721( contractAddress ).transferFrom( 
+                msgSender,
+                address( this ),
+                current
+            );
 
-        for( uint index = 0; index < totalSupply; index++ ) {
-
-        IERC721( contractAddress ).transferFrom( 
-            msgSender,
-            address( this ),
-            index
-         );
-
-        NFTsOfMarketplaces[ marketplaceId ].push( index );
+            NFTsOfMarketplaces[ marketplaceId ].push( current );
 
         }
         

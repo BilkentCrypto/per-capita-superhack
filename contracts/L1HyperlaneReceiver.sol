@@ -148,7 +148,7 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatib
             "submitRandomSeed(bytes)",
             abi.encode(collectionId, seed)
         ),
-        900000 // use whatever gas limit you want
+        400000 // use whatever gas limit you want
         ); 
 
         emit RandomSentToL2(collectionId);
@@ -165,7 +165,7 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatib
                 "submitMock(bytes)",
                 abi.encode(collectionId, seed)
             ),
-            900000 // use whatever gas limit you want
+            400000 // use whatever gas limit you want
             ); 
 
             

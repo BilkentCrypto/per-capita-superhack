@@ -16,9 +16,9 @@ contract L2VRFHyperlaneBroadcaster {
 
     uint32 constant goerliDomain = 5;
     //address constant goerliReceiver = 0x36FdA966CfffF8a9Cdc814f546db0e6378bFef35;
-    address constant optimismMailbox = 0xCC737a94FecaeC165AbCf12dED095BB13F037685;
+    address constant zoraMailbox = 0x51930e22E1D6d20E617BcF29693E187C015eBC6a;
     IInterchainGasPaymaster igp = IInterchainGasPaymaster(
-        0x8f9C3888bFC8a5B25AED115A82eCbb788b196d2a
+        0xb32687e14558C96d5a4C907003327A932356B42b
     );
 
     function addressToBytes32(address _addr) internal pure returns (bytes32) {
@@ -40,7 +40,7 @@ contract L2VRFHyperlaneBroadcaster {
 
     function getRandomSeed(uint collectionId) external payable onlyMainContract {
 
-        bytes32 messageId = IMailbox(optimismMailbox).dispatch(
+        bytes32 messageId = IMailbox(zoraMailbox).dispatch(
             goerliDomain,
             addressToBytes32(hyperlaneReceiver),
             abi.encode(collectionId)
