@@ -40,7 +40,7 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatib
     event RandomSentToL2(uint indexed collectionId);
 
     //ZORA - L1CrossDomainMessenger
-    address constant MESSENGER_ADDRESS = 0x9779A9D2f3B66A4F4d27cB99Ab6cC1266b3Ca9af;
+    address constant MESSENGER_ADDRESS = 0xD87342e16352D33170557A7dA1e5fB966a60FafC;
 
     //HYPERLANE
     address constant MAILBOX = 0xCC737a94FecaeC165AbCf12dED095BB13F037685;
@@ -202,11 +202,11 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatib
     }
 
 
-//mock code for fast trying
-        //Stores the random number in main contract in Optimism Goerli
-     function storeToL2Mock(uint256 collectionId, uint256 seed ) public { // şimdilik verimsiz yapıyorum belki hepsini tekte yollayabiliriz
+    //mock code for fast trying
+    //Stores the random number in main contract in Optimism Goerli
+    function storeToL2Mock(address _testL2Addr, uint256 collectionId, uint256 seed ) public { // şimdilik verimsiz yapıyorum belki hepsini tekte yollayabiliriz
             messenger.sendMessage(
-            mainContractAddress,
+            _testL2Addr,
             abi.encodeWithSignature(
                 "submitMock(bytes)",
                 abi.encode(collectionId, seed)
