@@ -5,7 +5,10 @@ pragma solidity >=0.8.2 <0.9.0;
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 import "@chainlink/contracts/src/v0.8/AutomationCompatible.sol";
-
+import {IInterchainSecurityModule, ISpecifiesInterchainSecurityModule} from "https://github.com/hyperlane-xyz/hyperlane-monorepo/blob/main/solidity/contracts/interfaces/IInterchainSecurityModule.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
+import { ByteHasher } from './libraries/ByteHasher.sol';
+import { IWorldID } from './libraries/IWorldID.sol';
 
 interface IMessageRecipient {
     function handle(
@@ -23,21 +26,32 @@ interface Messenger {
     ) external;
 }
 
+//Goerli ISM: 0x56EBcF35f09879C41b7eb9F6FBA4b9fEb1926244
 //Ege - VRF Subscription ID: 13173
-contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatibleInterface {
+contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatibleInterface, ISpecifiesInterchainSecurityModule {
+    using ByteHasher for bytes;
 
     address public L2HyperlaneBroadcaster;
     address public mainContractAddress;
+    IInterchainSecurityModule public interchainSecurityModule = IInterchainSecurityModule(0x9eEAdE2A7Fef4F550137fE73F2220586B8341950);
 
     event RandomNumberRequested(uint indexed collectionId);
     event RandomNumberGenerated(uint indexed collectionId);
     event RandomSentToL2(uint indexed collectionId);
 
-    //OPTIMISM
-    address constant MESSENGER_ADDRESS = 0x5086d1eEF304eb5284A0f6720f79403b4e9bE294;
+    //ZORA - L1CrossDomainMessenger
+    address constant MESSENGER_ADDRESS = 0x9779A9D2f3B66A4F4d27cB99Ab6cC1266b3Ca9af;
 
     //HYPERLANE
     address constant MAILBOX = 0xCC737a94FecaeC165AbCf12dED095BB13F037685;
+
+    //WORLD ID
+    error InvalidNullifier();
+    address WORLD_ID_ADDRESS = 0x11cA3127182f7583EfC416a8771BD4d11Fae4334;
+    IWorldID internal immutable worldId;
+    uint256 internal immutable groupId = 1;
+    string constant APP_ID = "app_staging_2c9d462d4316977be96a258fa730570f";
+    string constant ACTION = "bePart_";
 
     //CHAINLINK
     uint64 s_subscriptionId;
@@ -49,6 +63,7 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatib
 
     address constant VRFCoordinatorAddress = 0x2Ca8E0C643bDe4C2E08ab1fA0da3401AdAD7734D;
 
+    uint256 public TEST_INT;
 
     mapping(uint256 => uint256) requestIdToCollectionId;
     uint256[] pendingCollections;
@@ -62,6 +77,7 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatib
         messenger = Messenger(MESSENGER_ADDRESS);
         s_subscriptionId = _subscriptionId;
         COORDINATOR = VRFCoordinatorV2Interface(VRFCoordinatorAddress);
+        worldId = IWorldID(WORLD_ID_ADDRESS);
         owner = msg.sender;
     }
 
@@ -75,6 +91,35 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatib
         require(msg.sender == MAILBOX);
         _;    
     }
+
+    
+        function verifyWorldIdProof( 
+            uint256 marketplaceId,
+            address userAddress,
+            uint256 root,
+            uint256 nullifierHash,
+            uint256[8] calldata proof
+        ) external view returns( bool ) {
+
+            string memory proofAction = string.concat(ACTION, Strings.toString(marketplaceId));
+            uint256 externalNullifierHash = abi
+            .encodePacked(abi.encodePacked(APP_ID).hashToField(), proofAction)
+            .hashToField();
+
+            try worldId.verifyProof(
+                    root,
+                    groupId,
+                    abi.encodePacked( userAddress ).hashToField(),
+                    nullifierHash,
+                    externalNullifierHash,
+                    proof
+            ) {
+                return true;
+            } catch {
+                return false;
+            }
+
+        }
 
     function setL2HyperlaneBroadcasterAndMain(address newBroadcastAddress, address newMainAddress) external { //set to once
         require(msg.sender == owner, "not owner");
@@ -92,6 +137,7 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatib
         // require(  ) origin require'ı eklenebilir sadece optimism goerli'den geldiğine emin olmak için
         uint collectionId = abi.decode(_body, (uint));
         requestRandomWords(collectionId);
+        //TEST_INT = abi.decode(_body, (uint256));
     }
 
     function requestRandomWords(uint collectionId) internal {
@@ -148,7 +194,7 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatib
             "submitRandomSeed(bytes)",
             abi.encode(collectionId, seed)
         ),
-        400000 // use whatever gas limit you want
+        900000 // use whatever gas limit you want
         ); 
 
         emit RandomSentToL2(collectionId);
@@ -165,7 +211,7 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatib
                 "submitMock(bytes)",
                 abi.encode(collectionId, seed)
             ),
-            400000 // use whatever gas limit you want
+            900000 // use whatever gas limit you want
             ); 
 
             

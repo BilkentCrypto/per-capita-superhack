@@ -12,7 +12,7 @@ contract L2VRFHyperlaneBroadcaster {
     event RandomnessRequestSentToL1(uint256 indexed collectionId);
 
     uint number;
-    uint256 gasAmount = 600000;
+    uint256 gasAmount = 300000;
 
     uint32 constant goerliDomain = 5;
     //address constant goerliReceiver = 0x36FdA966CfffF8a9Cdc814f546db0e6378bFef35;
@@ -38,7 +38,7 @@ contract L2VRFHyperlaneBroadcaster {
         _;    
     }
 
-    function getRandomSeed(uint collectionId) external payable onlyMainContract {
+    function getRandomSeed(uint collectionId) external payable {
 
         bytes32 messageId = IMailbox(zoraMailbox).dispatch(
             goerliDomain,

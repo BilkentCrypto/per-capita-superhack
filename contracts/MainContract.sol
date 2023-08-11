@@ -5,6 +5,7 @@ pragma solidity ^0.8.10;
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 import { ByteHasher } from './libraries/ByteHasher.sol';
 import { IWorldID } from './libraries/IWorldID.sol';
 
@@ -16,6 +17,8 @@ contract PerCapita is IERC721Receiver {
 
     address public L1_VRF_RECEIVER_ADDRESS; 
 
+    string constant APP_ID = "app_staging_2c9d462d4316977be96a258fa730570f";
+    string constant ACTION = "bePart_";
 
     //HYPERLANE 
     IInterchainGasPaymaster igp = IInterchainGasPaymaster(
@@ -32,7 +35,7 @@ contract PerCapita is IERC721Receiver {
     event PriceClaimed(uint256 indexed collectionId);
 
 
-    //OPTIMISM
+    //ZORA - MESSENGER
     address constant ovmL2CrossDomainMessengerAddress = 0x4200000000000000000000000000000000000007;
     L2CrossDomainMessenger ovmL2CrossDomainMessenger;
 
@@ -40,10 +43,6 @@ contract PerCapita is IERC721Receiver {
     
 
     //WORLD_ID
-    error InvalidNullifier();
-    address WORLD_ID_ADDRESS = 0x11cA3127182f7583EfC416a8771BD4d11Fae4334;
-    IWorldID internal immutable worldId;
-    uint256 internal immutable groupId = 1;
     mapping(uint256 => bool) public nullifierHashes;
 
     enum MarketplaceType {
@@ -69,6 +68,7 @@ contract PerCapita is IERC721Receiver {
         bool isParticipated;
         uint nonce;
         bool isClaimed;
+        bool wantedVerification;
     }
 
     struct Marketplace {
@@ -91,9 +91,7 @@ contract PerCapita is IERC721Receiver {
         L2_VRF_BROADCAST_ADDRESS = _L2_VRF_BROADCAST_ADDRESS;
         L1_VRF_RECEIVER_ADDRESS = _L1_VRF_RECEIVER_ADDRESS;
         marketplaces.push();
-        //semaphore = ISemaphore(SEMAPHORE_ADDRESS);
         hyperlaneBroadcaster = L2VRFHyperlaneBroadcaster(L2_VRF_BROADCAST_ADDRESS);
-        worldId = IWorldID(WORLD_ID_ADDRESS);
         ovmL2CrossDomainMessenger = L2CrossDomainMessenger(ovmL2CrossDomainMessengerAddress);
     }
 
@@ -157,12 +155,17 @@ signal: abi.encode(receiver) (current metamask wallet address)
         Participant memory participant = participants[ marketplaceId ][ msgSender ];
         
         require( participant.isParticipated == false, "already participated with this address" );
+        require( participant.wantedVerification == false, "already wanted proof with this address" );
 
         uint msgValue = msg.value;
         require( msgValue >= marketplace.price, "not enough ethers" );
 
+    participants[ marketplaceId ][ msgSender ].nonce = marketplace.participantNumber;
+    participants[ marketplaceId ][ msgSender ].wantedVerification = true;
 
-
+    //query(marketPlaceId, root ,...)
+//will be query with hyperlane to L1 contract with verifyWorldIdProof() function and continuation of this will be done in query repsonse
+/*
         worldId.verifyProof(
             root,
             groupId,
@@ -172,11 +175,10 @@ signal: abi.encode(receiver) (current metamask wallet address)
             proof
         );
         nullifierHashes[ nullifierHash ] = true;
+*/
 
-
-        marketplaces[ marketplaceId ].pool += msgValue;
+        marketplaces[ marketplaceId ].pool += msgValue; // if unsuccessful send it back to user with secure command like call
         participants[ marketplaceId ][ msgSender ].isParticipated = true;
-        participants[ marketplaceId ][ msgSender ].nonce = marketplace.participantNumber;
         ++marketplaces[ marketplaceId ].participantNumber;
 
         emit ParticipantAdded(msg.sender, marketplaceId);
@@ -212,41 +214,6 @@ signal: abi.encode(receiver) (current metamask wallet address)
     }
 
 
-        function verifyTest( 
-            uint256 marketplaceId,
-            uint256 root,
-            uint256 nullifierHash,
-            uint256[8] calldata proof
-        ) external view returns( bool ) {
-
-/*
-        uint256 externalNullifierHash = abi
-        .encodePacked(abi.encodePacked(_appId).hashToField(), _action)
-        .hashToField();
-*/
-        worldId.verifyProof(
-            root,
-            groupId,
-            abi.encodePacked( msg.sender ).hashToField(),
-            nullifierHash,
-            abi.encodePacked( address(this), marketplaceId ).hashToField(),
-            proof
-        );
-  
-            return true;
-        }
-
-
-    //used chainlink for test only
-    /*
-    function getRandomNumber() internal view returns( uint ) {
-        uint randomNumber;
-
-        randomNumber = uint(keccak256(abi.encodePacked( block.number / 2, block.timestamp)));
-
-        return randomNumber;
-    }
-    */
 
 
     function getExecutorReward( uint marketplaceId ) public view returns( uint ) {
@@ -326,7 +293,7 @@ signal: abi.encode(receiver) (current metamask wallet address)
     //************USED FOR TESTING AUTOMATION AND VRF************
     uint public  mockSeed;
     uint public mockCollectionId;
-    function submitMock(bytes calldata parameters) external onlyL1Receiver {
+    function submitMock(bytes calldata parameters) external {
         (mockCollectionId, mockSeed) = abi.decode(parameters, (uint256, uint256));
     } 
 
