@@ -8,6 +8,8 @@ import contractAddresses from '../utils/addresses.json';
 import mainContractAbi from '../utils/MainAbi.json';
 import { writeContract } from '@wagmi/core'
 import { generateOpenseaUrl } from '../utils/marketplaceGenerator';
+import zdk from '../utils/zdk';
+import { getImageUrl } from '../utils/getWeb3';
 
 const DetailFooter = ({collectionAddress, nftIds, marketplaceId, isPast, isOwner}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,17 +26,30 @@ const DetailFooter = ({collectionAddress, nftIds, marketplaceId, isPast, isOwner
 
 
   const fetchNfts = async () => {
-    const requestTokens = nftIds?.map( (value) => {
-      return {contractAddress: collectionAddress,
-      tokenId: value.toString(),
-      tokenType: 'ERC721'}
-    } )
-    console.log("new", nftIds)
-    if(nftIds && nftIds.length > 0) {
-      const newNfts = await alchemy.nft.getNftMetadataBatch( requestTokens );
-      setNfts(newNfts);
-      console.log("new nfts", newNfts);
-    }
+
+    const args = { 
+      where: { 
+        collectionAddresses: [collectionAddress], 
+        ownerAddresses: [contractAddresses.Main] 
+      }, 
+      pagination: {limit: 50}, // Optional, limits the response size to 3 NFTs
+      includeFullDetails: false, // Optional, provides more data on the NFTs such as events
+      includeSalesHistory: false // Optional, provides sales data on the NFTs
+    };
+    
+    const response = await zdk.tokens(args);
+    console.log("nft response", response);
+
+    const newNfts = response.tokens.nodes.map( value => {
+      return {
+        tokenId: value.token.tokenId,
+        title: value.token.name,
+        imageUrl: getImageUrl(value.token.image?.url),
+      }
+    } ) 
+
+    console.log("formatted nfts", newNfts);
+    setNfts(newNfts);
 
   }
   useEffect( () => {
@@ -72,7 +87,7 @@ const DetailFooter = ({collectionAddress, nftIds, marketplaceId, isPast, isOwner
   console.log("approve", isApproved)
 
   const nftComponents = nfts.map( (value, index) => {
-    return <NftCard key={value.tokenId} onClick={() => handleImageClick(value.tokenId)} title={value.title} imageUrl={value.media[0].gateway} index={index}/>
+    return <NftCard key={value.tokenId} onClick={() => handleImageClick(value.tokenId)} title={value.title} imageUrl={value.imageUrl} index={index}/>
   } )
 
   return (

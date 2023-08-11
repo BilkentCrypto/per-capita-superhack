@@ -9,7 +9,7 @@ import { publicClientL1, publicClientL2 } from "../utils/viemClients";
 import moment from "moment";
 
 const L1Explorer = "https://goerli.etherscan.io/tx/";
-const L2Explorer = "https://goerli-optimism.etherscan.io/tx/";
+const L2Explorer = "https://testnet.explorer.zora.energy/tx/";
 
 const TrackEvents = ({id}) => {
   const [vrfRequestL1, setVrfRequestL1] = useState();

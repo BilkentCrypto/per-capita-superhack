@@ -12,6 +12,8 @@
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
     "@worldcoin/idkit": "^0.5.1",
+    "@zoralabs/nft-hooks": "^1.2.1",
+    "@zoralabs/zdk": "^2.4.0",
     "alchemy-sdk": "^2.9.2",
     "antd": "^5.7.3",
     "dotenv": "^16.3.1",

@@ -7,6 +7,8 @@ import ModalNftCard from './ModalNftCard';
 import { writeContract } from '@wagmi/core'
 import contractAddresses from '../utils/addresses.json';
 import mainContractAbi from '../utils/MainAbi.json';
+import { getImageUrl } from '../utils/getWeb3';
+import zdk from '../utils/zdk';
 
 const AddNftModal = ({ onClose, collectionAddress, marketplaceId }) => {
   const [selectedImages, setSelectedImages] = useState([]);
@@ -17,10 +19,29 @@ const AddNftModal = ({ onClose, collectionAddress, marketplaceId }) => {
 
   const fetchNfts = async () => {
     if(address) {
-    console.log(collectionAddress)
-    const newMyNfts = await alchemy.nft.getNftsForOwner(address, {contractAddresses: [collectionAddress] });
-    console.log("nfts", newMyNfts)
-    setMyNfts(newMyNfts.ownedNfts);
+      const args = { 
+        where: { 
+          collectionAddresses: [collectionAddress], 
+          ownerAddresses: [address] 
+        }, 
+        pagination: {limit: 50}, // Optional, limits the response size to 3 NFTs
+        includeFullDetails: false, // Optional, provides more data on the NFTs such as events
+        includeSalesHistory: false // Optional, provides sales data on the NFTs
+      };
+      
+      const response = await zdk.tokens(args);
+      console.log("nft response", response);
+  
+      const newNfts = response.tokens.nodes.map( value => {
+        return {
+          tokenId: value.token.tokenId,
+          title: value.token.name,
+          imageUrl: getImageUrl(value.token.image?.url),
+        }
+      } ) 
+  
+      console.log("formatted nfts", newNfts);
+      setMyNfts(newNfts);
   }
   }
   useEffect( () => {
@@ -69,7 +90,7 @@ const AddNftModal = ({ onClose, collectionAddress, marketplaceId }) => {
 
 console.log(myNfts)
   const nftComponents = myNfts.map( (value) => {
-    return <ModalNftCard key={value.tokenId} selected={ selectedImages.includes(value.tokenId) } onClick={() => handleImageClick(value.tokenId)} title={value.title} imageUrl={value.media[0].gateway}/>
+    return <ModalNftCard key={value.tokenId} selected={ selectedImages.includes(value.tokenId) } onClick={() => handleImageClick(value.tokenId)} title={value.title} imageUrl={value.imageUrl}/>
   } )
   console.log("comps", nftComponents)
 

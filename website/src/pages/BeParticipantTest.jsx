@@ -34,7 +34,7 @@ console.log("block number", blockNumber)
 
 //contract
 const isContractVerified = await publicClientL1.readContract({
-    address: contractAddresses.proofTestMain,
+    address: contractAddresses.L1,
     abi: l1Abi,
     functionName: 'verifyWorldIdProof',
     args: [marketplaceId, address, merkleRoot, nullifierHash, unpackedProof],

@@ -40,10 +40,17 @@ async function storeUri(name, description, imageCid) {
     return JSON.parse(stringed);
   }
 
+  function getImageUrl(url) {
+    url = url.replace("ipfs://", "");
+    const splitted = url.split('/');
+    return `https://${splitted[0]}.ipfs.dweb.link/${splitted[1]}`
+  }
+
 export {
     storeFile, 
     getFile,
     convertToImage,
     storeUri,
     getUri,
+    getImageUrl,
 }

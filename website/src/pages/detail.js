@@ -119,6 +119,14 @@ const Detail = () => {
     watch: true,
   })
 
+  const rewardRequest = useContractRead({
+    address: contractAddresses.Main,
+    abi: mainContractAbi,
+    functionName: 'getExecutorReward',
+    args: [id],
+    watch: true,
+  })
+
 
   const requiredGas = requiredGasRequest.data;
 
@@ -135,6 +143,8 @@ const Detail = () => {
   const participantNonce = participantData?.[1];
   const isClaimed = participantData?.[2];
 
+  const executorReward = rewardRequest.data;
+console.log("reward", executorReward)
 console.log("execute button test", requiredGas ,collectionData?.giveawayTime < moment().unix() , collectionData?.isDistributed )
 
   //console.log("data", collectionData)
@@ -276,8 +286,8 @@ console.log("execute button test", requiredGas ,collectionData?.giveawayTime < m
                   className="flex items-center text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-3xl text-lg align-center"
                 >
                   <span className="mr-2 font-semibold">Execute</span>
-                  { requiredGas && <span className="bg-white flex items-center rounded-3xl px-2 py-1">
-                    <span className="text-black font-semibold">{formatEther(requiredGas)} ETH</span>
+                  { executorReward && <span className="bg-white flex items-center rounded-3xl px-2 py-1">
+                    <span className="text-black font-semibold">{formatEther(executorReward)} ETH</span>
                   </span>}
                 </button> : null}
 
@@ -299,7 +309,7 @@ console.log("execute button test", requiredGas ,collectionData?.giveawayTime < m
 
                 </button> : null}
 
-                {collectionData?.owner == address && collectionData?.randomSeed > 0 ? <button
+                {collectionData?.owner == address && collectionData?.randomSeed > 0 && balance > 0 ? <button
                   onClick={withdraw}
                   className="flex items-center text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-3xl text-lg align-center"
                 >
