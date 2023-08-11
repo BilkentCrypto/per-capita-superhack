@@ -69,7 +69,7 @@ function INO() {
           },
         ]
       },
-      { start: 0, perPage: 10, direction: 'increment' },
+      { start: 0, perPage: 50, direction: 'increment' },
     ),
   })
 

@@ -13,6 +13,7 @@ import {
   arbitrum,
   zora,
   optimismGoerli,
+  zoraTestnet,
 } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
@@ -35,9 +36,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 //WAGMI
 const { chains, publicClient } = configureChains(
-  [optimismGoerli],
+  [zoraTestnet],
   [
-    alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_KEY }),
     publicProvider()
   ]
 );

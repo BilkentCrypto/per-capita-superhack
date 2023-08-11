@@ -123,7 +123,7 @@ const Detail = () => {
   const requiredGas = requiredGasRequest.data;
 
   const collectionData = contractRead.data;
-
+  console.log("dataTest", collectionData)
   const balance = balanceRequest.data;
 
   const giveawayResult = giveawayResultRequest.data;
@@ -135,7 +135,7 @@ const Detail = () => {
   const participantNonce = participantData?.[1];
   const isClaimed = participantData?.[2];
 
-
+console.log("execute button test", requiredGas ,collectionData?.giveawayTime < moment().unix() , collectionData?.isDistributed )
 
   //console.log("data", collectionData)
 
@@ -271,14 +271,14 @@ const Detail = () => {
 
                 </button> : null}
 
-                {requiredGas && collectionData?.giveawayTime < moment().unix() && !collectionData?.isDistributed ? <button
+                {requiredGas >= 0 && collectionData?.giveawayTime < moment().unix() && !collectionData?.isDistributed ? <button
                   onClick={executeGiveaway}
                   className="flex items-center text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-3xl text-lg align-center"
                 >
                   <span className="mr-2 font-semibold">Execute</span>
-                  <span className="bg-white flex items-center rounded-3xl px-2 py-1">
+                  { requiredGas && <span className="bg-white flex items-center rounded-3xl px-2 py-1">
                     <span className="text-black font-semibold">{formatEther(requiredGas)} ETH</span>
-                  </span>
+                  </span>}
                 </button> : null}
 
                 {collectionData && collectionData?.randomSeed > 0 && !isClaimed && isParticipated && giveawayResult >= NFTs?.length ? <button
