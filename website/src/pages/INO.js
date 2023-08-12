@@ -15,7 +15,7 @@ function INO() {
   const [query] = useSearchParams();
   const [selectedProvider, setSelectedProvider] = useState(query.get('provider') || '');
   const [marketplaces, setMarketplaces] = useState([]);
- const {address} = useAccount();
+  const { address } = useAccount();
 
   const providers = [
     {
@@ -38,21 +38,21 @@ function INO() {
       address: contractAddresses.Main,
       abi: mainContractAbi,
       functionName: 'fetchAllMarketplaces',
-      
+
     })
-    const finalData = newData.map( (value, index) => {
+    const finalData = newData.map((value, index) => {
       value.id = index;
       return value;
-    } )
+    })
     setMarketplaces(finalData);
     console.log("marketplaces", finalData)
     //setTestData(newData);
   }
   useEffect(() => {
     readMarketplaces();
-  
+
   }, []);
-  
+
   console.log(marketplaces)
   //wagmi test
 
@@ -74,38 +74,38 @@ function INO() {
   })
 
   const isParticipated = [];
-  data?.pages.forEach( (value) => {
-    value.forEach( (data) => {
-      if(data.status) 
+  data?.pages.forEach((value) => {
+    value.forEach((data) => {
+      if (data.status)
         isParticipated.push(data?.result?.[0])
-    } )
-  } )
+    })
+  })
 
-console.log("particapant", isParticipated);
+  console.log("particapant", isParticipated);
 
-let filteredMarketplaces;
+  let filteredMarketplaces;
 
-if(selectedProvider === 'myCollections')
-  filteredMarketplaces = marketplaces.filter( (value) => {
-    return isParticipated[value.id];
-  } );
-   else if(selectedProvider === 'executable')
-  filteredMarketplaces = marketplaces.filter( (value) => {
-    return value.giveawayTime < moment().unix() && !value.isDistributed
-  } );
-  else if(selectedProvider === 'past')
-  filteredMarketplaces = marketplaces.filter( (value) => {
-    return value.giveawayTime < moment().unix() && value.isDistributed
-  } ); else 
-  filteredMarketplaces = marketplaces.filter( (value) => {
-   return value.giveawayTime > moment().unix()
-  } );
+  if (selectedProvider === 'myCollections')
+    filteredMarketplaces = marketplaces.filter((value) => {
+      return isParticipated[value.id];
+    });
+  else if (selectedProvider === 'executable')
+    filteredMarketplaces = marketplaces.filter((value) => {
+      return value.giveawayTime < moment().unix() && !value.isDistributed
+    });
+  else if (selectedProvider === 'past')
+    filteredMarketplaces = marketplaces.filter((value) => {
+      return value.giveawayTime < moment().unix() && value.isDistributed
+    }); else
+    filteredMarketplaces = marketplaces.filter((value) => {
+      return value.giveawayTime > moment().unix()
+    });
 
 
 
   const marketplaceCards = filteredMarketplaces.map((value, index) => {
     if (value.marketType == 0) return null;
-    return <Card imageUri={value.imageUri} name={value.name} contractAddress={ value.contractAddress} price={formatEther(value.price)} id={value.id} />
+    return <Card imageUri={value.imageUri} name={value.name} contractAddress={value.contractAddress} price={formatEther(value.price)} id={value.id} />
   });
 
 
@@ -114,33 +114,35 @@ if(selectedProvider === 'myCollections')
       <div className="container w-full flex bg-red">
         <div className="w-full flex flex-wrap">
           <div className="w-full">
-            <BeParticipantTest />
-            <div className="px-2 py-5 mb-10 items-center">
-              <div className=" overflow-y-auto rounded-lg shadow-zinc-700 shadow-2xl">
-                <ul className="space-y-2">
-
-                  <li className="flex justify-between text-white bg-blue-700 g">
+           
+            <div className="mb-10 mt-16 flex justify-start">
+              <div className="rounded-lg shadow-zinc-700 shadow-2xl">
+                <ul className="space-y-1">
+                  <Link
+                    to="/INO"
+                    className={`px-4 py-2 w-[116px] h-14 rounded-lg mr-5  font-medium mb-5 ${selectedProvider === '' ? 'bg-[#7316ff] text-white rounded-3xl ' : 'border border-[#7316ff] text-white rounded-3xl'}`}
+                    onClick={() => setSelectedProvider('')}
+                  >
+                    Active INOs
+                  </Link>
+                  {providers.map((provider, index) => (
                     <Link
-                      to="/INO"
-                      className={`px-4 py-2 rounded-lg font-medium ${selectedProvider === '' ? 'bg-blue-800 rounded-3xl ' : ''}`}
-                      onClick={() => setSelectedProvider('')}
+                      key={provider.id}
+                      to={`/INO?provider=${provider.id}`}
+                      className={`px-4 py-2 w-[116px] h-14 mr-5 rounded-lg font-medium mb-5 ${selectedProvider === provider.id ? 'bg-[#7316ff] text-white rounded-3xl ' : 'border border-[#7316ff] text-white rounded-3xl'}`}
+                      onClick={() => setSelectedProvider(provider.id)}
                     >
-                      Active INOs
+                      {provider.name}
                     </Link>
-                    {providers.map((provider) => (
-                      <Link
-                        key={provider.id}
-                        to={`/INO?provider=${provider.id}`}
-                        className={`px-4 py-2 font-medium rounded-lg ${selectedProvider === provider.id ? 'bg-blue-800 rounded-3xl' : ''}`}
-                        onClick={() => setSelectedProvider(provider.id)}
-                      >
-                        {provider.name}
-                      </Link>
-                    ))}
-                  </li>
+                  ))}
                 </ul>
               </div>
             </div>
+
+
+
+
+
           </div>
           <div className="w-full">
             <div className="grid mt-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">

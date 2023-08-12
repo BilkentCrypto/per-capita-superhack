@@ -263,7 +263,7 @@ const Detail = () => {
 
     console.log("contract verified", isContractVerified);
 
-    if(isContractVerified) {
+    if (isContractVerified) {
       enqueueSnackbar('Correct proof!');
       const { hash } = await writeContract({
         address: contractAddresses.Main,
@@ -279,7 +279,7 @@ const Detail = () => {
 
 
 
-    
+
 
   }
 
@@ -295,7 +295,7 @@ const Detail = () => {
             {/* Left Card */}
             <div className="w-[585px] h-[508px] p-2 shadow-md rounded-3xl mx-auto">
               <img
-                src={Image} // Reduced image size to 200x200
+                src={Image}
                 alt={collectionData?.name}
                 className="w-full h-full rounded-3xl object-contain"
               />
@@ -305,11 +305,9 @@ const Detail = () => {
           <div className=" mt-15 p-4 flex items-center justify-center w-full md:w-1/2"> {/* Change to w-full md:w-1/2 */}
             {/* Right Card */}
             <div className=" max-w-[585px] w-full h-[485px] rounded-3xl mx-auto p-2 bg-black shadow-md">
-              <h1 className="text-white text-5xl font-bold capitalize leading-[63.98px]">Collection #{id}</h1>
+              <h1 className="text-white text-5xl font-bold capitalize leading-[63.98px]">{collectionData?.name}</h1>
               <ul className="space-y-2">
-                <li className="px-1 flex justify-between py-2">
-                  <span className='text-white text-2xl font-bold'>{collectionData?.name}</span>
-                </li>
+
                 <li className="flex px-1 justify-between py-1">
                   <span className='w-[574px] text-slate-400 text-base font-normal leading-loose'>{collectionData?.description}</span>
                 </li>
@@ -320,12 +318,35 @@ const Detail = () => {
 
                 <li className="flex flex-col px-1 text-white py-1">
                   <span className="font-bold text-slate-400 ">Join Price</span>
-                  {collectionData && <span className="text-white font-semibold"> {formatEther(collectionData?.price)} ETH</span>}
+                  {collectionData && <span className="text-white text-xl font-bold"> {formatEther(collectionData?.price)} ETH</span>}
                 </li>
+                <li className="flex flex-col px-1 text-white py-1">
+                  <span className="font-bold text-slate-400 ">Active Pool</span>
+                  {collectionData && <span className="text-white text-xl font-bold"> 10000 ETH</span>}
+                </li>
+                <li className="flex flex-col px-1 py-1 bg-gray-800 rounded-2xl">
+                  <div className="flex items-center">
+                    <img
+                      src={Image}
+                      alt="Owner's Avatar"
+                      className="w-16 h-16 rounded-2xl mb-2 ml-2 mt-2 mr-2"
+                    />
+                    <div className="flex flex-col">
+                      <span className="font-bold text-slate-400">Owner</span>
+                      <span className="text-slate-200">0xf938975d181E4228cA2B36EfD4Ddd541A59724a1</span>
+                    </div>
+                  </div>
+                </li>
+              
+
+
+
+
 
               </ul>
 
               <div className="flex items-start gap-5 justify-start mt-5">
+                
 
                 <IDKitWidget
                   app_id="app_staging_2c9d462d4316977be96a258fa730570f" // must be an app set to on-chain
