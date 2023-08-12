@@ -20,10 +20,6 @@ const TrackEvents = ({id}) => {
 
   const marketplaceID = id ? id : 733 ;
 
-  //const L1Hyperlane = "0xD45b26D61c41D731adCd661831CEc173D23A4012";
-  //const L2Hyperlane = "0x3A51C234065016fD1612856b5456e7164858768e";
-  //const L2Main = "0xad8aa0918B2aE001762a233fF4283F2C2A2a1479";
-
   //Event Flow: Randomness Request sent to L1 -> Randomness Requested from Chainlink
   // ->Randomness Generated, waiting for Automation -> Randomness Sent to L2 -> Giveaway Executed.
 

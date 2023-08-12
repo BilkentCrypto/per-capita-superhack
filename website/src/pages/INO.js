@@ -19,14 +19,14 @@ function INO() {
 
   const providers = [
     {
-      id: 'myIno',
-      name: 'My INOs',
-    },
-    {
-      id: 'myCollections',
+      id: 'joined',
       name: 'Joined INOs',
     },
    
+    {
+      id: 'myINOs',
+      name: 'My INOs',
+    },
     {
       id: 'executable',
       name: 'Executable INOs',
@@ -91,9 +91,13 @@ function INO() {
 
   let filteredMarketplaces;
 
-  if (selectedProvider === 'myCollections')
+  if (selectedProvider === 'joined')
     filteredMarketplaces = marketplaces.filter((value) => {
       return isParticipated[value.id];
+    });
+  if (selectedProvider === 'myINOs')
+    filteredMarketplaces = marketplaces.filter((value) => {
+      return value.owner.toLowerCase() === address.toLowerCase();
     });
   else if (selectedProvider === 'executable')
     filteredMarketplaces = marketplaces.filter((value) => {
