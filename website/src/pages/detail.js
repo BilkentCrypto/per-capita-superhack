@@ -369,19 +369,20 @@ const Detail = () => {
                   <span className='w-[574px] text-slate-400 text-base font-normal leading-loose'>{collectionData?.description}</span>
                 </li>
                 <li className="flex flex-col px-1 text-white py-1">
+                  <span className="font-bold text-slate-400 ">Collection Status</span>
+                  <span className="font-bold text-green-400 text-xl italic">{`Active`}</span>
+                </li>
+                { collectionData?.giveawayTime > moment().unix() &&
+                <li className="flex flex-col px-1 text-white py-1">
                   <span className="font-bold text-slate-400">Remaining Time</span>
                   <span className='text-white text-base font-bold capitalize'><CountDownTimer targetTime={collectionData?.giveawayTime.toString()}/></span>
-                </li>
+                </li>}
 
                 <li className="flex flex-col px-1 text-white py-1">
                   <span className="font-bold text-slate-400 ">Join Price</span>
                   {collectionData && <span className="text-white text-[22px] text-base font-bold capitalize"> {formatEther(collectionData?.price)} ETH</span>}
                 </li>
-                <li className="flex flex-col px-1 text-white py-1">
-                  <span className="font-bold text-slate-400 ">Collection Status</span>
-                  <span className="font-bold text-green-400 text-xl italic">{`Active`}</span>
-
-                </li>
+               
                 <li className="flex flex-col px-1 text-white py-1">
                   <span className="font-bold text-slate-200 ">Collection Addres</span>
                   <span className="font-bold italic hover:text-gray-400 text-white">
@@ -426,7 +427,7 @@ const Detail = () => {
                       disabled={isParticipated || wantedVerification}
                       className="w-[275px] h-16 p-4 bg-blue-600 rounded-lg justify-center items-start gap-2.5 inline-flex text-white hover:bg-indigo-600 text-lg align-center disabled:bg-gray-600 disabled:text-opacity-60"
                     >
-                      <span className=" font-semibold">{isParticipated || wantedVerification ? "Already Participated" : "Join"}</span>
+                      <span className=" font-semibold">{wantedVerification ? (isParticipated ? "Already Participated" : "Verifying Proof...") : "Join"}</span>
                     </button> : null
                   }
                 </IDKitWidget>
@@ -478,7 +479,7 @@ const Detail = () => {
         </div>
 
         <div className="flex justify-center mt-72 space-x-4 md:mt-72">
-          <DetailFooter isPast={collectionData?.giveawayTime < moment().unix()} collectionAddress={collectionData?.contractAddress} marketplaceId={id} nftIds={NFTs} nftNumber={`40`} isOwner={collectionData?.owner == address} />
+          <DetailFooter isPast={collectionData?.giveawayTime < moment().unix()} collectionAddress={collectionData?.contractAddress} marketplaceId={id} nftIds={NFTs} nftNumber={`40`} isOwner={collectionData?.owner.toLowerCase() == address?.toLowerCase()} />
         </div>
 
 

@@ -10,7 +10,7 @@ import { generateOpenseaCollectionUrl, generateOpenseaUrl } from '../utils/marke
 import zdk from '../utils/zdk';
 import { getImageUrl } from '../utils/getWeb3';
 
-const DetailFooter = ({collectionAddress, nftIds, marketplaceId, isPast, isOwner,nftNumber}) => {
+const DetailFooter = ({collectionAddress, nftIds, marketplaceId, isPast, isOwner}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { address } = useAccount();
   const [nfts, setNfts] = useState([]);
@@ -96,16 +96,16 @@ return () => {
     <div className="flex flex-col w-full items-left bg-black py-4 px-6">
       <div className="flex items-center justify-between mb-4">
         <div className="text-white text-3xl font-bold">
-          All NFTs [{nftNumber}]
+          All NFTs [{nftIds?.length}]
         </div>
         <div className="flex items-center">
-          {!isPast && !isApproved && (
+          {!isPast && !isApproved && isOwner && (
             <button className="w-44 h-16 p-4 rounded-lg items-center border border-blue-600 hover:bg-blue-700 justify-center gap-2.5 inline-flex" onClick={handleApprove}>
               <AiOutlinePlus className="text-white text-base" />
               <div className="text-white text-base font-semibold capitalize leading-loose">Approve</div>
             </button>
           )}
-          {!isPast && isApproved && (
+          {!isPast && isApproved && isOwner && (
             <button className="w-44 h-16 p-4 rounded-lg items-center border border-blue-600 hover:bg-blue-700 justify-center gap-2.5 inline-flex ml-auto" onClick={handleOpenModal}>
               <AiOutlinePlus className="text-white text-base" />
               <div className="text-white text-base font-semibold capitalize leading-loose">Add NFT</div>

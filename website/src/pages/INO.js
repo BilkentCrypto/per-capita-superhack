@@ -8,6 +8,7 @@ import { formatUnits } from 'viem';
 import Card from '../components/Card';
 import moment from 'moment';
 import { useContractInfiniteReads, paginatedIndexesConfig, useAccount } from 'wagmi';
+import inoTypes from '../utils/inoTypes';
 
 
 function INO() {
@@ -90,32 +91,51 @@ function INO() {
 
   let filteredMarketplaces;
 
-  if (selectedProvider === 'joined')
+
+
+  if (selectedProvider === 'joined') {
+    
     filteredMarketplaces = marketplaces.filter((value) => {
       console.log("single", isParticipated[value.id]);
       return isParticipated[value.id];
     });
-  else if (selectedProvider === 'myINOs')
+  }
+  else if (selectedProvider === 'myINOs'){
+    
     filteredMarketplaces = marketplaces.filter((value) => {
-      return value?.owner.toLowerCase() === address?.toLowerCase();
+      return value.owner.toLowerCase() === address?.toLowerCase();
     });
-  else if (selectedProvider === 'executable')
+  }
+  else if (selectedProvider === 'executable'){
+    
     filteredMarketplaces = marketplaces.filter((value) => {
       return value.giveawayTime < moment().unix() && !value.isDistributed
     });
-  else if (selectedProvider === 'past')
+  }
+  else
+  if (selectedProvider === 'past'){
+    
     filteredMarketplaces = marketplaces.filter((value) => {
       return value.giveawayTime < moment().unix() && value.isDistributed
-    }); else
+    });
+  }
+    else {
+    
     filteredMarketplaces = marketplaces.filter((value) => {
       return value.giveawayTime > moment().unix()
     });
-
+  }
 
 
   const marketplaceCards = filteredMarketplaces.map((value, index) => {
     if (value.marketType == 0) return null;
-    return <Card key={value.id} imageUri={value.imageUri} name={value.name} contractAddress={value.contractAddress} price={formatEther(value.price)} targetTime={value.giveawayTime.toString()} id={value.id} participant={`1238 Unique Participants`} />
+    let inoType;
+    if(value.giveawayTime < moment().unix() && !value.isDistributed) inoType = inoTypes.Executable;
+    else if(value.giveawayTime < moment().unix() && value.isDistributed) inoType = inoTypes.Past;
+    else if(value.owner.toLowerCase() === address?.toLowerCase()) inoType = inoTypes.MyINOs;
+    else if(isParticipated[value.id]) inoType = inoTypes.Joined;
+    else inoType = inoTypes.Normal;
+    return <Card key={value.id} imageUri={value.imageUri} name={value.name} contractAddress={value.contractAddress} price={formatEther(value.price)} targetTime={value.giveawayTime.toString()} id={value.id} participant={value.participantNumber.toString()} inoType={inoType}/>
   });
 
 

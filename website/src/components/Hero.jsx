@@ -7,6 +7,7 @@ import { formatEther, parseGwei } from 'viem';
 import { formatUnits } from 'viem';
 import { readContract, writeContract } from '@wagmi/core';
 import { useContractRead } from 'wagmi';
+import inoTypes from '../utils/inoTypes';
 
 
 
@@ -21,7 +22,7 @@ function Home() {
   }) 
 
   const collectionData = readContract.data;
-  
+
   return (
     <>
       <section className="w-full pt-24 md:pt-0 md:h-screen bg-[#02050E] relative flex flex-col md:flex-row justify-center items-center">
@@ -47,7 +48,8 @@ function Home() {
         </div>
         <div className="lg:max-w-lg lg:w-5/12 md:w-1/2 w-5/6 mb-6 md:mt-10 max-w-[400px]">
           <div style={{ width: '100%', maxWidth: '400px', height: '400px' }}>
-            {collectionData && <Card imageUri={collectionData.imageUri} name={collectionData.name} contractAddress={ collectionData.contractAddress} time= {'05 : 12 : 07 : 45'}price={formatEther(collectionData.price)} id={1} />}
+
+            {collectionData && <Card imageUri={collectionData.imageUri} name={collectionData.name} contractAddress={ collectionData.contractAddress} targetTime={collectionData.giveawayTime.toString()} price={formatEther(collectionData.price)} id={1} participant={collectionData.participantNumber.toString()} inoType={inoTypes.Normal}/>}
 
           </div>
         </div>
