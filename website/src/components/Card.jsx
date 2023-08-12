@@ -3,7 +3,6 @@ import { useNavigate  } from 'react-router-dom';
 import { erc721ABI } from 'wagmi'
 import contractAddresses from '../utils/addresses.json';
 import mainContractAbi from '../utils/MainAbi.json';
-import  {alchemy}  from '../utils/getAlchemy.js'
 import { convertToImage, getFile, getUri } from '../utils/getWeb3';
 
 const Card = ({ imageUri, name, contractAddress, price, deadline, id }) => {

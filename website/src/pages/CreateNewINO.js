@@ -5,7 +5,6 @@ import mainContractAbi from '../utils/MainAbi.json';
 import { decodeEventLog, parseEther } from 'viem';
 import { useAccount } from 'wagmi';
 import { useNavigate } from 'react-router-dom';
-import { alchemy } from '../utils/getAlchemy.js'
 import { storeFile, getFile, storeUri } from '../utils/getWeb3';
 
 const CreateNewNIO = () => {

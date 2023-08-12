@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import NftCard from './NftCard';
 import { AiOutlinePlus } from 'react-icons/ai';
 import AddNftModal from './AddNftModal'; 
-import { alchemy } from '../utils/getAlchemy';
 import { useContractRead, useAccount, erc721ABI } from 'wagmi';
 import contractAddresses from '../utils/addresses.json';
 import mainContractAbi from '../utils/MainAbi.json';

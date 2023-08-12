@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
-import { alchemy } from '../utils/getAlchemy';
 import { useAccount } from 'wagmi';
 import NftCard from './NftCard';
 import ModalNftCard from './ModalNftCard';
