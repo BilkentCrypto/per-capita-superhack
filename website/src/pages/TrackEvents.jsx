@@ -1,10 +1,7 @@
 //import { watchEvent } from "viem/dist/types/actions/public/watchEvent";
 import { useState, useEffect } from "react";
-import { createPublicClient, http, parseAbiItem } from "viem";
-import { optimismGoerli, goerli } from "viem/chains";
-import { readContract, writeContract, watchContractEvent } from '@wagmi/core';
+import { parseAbiItem } from "viem";
 import contractAddresses from '../utils/addresses.json';
-import mainContractAbi from '../utils/MainAbi.json';
 import { publicClientL1, publicClientL2 } from "../utils/viemClients";
 import moment from "moment";
 

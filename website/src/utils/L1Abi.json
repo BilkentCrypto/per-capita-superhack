@@ -43,7 +43,7 @@
 			{
 				"indexed": true,
 				"internalType": "address",
-				"name": "userAddress",
+				"name": "participant",
 				"type": "address"
 			},
 			{

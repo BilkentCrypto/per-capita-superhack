@@ -6,7 +6,7 @@ import { useContractRead, useAccount, erc721ABI } from 'wagmi';
 import contractAddresses from '../utils/addresses.json';
 import mainContractAbi from '../utils/MainAbi.json';
 import { writeContract } from '@wagmi/core'
-import { generateOpenseaUrl } from '../utils/marketplaceGenerator';
+import { generateOpenseaCollectionUrl, generateOpenseaUrl } from '../utils/marketplaceGenerator';
 import zdk from '../utils/zdk';
 import { getImageUrl } from '../utils/getWeb3';
 

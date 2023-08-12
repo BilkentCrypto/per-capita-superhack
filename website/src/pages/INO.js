@@ -5,7 +5,6 @@ import contractAddresses from '../utils/addresses.json';
 import mainContractAbi from '../utils/MainAbi.json';
 import { formatEther, parseGwei } from 'viem';
 import { formatUnits } from 'viem';
-import { BeParticipantTest } from './BeParticipantTest';
 import Card from '../components/Card';
 import moment from 'moment';
 import { useContractInfiniteReads, paginatedIndexesConfig, useAccount } from 'wagmi';
@@ -93,11 +92,12 @@ function INO() {
 
   if (selectedProvider === 'joined')
     filteredMarketplaces = marketplaces.filter((value) => {
+  console.log("single", isParticipated[value.id]);
       return isParticipated[value.id];
     });
-  if (selectedProvider === 'myINOs')
+  else if (selectedProvider === 'myINOs')
     filteredMarketplaces = marketplaces.filter((value) => {
-      return value.owner.toLowerCase() === address.toLowerCase();
+      return value?.owner.toLowerCase() === address?.toLowerCase();
     });
   else if (selectedProvider === 'executable')
     filteredMarketplaces = marketplaces.filter((value) => {
