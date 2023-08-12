@@ -4,6 +4,8 @@ import { parseAbiItem } from "viem";
 import contractAddresses from '../utils/addresses.json';
 import { publicClientL1, publicClientL2 } from "../utils/viemClients";
 import moment from "moment";
+import { FaTimes } from 'react-icons/fa'; 
+
 
 const L1Explorer = "https://goerli.etherscan.io/tx/";
 const L2Explorer = "https://testnet.explorer.zora.energy/tx/";
@@ -125,24 +127,24 @@ const TrackEvents = ({id}) => {
     <div className="flex items-center justify-center">
       <div className="flex flex-col items-start gap-4 justify-center">
   
-        <span className="text-base text-white">
-          Sent L2-L1 message with hyperlane: {vrfRequestL1 ? "true " + moment.unix(vrfRequestL1.timestamp.toString()).toDate() : <span className="text-red-500">false</span>}
+        <span className="text-base  text-white">
+          Sent L2-L1 message with hyperlane: {vrfRequestL1 ? "true " + moment.unix(vrfRequestL1.timestamp.toString()).toDate() : <span className="text-red-500"> <FaTimes className="inline w-6 h-6 text-red-500 mr-1" /></span>}
           {vrfRequestL1 && <a href={L2Explorer + vrfRequestL1.transactionHash} target="_blank" className="text-blue-400 ml-2">Go to transaction</a>}
         </span>
         <span className="text-base text-white">
-          VRF Requested from Chainlink: {vrfRequestSentL1 ? "true " + moment.unix(vrfRequestSentL1.timestamp.toString()).toDate() : <span className="text-red-500">false</span>}
+          VRF Requested from Chainlink: {vrfRequestSentL1 ? "true " + moment.unix(vrfRequestSentL1.timestamp.toString()).toDate() : <span className="text-red-500"><FaTimes className="inline w-6 h-6 text-red-500 mr-1" /></span>}
           {vrfRequestSentL1 && <a href={L1Explorer + vrfRequestSentL1.transactionHash} target="_blank" className="text-blue-400 ml-2">Go to transaction</a>}
         </span>
         <span className="text-base text-white">
-          Randomness Received From Chainlink: {randomGenerated ? "true " + moment.unix(randomGenerated.timestamp.toString()).toDate() : <span className="text-red-500">false</span>}
+          Randomness Received From Chainlink: {randomGenerated ? "true " + moment.unix(randomGenerated.timestamp.toString()).toDate() : <span className="text-red-500"><FaTimes className="inline w-6 h-6 text-red-500 mr-1" /></span>}
           {randomGenerated && <a href={L1Explorer + randomGenerated.transactionHash} target="_blank" className="text-blue-400 ml-2">Go to transaction</a>}
         </span>
         <span className="text-base text-white">
-          Random Sent L1 to L2: {randomSentToL2 ? "true " + moment.unix(randomSentToL2.timestamp.toString()).toDate() : <span className="text-red-500">false</span>}
+          Random Sent L1 to L2: {randomSentToL2 ? "true " + moment.unix(randomSentToL2.timestamp.toString()).toDate() : <span className="text-red-500"><FaTimes className="inline w-6 h-6 text-red-500 mr-1" /></span>}
           {randomSentToL2 && <a href={L1Explorer + randomSentToL2.transactionHash} target="_blank" className="text-blue-400 ml-2">Go to transaction</a>}
         </span>
         <span className="text-base text-white">
-          Giveaway Seed Saved: {giveawayDone ? "true " + moment.unix(giveawayDone.timestamp.toString()).toDate() : <span className="text-red-500">false</span>}
+          Giveaway Seed Saved: {giveawayDone ? "true " + moment.unix(giveawayDone.timestamp.toString()).toDate() : <span className="text-red-500"><FaTimes className="inline w-6 h-6 text-red-500 mr-1" /></span>}
           {giveawayDone && <a href={L2Explorer + giveawayDone.transactionHash} target="_blank" className="text-blue-400 ml-2">Go to transaction</a>}
         </span>
       </div>

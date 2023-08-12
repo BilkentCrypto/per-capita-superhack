@@ -35,6 +35,8 @@ const EventsModal = ({ id, showModal, setShowModal }) => {
                   <h3 className="text-2xl text-white font-semibold">
                     Track Events
                   </h3>
+                  <div className="border-b border-gray-100"></div>
+
                   <button
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-xl leading-none font-semibold outline-none focus:outline-none"
                     onClick={() => setShowModal(false)}
@@ -121,7 +123,7 @@ const Detail = () => {
 
   const [image, setImage] = useState();
   const [shouldGetImage, setGetImage] = useState(true);
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(true);
   const [showProofModal, setShowProofModal] = useState(false);
 
 
