@@ -39,6 +39,31 @@
 				"internalType": "uint256",
 				"name": "collectionId",
 				"type": "uint256"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "userAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "proofResult",
+				"type": "bool"
+			}
+		],
+		"name": "L1GotProof",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "collectionId",
+				"type": "uint256"
 			}
 		],
 		"name": "RandomNumberGenerated",
