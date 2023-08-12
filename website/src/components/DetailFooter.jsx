@@ -34,11 +34,8 @@ const DetailFooter = ({collectionAddress, nftIds, marketplaceId, isPast, isOwner
     } ));
 
     nftMetadatas.sort( (a, b) => a.nft.identifier - b.nft.identifier );
-    console.log("filtered nfts", nftMetadatas);
-    const filteredNfts = nftMetadatas.filter((value ) => value.nft.owners[0].address.toLowerCase() === contractAddresses.Main.toLowerCase())
 
-
-    const newNfts = filteredNfts.map( value => {
+    const newNfts = nftMetadatas.map( value => {
       return {
         tokenId: value.nft.identifier,
         title: value.nft.name,

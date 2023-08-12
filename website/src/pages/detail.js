@@ -223,7 +223,7 @@ const Detail = () => {
     getImage();
   }
 
-  const handleBeParticipant = async () => {
+  const handleBeParticipantMock = async () => {
 
     const { hash } = await writeContract({
       address: contractAddresses.Main,
@@ -325,7 +325,8 @@ const Detail = () => {
     console.log("contract verified", isContractVerified);
 
     if (isContractVerified) {
-      enqueueSnackbar('Correct proof!');
+      enqueueSnackbar('Correct proof!', { variant: 'success'} );
+      try{
       const { hash } = await writeContract({
         address: contractAddresses.Main,
         abi: mainContractAbi,
@@ -334,8 +335,13 @@ const Detail = () => {
         value: collectionData.price,
       });
       setShowProofModal(true);
+
+    } catch(e) {
+      enqueueSnackbar('Person already participated!', { variant: 'error'} )
+    }
+
     } else {
-      enqueueSnackbar('Proof is wrong!');
+      enqueueSnackbar('Proof is wrong!', { variant: 'error'} );
 
     }
 
@@ -346,6 +352,8 @@ const Detail = () => {
 
   let statusText;
   if(collectionData?.giveawayTime < moment().unix() && !collectionData?.isDistributed) statusText = <span className="font-bold text-yellow-400 text-xl italic">Executable</span>;
+  else if(collectionData?.randomSeed > 0 && !isClaimed && isParticipated && giveawayResult >= NFTs?.length) statusText = <span className="font-bold text-red-500 text-xl italic">Not Won</span>;
+  else if(collectionData?.randomSeed > 0 && !isClaimed && isParticipated && giveawayResult < NFTs?.length) statusText = <span className="font-bold text-green-500 text-xl italic">Won NFT!</span>;
   else if(collectionData?.giveawayTime < moment().unix() && collectionData?.isDistributed) statusText = <span className="font-bold text-red-400 text-xl italic">Done</span>;
   else statusText = <span className="font-bold text-green-400 text-xl italic">Active</span>;
 
