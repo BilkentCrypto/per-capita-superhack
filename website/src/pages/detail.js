@@ -209,7 +209,7 @@ const Detail = () => {
   //console.log("data", collectionData)
 
 
-
+  const isOwner = collectionData?.owner.toLowerCase() === address?.toLowerCase();
 
   const getImage = async () => {
 
@@ -407,7 +407,10 @@ const Detail = () => {
                     />
                     <div className="flex flex-col overflow-hidden ">
                       <span className="font-bold text-slate-400 ">Owner</span>
+                      { isOwner ? 
+                      <span className="text-slate-200 text-xl truncate font-bold opacity-85 ml-1">You</span> :
                       <span className="text-slate-200 truncate font-semibold opacity-95">{collectionData?.owner}</span>
+                      }
                     </div>
                   </div>
                 </li>
@@ -479,7 +482,7 @@ const Detail = () => {
         </div>
 
         <div className="flex justify-center mt-72 space-x-4 md:mt-72">
-          <DetailFooter isPast={collectionData?.giveawayTime < moment().unix()} collectionAddress={collectionData?.contractAddress} marketplaceId={id} nftIds={NFTs} nftNumber={`40`} isOwner={collectionData?.owner.toLowerCase() == address?.toLowerCase()} />
+          <DetailFooter isPast={collectionData?.giveawayTime < moment().unix()} collectionAddress={collectionData?.contractAddress} marketplaceId={id} nftIds={NFTs} nftNumber={`40`} isOwner={isOwner} />
         </div>
 
 

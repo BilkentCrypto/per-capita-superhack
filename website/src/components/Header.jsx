@@ -73,9 +73,9 @@ const Header = () => {
               </li>
               <li>
                 <Link
-                  to="/CreateNewNIO"
+                  to="/CreateNewINO"
                   className={
-                    location.pathname === '/CreateNewNIO'
+                    location.pathname === '/CreateNewINO'
                       ? 'block py-2 pr-4 pl-3 text-white font-semibold md:p-0'
                       : 'block py-2 pr-4 pl-3 text-gray-400 font-semibold md:border-0 md:p-0'
                   }
@@ -83,7 +83,7 @@ const Header = () => {
                     setIsNavExpanded(false);
                   }}
                 >
-                  CreateNewINO
+                  Start INO
                 </Link>
               </li>
             

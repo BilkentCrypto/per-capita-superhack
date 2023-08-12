@@ -7,7 +7,7 @@ import { useAccount } from 'wagmi';
 import { useNavigate } from 'react-router-dom';
 import { storeFile, getFile, storeUri } from '../utils/getWeb3';
 
-const CreateNewNIO = () => {
+const CreateNewINO = () => {
   const [name, setName] = useState(''); //sets name
   const [description, setDescription] = useState('');
   const [giveawayTime, setGiveawayTime] = useState('');
@@ -169,5 +169,5 @@ const CreateNewNIO = () => {
   );
 };
 
-export default CreateNewNIO;
+export default CreateNewINO;
 
