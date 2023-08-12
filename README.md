@@ -5,13 +5,13 @@ PerCapita is a Decentralized Initial NFT Offering platform built on Zora in Supe
 
 Below, you can see a brief description of how PerCapita utilizes the sponsor projects of the Superhack hackathon (For more details, scroll below):
 
-**Zora**: PerCapita Main Contract is built on Zora - OP Stack chain. Zora has built-in NFT marketplace, and NFT Creating contracts which makes creating and trading NFT collections easier in terms of UX. Also, thanks to its OP Stack architecture, these actions with NFTs are scalable and cost-efficient.
+[**Zora**](https://docs.zora.co/docs/zora-network/intro): PerCapita Main Contract is built on Zora - OP Stack chain. Zora has built-in NFT marketplace, and NFT Creating contracts which makes creating and trading NFT collections easier in terms of UX. Also, thanks to its OP Stack architecture, these actions with NFTs are scalable and cost-efficient.
 
-**Worldcoin**: PerCapita makes sure that the offerings are sybil-resistant. To achieve Proof of Humanity for the offerings, Worldcoin is used where the collection owners can be certain a person can get at most 1 NFT (Worldcoin is not supported in Zora, we made this possible with Hyperlane; see "Hyperlane" section below).
+[**Worldcoin**](https://worldcoin.org/): PerCapita makes sure that the offerings are sybil-resistant. To achieve Proof of Humanity for the offerings, Worldcoin is used where the collection owners can be certain a person can get at most 1 NFT (Worldcoin is not supported in Zora, we made this possible with Hyperlane; see "Hyperlane" section below).
 
-**Chainlink**: The participant count for the offerings can be more than the supply of the collection, so verifiable randomness should be used to ensure fair distribution of the offered NFTs. Chainlink VRF is used for verifiable randomness (Chainlink VRF is not supported in Zora. We made this possible in Zora with Hyperlane; see below for more)
+[**Chainlink**](https://chain.link/): The participant count for the offerings can be more than the supply of the collection, so verifiable randomness should be used to ensure fair distribution of the offered NFTs. Chainlink VRF is used for verifiable randomness (Chainlink VRF is not supported in Zora. We made this possible in Zora with Hyperlane; see below for more)
 
-**Hyperlane**: Building decentralized apps that hash to ensure fairness and randomness for the functionality of the protocol may require devs to use other protocols like Worldcoin and Chainlink. These key protocols are not supported in Zora, so PerCapita deployed a custom Hyperlane protocol between Goerli-Zora where cross-chain messaging is used to utilize Worldcoin and Chainlink- very crucial for the functionality of PerCapita.
+[**Hyperlane**](https://www.hyperlane.xyz/): Building decentralized apps that hash to ensure fairness and randomness for the functionality of the protocol may require devs to use other protocols like Worldcoin and Chainlink. These key protocols are not supported in Zora, so PerCapita deployed a custom Hyperlane protocol between Goerli-Zora where cross-chain messaging is used to utilize Worldcoin and Chainlink- very crucial for the functionality of PerCapita.
 
 ## Description (Go in as much detail as you can about what this project is. Please be as clear as possible!): 
 
@@ -37,6 +37,3 @@ In order to join an offering, a participant needs to stake X amount of ETH, and 
 Because Zora is not supported by Hyperlane, a custom Hyperlane network (relayer & validator) was deployed for Zora -> Goerli communication lane by the PerCapita team. 
 
 In the PerCapita website, OpenSea API is used to demonstrate the NFTs to the users, and collection owners for a better UI and UX.
-
-
-
