@@ -1,0 +1,32 @@
+{
+  "chains": {
+    "goerli": {
+      "name": "goerli",
+      "domain": 5,
+      "addresses": {
+        "mailbox": "0xCC737a94FecaeC165AbCf12dED095BB13F037685",
+        "interchainGasPaymaster": "0xA13eD1D1E4B2176f83adFeC45F1efcD0D4091ad8",
+        "validatorAnnounce": "0x3Fc742696D5dc9846e04f7A1823D92cb51695f9a"
+      },
+      "protocol": "ethereum",
+      "finalityBlocks": 2,
+      "index": {
+        "from": 8039005
+      }
+    },
+    "zora": {
+      "name": "zora",
+      "domain": 999,
+      "addresses": {
+        "mailbox": "0x51930e22E1D6d20E617BcF29693E187C015eBC6a",
+        "interchainGasPaymaster": "0xb32687e14558C96d5a4C907003327A932356B42b",
+        "validatorAnnounce": "0xdDA09b54aD8685Da6D43ad6638d90A597e8c8cA8"
+      },
+      "protocol": "ethereum",
+      "finalityBlocks": 1,
+      "index": {
+        "from": 835722
+      }
+    }
+  }
+}
