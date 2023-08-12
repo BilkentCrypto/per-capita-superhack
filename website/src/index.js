@@ -62,8 +62,8 @@ root.render(
             <Routes>
               <Route path="/" element={<Home />}></Route>
               {/* <Route path="/exchange" element={<Exchange />}></Route> */}
-              <Route path="/INO" element={<INO />}></Route>
-              <Route path="/CreateNewINO" element={<CreateNewINO />}></Route>
+              <Route path="/INOs" element={<INO />}></Route>
+              <Route path="/LaunchINO" element={<CreateNewINO />}></Route>
               <Route path="/track" element={<TrackEvents />}></Route>
               <Route path="/detail/:id" element={<Detail />}></Route>
               {/* <Route path="/voting" element={<Voting />}></Route>

@@ -209,6 +209,7 @@ const Detail = () => {
   //console.log("data", collectionData)
 
 
+
   const isOwner = collectionData?.owner.toLowerCase() === address?.toLowerCase();
 
   const getImage = async () => {
@@ -343,6 +344,11 @@ const Detail = () => {
 
   console.log("test", giveawayResult, collectionData?.randomSeed > 0, isClaimed, isParticipated, giveawayResult, NFTs?.length)
 
+  let statusText;
+  if(collectionData?.giveawayTime < moment().unix() && !collectionData?.isDistributed) statusText = <span className="font-bold text-yellow-400 text-xl italic">Executable</span>;
+  else if(collectionData?.giveawayTime < moment().unix() && collectionData?.isDistributed) statusText = <span className="font-bold text-red-400 text-xl italic">Done</span>;
+  else statusText = <span className="font-bold text-green-400 text-xl italic">Active</span>;
+
   return (
     <section className="w-full min-h-screen bg-black flex justify-center items-center">
       <SnackbarProvider />
@@ -370,7 +376,7 @@ const Detail = () => {
                 </li>
                 <li className="flex flex-col px-1 text-white py-1">
                   <span className="font-bold text-slate-400 ">Collection Status</span>
-                  <span className="font-bold text-green-400 text-xl italic">{`Active`}</span>
+                  {statusText}
                 </li>
                 { collectionData?.giveawayTime > moment().unix() &&
                 <li className="flex flex-col px-1 text-white py-1">
