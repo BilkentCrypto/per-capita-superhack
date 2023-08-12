@@ -29,6 +29,8 @@ contract PerCapita is IERC721Receiver {
 
     event CollectionCreated(string indexed name, uint256 indexed collectionId);
     event ParticipantAdded(address indexed participant, uint256 indexed collectionId);
+    event ParticipantSentProof(address indexed participant, uint256 indexed collectionId);
+    event WrongProof(address indexed participant, uint256 indexed collectionId);
     event GiveawayExecuting(uint256 indexed collectionId);
     event GiveawayExecuted(uint256 indexed collectionId);
     event NFTClaimed(uint256 indexed collectionId, address claimer);
@@ -160,8 +162,13 @@ signal: abi.encode(receiver) (current metamask wallet address)
         uint msgValue = msg.value;
         require( msgValue >= marketplace.price, "not enough ethers" );
 
-    participants[ marketplaceId ][ msgSender ].nonce = marketplace.participantNumber;
+   
     participants[ marketplaceId ][ msgSender ].wantedVerification = true;
+    marketplaces[ marketplaceId ].pool += msgValue; // if unsuccessful send it back to user with secure command like call
+
+    emit ParticipantSentProof(msgSender, marketplaceId);
+
+    hyperlaneBroadcaster.getProof{value: msg.value}(marketplaceId, msgSender, root, nullifierHash, proof);
 
     //query(marketPlaceId, root ,...)
 //will be query with hyperlane to L1 contract with verifyWorldIdProof() function and continuation of this will be done in query repsonse
@@ -174,14 +181,35 @@ signal: abi.encode(receiver) (current metamask wallet address)
             abi.encodePacked( address(this), marketplaceId ).hashToField(),
             proof
         );
-        nullifierHashes[ nullifierHash ] = true;
+        
 */
 
-        marketplaces[ marketplaceId ].pool += msgValue; // if unsuccessful send it back to user with secure command like call
-        participants[ marketplaceId ][ msgSender ].isParticipated = true;
-        ++marketplaces[ marketplaceId ].participantNumber;
 
-        emit ParticipantAdded(msg.sender, marketplaceId);
+    }
+
+    function gotProof(bytes calldata parameters) external onlyL1Receiver {
+        uint marketplaceId;
+        address msgSender;
+        bool proofResult;
+        uint nullifierHash;
+        (marketplaceId, msgSender, proofResult, nullifierHash) = abi.decode(parameters, (uint, address, bool, uint));
+        Marketplace memory marketplace = marketplaces[ marketplaceId ];
+
+        if(nullifierHashes[ nullifierHash ] == false && proofResult) {
+            nullifierHashes[ nullifierHash ] = true;
+            
+            participants[ marketplaceId ][ msgSender ].isParticipated = true;
+            participants[ marketplaceId ][ msgSender ].nonce = marketplace.participantNumber;
+            ++marketplaces[ marketplaceId ].participantNumber;
+
+            emit ParticipantAdded(msgSender, marketplaceId);
+        } else {
+            marketplaces[ marketplaceId ].pool -= marketplace.price;
+            payable(msgSender).call{value: marketplace.price}("");
+            participants[ marketplaceId ][ msgSender ].wantedVerification = false;
+            emit WrongProof(msgSender, marketplaceId);
+        }
+        
     }
 
 
@@ -445,6 +473,13 @@ signal: abi.encode(receiver) (current metamask wallet address)
 
 interface L2VRFHyperlaneBroadcaster {
     function getRandomSeed(uint collectionId) external payable;
+    function getProof(            
+            uint256 collectionId,
+            address userAddress,
+            uint256 root,
+            uint256 nullifierHash,
+            uint256[8] memory proof
+            ) external payable;
 }
 
 interface L2CrossDomainMessenger {

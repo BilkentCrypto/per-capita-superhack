@@ -98,8 +98,8 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatib
             address userAddress,
             uint256 root,
             uint256 nullifierHash,
-            uint256[8] calldata proof
-        ) external view returns( bool ) {
+            uint256[8] memory proof
+        ) public view returns( bool ) {
 
             string memory proofAction = string.concat(ACTION, Strings.toString(marketplaceId));
             uint256 externalNullifierHash = abi
@@ -134,10 +134,30 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatib
         bytes calldata _body
     ) external onlyMailbox {
         require( bytes32ToAddress(_sender) == L2HyperlaneBroadcaster, "not L2 broadcaster");
-        // require(  ) origin require'ı eklenebilir sadece optimism goerli'den geldiğine emin olmak için
-        uint collectionId = abi.decode(_body, (uint));
-        requestRandomWords(collectionId);
-        //TEST_INT = abi.decode(_body, (uint256));
+        // require(  ) origin require from 999 can be addet to ensure that only coming from zora goerli network
+        bool isVerifyProof;
+        uint256 collectionId;
+        (isVerifyProof, collectionId) = abi.decode(_body, (bool, uint));
+        if(isVerifyProof) {
+            address _userAddress;
+            uint256 _root;
+            uint256 _nullifierHash;
+            uint256[8] memory _proof;
+            (isVerifyProof, collectionId, _userAddress, _root, _nullifierHash, _proof) = abi.decode(_body, (bool, uint, address, uint, uint, uint[8]));
+            bool proofResult = verifyWorldIdProof(collectionId, _userAddress, _root, _nullifierHash, _proof);
+            messenger.sendMessage(
+                mainContractAddress,
+                abi.encodeWithSignature(
+                "gotProof(bytes)",
+                abi.encode(collectionId, _userAddress, proofResult, _nullifierHash)
+            ),
+            700000 // use whatever gas limit you want
+            ); 
+        } else {
+            requestRandomWords(collectionId);
+        }
+
+        
     }
 
     function requestRandomWords(uint collectionId) internal {
@@ -194,7 +214,7 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatib
             "submitRandomSeed(bytes)",
             abi.encode(collectionId, seed)
         ),
-        900000 // use whatever gas limit you want
+        500000 // use whatever gas limit you want
         ); 
 
         emit RandomSentToL2(collectionId);
@@ -211,7 +231,7 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatib
                 "submitMock(bytes)",
                 abi.encode(collectionId, seed)
             ),
-            900000 // use whatever gas limit you want
+            500000 // use whatever gas limit you want
             ); 
 
             
