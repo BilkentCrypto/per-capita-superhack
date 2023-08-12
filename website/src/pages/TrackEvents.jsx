@@ -33,32 +33,6 @@ const TrackEvents = ({id}) => {
   const RandomnessSentToL2 = 'event RandomSentToL2(uint indexed collectionId)';
   const GiveawayDone = 'event GiveawayExecuted(uint256 indexed collectionId)';
 
-  //const marketplaceID = 579 //TAKE THIS AS A PARAMETER IN DETAILS PAGE!
-
-  //Get Random Seed Test
-
-  const getSeedTest = async () => {
-    try {
-      const requiredGas = await readContract({
-        address: contractAddresses.Main,
-        abi: mainContractAbi,
-        functionName: 'getRequiredGasForHyperlane'
-      })
-
-      const { hash } = await writeContract({
-        address: contractAddresses.Main,
-        abi: mainContractAbi,
-        functionName: 'sendVRFRequest',
-        args: [marketplaceID],
-        value: requiredGas,
-      });
-
-      console.log("hash", hash);
-    } catch (e) {
-      console.log("error on write", e);
-    }
-
-  }
 
   async function getL1Data(logs, setFunction) {
     const block = await publicClientL1.getBlock({
@@ -157,12 +131,6 @@ const TrackEvents = ({id}) => {
   return (
     <div className="flex items-center justify-center">
       <div className="flex flex-col items-start gap-4 justify-center">
-        <button
-          onClick={() => getSeedTest()}
-          className="text-white border border-white rounded px-3 py-2"
-        >
-          Get Random Seed
-        </button>
   
         <span className="text-base text-white">
           Sent L2-L1 message with hyperlane: {vrfRequestL1 ? "true " + moment.unix(vrfRequestL1.timestamp.toString()).toDate() : <span className="text-red-500">false</span>}

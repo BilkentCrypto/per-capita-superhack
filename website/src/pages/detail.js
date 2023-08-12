@@ -16,17 +16,9 @@ import { publicClientL1 } from '../utils/viemClients';
 import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 
 
-const EventsModal = ({ id }) => {
-  const [showModal, setShowModal] = useState(false);
+const EventsModal = ({ id, showModal, setShowModal }) => {
   return (
     <>
-      <button
-        className="w-[275px] h-16 p-4 font-semibold bg-purple-600 hover:bg-purple-700 rounded-lg border text-white border-purple-600 justify-center items-start gap-2.5 inline-flex"
-        type="button"
-        onClick={() => setShowModal(true)}
-      >
-        Open regular modal
-      </button>
       {showModal ? (
         <>
           <div
@@ -75,6 +67,10 @@ const EventsModal = ({ id }) => {
 const Detail = () => {
   const { id } = useParams();
   const { address } = useAccount();
+
+  const [image, setImage] = useState();
+  const [shouldGetImage, setGetImage] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
 
   const contractRead = useContractRead({
@@ -158,8 +154,6 @@ const Detail = () => {
   //console.log("data", collectionData)
 
 
-  const [image, setImage] = useState();
-  const [shouldGetImage, setGetImage] = useState(true);
 
   const getImage = async () => {
 
@@ -200,9 +194,12 @@ const Detail = () => {
         args: [id],
         value: requiredGas,
       });
+      setShowModal(true);
+
 
       console.log("hash", hash);
     } catch (e) {
+      
       console.log("error on write", e);
     }
 
@@ -398,7 +395,7 @@ const Detail = () => {
                   </span>
                 </button> : null}
 
-                <EventsModal id={id} />
+                <EventsModal id={id} showModal={showModal} setShowModal={setShowModal} />
               </div>
 
             </div>
