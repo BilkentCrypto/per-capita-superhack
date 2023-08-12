@@ -5,7 +5,7 @@ import contractAddresses from '../utils/addresses.json';
 import mainContractAbi from '../utils/MainAbi.json';
 import { convertToImage, getFile, getUri } from '../utils/getWeb3';
 import Image from '../assets/fire.png'
-const Card = ({ imageUri, name, contractAddress, price, deadline,time, id }) => {
+const Card = ({ imageUri, name, contractAddress, price, deadline,time,participant, id }) => {
 
   //image için nft api gerekiyor gibi
 
@@ -32,7 +32,7 @@ const Card = ({ imageUri, name, contractAddress, price, deadline,time, id }) => 
   }
 
   return (
-    <div className=" w-[350px] h-[536px] mb-5 mt-5 bg-gray-800 rounded-3xl p-6 flex flex-col items-start justify-between shadow-lg">
+    <div className=" w-[350px] h-[550px] mb-5 mt-5 bg-gray-800 rounded-3xl p-6 flex flex-col items-start justify-between shadow-lg">
       <img
         src={image}
         className="self-center w-[336px] h-[352px] object-contain mb-5 rounded-xl"
@@ -45,6 +45,8 @@ const Card = ({ imageUri, name, contractAddress, price, deadline,time, id }) => 
         </p>
         <p className="text-white flex text-base font-medium gap-2">{deadline}</p>
       </div>
+      <span className="text-gray-300 mt-1 italic font-bold">{participant}</span>
+
       <li className="flex flex-col w-[300px] px-2 py-2 mt-2 bg-gray-600 rounded-lg">
   <div className="flex items-center justify-center">
     <div className="flex flex-col text-center items-center justify-center">
@@ -64,7 +66,7 @@ const Card = ({ imageUri, name, contractAddress, price, deadline,time, id }) => 
 
         <button
           onClick={() => handleClick()}
-          className="bg-[#7316ff] w-[300px] mt-2 text-white text-base font-medium px-4 py-2 rounded-lg hover:bg-[#7d27ff] hover:scale-[1.03]"
+          className="bg-[#7316ff] mb-3 w-[300px] mt-2 text-white text-base font-medium px-4 py-2 rounded-lg hover:bg-[#7d27ff] hover:scale-[1.03]"
         >
           Join Now
         </button>

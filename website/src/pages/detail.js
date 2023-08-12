@@ -313,17 +313,17 @@ const Detail = () => {
                 </li>
                 <li className="flex flex-col px-1 text-white py-1">
                   <span className="font-bold text-slate-400">Remaining Time</span>
-                  <span>{moment.unix(collectionData?.giveawayTime.toString()).toString()}</span>
+                  <span className='text-white text-base font-bold capitalize'>{moment.unix(collectionData?.giveawayTime.toString()).toString()}</span>
                 </li>
 
                
                 <li className="flex flex-col px-1 text-white py-1">
                   <span className="font-bold text-slate-400 ">Active Pool</span>
-                  {collectionData && <span className="text-white text-[22px] font-semibold "> 10000 ETH</span>}
+                  {collectionData && <span className="text-white text-[22px] text-base font-bold capitalize "> 10000 ETH</span>}
                 </li>
                 <li className="flex flex-col px-1 text-white py-1">
                   <span className="font-bold text-slate-400 ">Join Price</span>
-                  {collectionData && <span className="text-white text-[22px] font-semibold"> {formatEther(collectionData?.price)} ETH</span>}
+                  {collectionData && <span className="text-white text-[22px] text-base font-bold capitalize"> {formatEther(collectionData?.price)} ETH</span>}
                 </li>
                 <li className="flex flex-col px-1 py-1 bg-gray-800 rounded-2xl">
                   <div className="flex items-center">
