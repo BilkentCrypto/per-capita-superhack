@@ -8,6 +8,7 @@
     "@mui/material": "^5.14.1",
     "@mui/x-date-pickers": "^6.10.1",
     "@rainbow-me/rainbowkit": "^1.0.7",
+    "@tailwindcss/line-clamp": "^0.4.4",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",

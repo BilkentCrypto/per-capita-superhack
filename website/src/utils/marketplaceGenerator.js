@@ -7,4 +7,8 @@ const generateOpenseaCollectionUrl = (collectionAddress) => {
     return `https://testnets.opensea.io/assets/zora-testnet/${collectionAddress}`
 }
 
-export {generateOpenseaUrl, generateOpenseaCollectionUrl}
+const generateOpenseaAccountUrl = (address) => {
+    return `https://testnets.opensea.io/${address}`
+}
+
+export {generateOpenseaUrl, generateOpenseaCollectionUrl, generateOpenseaAccountUrl}

@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useAccount, useContractRead } from 'wagmi';
+import { useAccount, useContractRead, } from 'wagmi';
 import contractAddresses from '../utils/addresses.json';
 import mainContractAbi from '../utils/MainAbi.json';
 import l1Abi from '../utils/L1Abi.json';
@@ -16,6 +16,7 @@ import { publicClientL1 } from '../utils/viemClients';
 import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 import TrackProof from './TrackProof';
 import { CountDownTimer } from '../components/CountdownTimer';
+import { generateOpenseaAccountUrl, generateOpenseaCollectionUrl } from '../utils/marketplaceGenerator';
 
 
 const EventsModal = ({ id, showModal, setShowModal }) => {
@@ -124,6 +125,9 @@ const Detail = () => {
   const [showProofModal, setShowProofModal] = useState(false);
 
 
+
+
+
   const contractRead = useContractRead({
     address: contractAddresses.Main,
     abi: mainContractAbi,
@@ -203,6 +207,7 @@ const Detail = () => {
   console.log("execute button test", requiredGas, collectionData?.giveawayTime < moment().unix(), collectionData?.isDistributed)
 
   //console.log("data", collectionData)
+
 
 
 
@@ -288,6 +293,10 @@ const Detail = () => {
 
   }
 
+  const navigateToAddress = () => {
+    const url = generateOpenseaAccountUrl(collectionData?.owner);
+    window.open(url, '_blank', 'noreferrer');
+  }
 
   const onSuccessWorldId = async (data) => {
 
@@ -329,10 +338,6 @@ const Detail = () => {
 
     }
 
-
-
-
-
   }
 
 
@@ -347,7 +352,7 @@ const Detail = () => {
             {/* Left Card */}
             <div className="w-[585px] h-[508px] p-2 shadow-md rounded-3xl mx-auto">
               <img
-                src={Image}
+                src={image}
                 alt={collectionData?.name}
                 className="w-full mt-7 h-full rounded-3xl object-contain"
               />
@@ -368,43 +373,40 @@ const Detail = () => {
                   <span className='text-white text-base font-bold capitalize'><CountDownTimer targetTime={collectionData?.giveawayTime.toString()}/></span>
                 </li>
 
-
-                <li className="flex flex-col px-1 text-white py-1">
-                  <span className="font-bold text-slate-400 ">Active Pool</span>
-                  {collectionData && <span className="text-white text-[22px] text-base font-bold capitalize "> 10000 ETH</span>}
-                </li>
                 <li className="flex flex-col px-1 text-white py-1">
                   <span className="font-bold text-slate-400 ">Join Price</span>
                   {collectionData && <span className="text-white text-[22px] text-base font-bold capitalize"> {formatEther(collectionData?.price)} ETH</span>}
                 </li>
                 <li className="flex flex-col px-1 text-white py-1">
                   <span className="font-bold text-slate-400 ">Collection Status</span>
-                  <span className="font-bold text-green-400 text-xl ">{`Active`}</span>
+                  <span className="font-bold text-green-400 text-xl italic">{`Active`}</span>
 
                 </li>
                 <li className="flex flex-col px-1 text-white py-1">
                   <span className="font-bold text-slate-200 ">Collection Addres</span>
                   <span className="font-bold italic hover:text-gray-400 text-white">
-                    <a href="https://opensea.io/collection/spaghetti-bones-by-joshua-bagley" target="_blank" rel="noopener noreferrer">
-                    https://opensea.io/collection/spaghetti-bones-by-joshua-bagley                    </a>
+                    <a href={generateOpenseaCollectionUrl(collectionData?.contractAddress)} target="_blank" rel="noopener noreferrer">
+                    {collectionData?.contractAddress}</a>
                   </span>
 
                 </li>
                 <li className="flex flex-col px-1 text-white py-1">
-                  <span className="text-gray-300 mt-1 italic font-bold">{`1287 Unique Participants`}</span>
+                  <span className="text-gray-300 mt-1 italic font-bold">{`${collectionData?.participantNumber} Unique Participants`}</span>
                 </li>
 
 
-                <li className="flex flex-col px-1 py-1 bg-gray-800 rounded-2xl">
+                <li className="flex flex-col px-1 py-1 bg-gray-800 rounded-2xl  hover:scale-[1.02] hover:cursor-pointer"
+                onClick={navigateToAddress}
+                >
                   <div className="flex items-center">
                     <img
-                      src={Image}
+                      src={`https://effigy.im/a/${collectionData?.owner}.png`}
                       alt="Owner's Avatar"
-                      className="w-16 h-16 rounded-2xl mb-2 ml-2 mt-2 mr-2"
+                      className="w-16 h-16 rounded-2xl mb-2 ml-2 mt-2 mr-4"
                     />
-                    <div className="flex flex-col">
-                      <span className="font-bold text-slate-400">Owner</span>
-                      <span className="text-slate-200">0xf938975d181E4228cA2B36EfD4Ddd541A59724a1</span>
+                    <div className="flex flex-col overflow-hidden ">
+                      <span className="font-bold text-slate-400 ">Owner</span>
+                      <span className="text-slate-200 truncate font-semibold opacity-95">{collectionData?.owner}</span>
                     </div>
                   </div>
                 </li>
@@ -419,11 +421,12 @@ const Detail = () => {
                   credential_types={['orb']} // we recommend only allowing orb verification on-chain
                 >
                   {({ open }) =>
-                    !isParticipated && !wantedVerification && collectionData?.giveawayTime > moment().unix() ? <button
+                    collectionData?.giveawayTime > moment().unix() ? <button
                       onClick={open}
-                      className="w-[275px] h-16 p-4 bg-blue-600 rounded-lg justify-center items-start gap-2.5 inline-flex text-white hover:bg-indigo-600 text-lg align-center"
+                      disabled={isParticipated || wantedVerification}
+                      className="w-[275px] h-16 p-4 bg-blue-600 rounded-lg justify-center items-start gap-2.5 inline-flex text-white hover:bg-indigo-600 text-lg align-center disabled:bg-gray-600 disabled:text-opacity-60"
                     >
-                      <span className=" font-semibold">Join</span>
+                      <span className=" font-semibold">{isParticipated || wantedVerification ? "Already Participated" : "Join"}</span>
                     </button> : null
                   }
                 </IDKitWidget>
