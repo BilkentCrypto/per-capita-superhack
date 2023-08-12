@@ -146,6 +146,7 @@ const Detail = () => {
   const isParticipated = participantData?.[0];
   const participantNonce = participantData?.[1];
   const isClaimed = participantData?.[2];
+  const wantedVerification = participantData?.[3];
 
   const executorReward = rewardRequest.data;
   console.log("reward", executorReward)
@@ -336,7 +337,7 @@ const Detail = () => {
 
                 >
                   {({ open }) =>
-                    !isParticipated && collectionData?.giveawayTime > moment().unix() ? <button
+                    !isParticipated && !wantedVerification && collectionData?.giveawayTime > moment().unix() ? <button
                       onClick={open}
                       className="w-[275px] h-16 p-4 bg-blue-600 rounded-lg justify-center items-start gap-2.5 inline-flex text-white hover:bg-indigo-600 text-lg align-center"
                     >
