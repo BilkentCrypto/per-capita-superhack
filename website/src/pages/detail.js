@@ -250,7 +250,7 @@ const Detail = () => {
 
       console.log("hash", hash);
     } catch (e) {
-      
+
       console.log("error on write", e);
     }
 
@@ -349,7 +349,7 @@ const Detail = () => {
               <img
                 src={Image}
                 alt={collectionData?.name}
-                className="w-full h-full rounded-3xl object-contain"
+                className="w-full mt-7 h-full rounded-3xl object-contain"
               />
             </div>
 
@@ -368,7 +368,7 @@ const Detail = () => {
                   <span className='text-white text-base font-bold capitalize'><CountDownTimer targetTime={collectionData?.giveawayTime.toString()}/></span>
                 </li>
 
-               
+
                 <li className="flex flex-col px-1 text-white py-1">
                   <span className="font-bold text-slate-400 ">Active Pool</span>
                   {collectionData && <span className="text-white text-[22px] text-base font-bold capitalize "> 10000 ETH</span>}
@@ -377,6 +377,24 @@ const Detail = () => {
                   <span className="font-bold text-slate-400 ">Join Price</span>
                   {collectionData && <span className="text-white text-[22px] text-base font-bold capitalize"> {formatEther(collectionData?.price)} ETH</span>}
                 </li>
+                <li className="flex flex-col px-1 text-white py-1">
+                  <span className="font-bold text-slate-400 ">Collection Status</span>
+                  <span className="font-bold text-green-400 text-xl ">{`Active`}</span>
+
+                </li>
+                <li className="flex flex-col px-1 text-white py-1">
+                  <span className="font-bold text-slate-200 ">Collection Addres</span>
+                  <span className="font-bold italic hover:text-gray-400 text-white">
+                    <a href="https://opensea.io/collection/spaghetti-bones-by-joshua-bagley" target="_blank" rel="noopener noreferrer">
+                    https://opensea.io/collection/spaghetti-bones-by-joshua-bagley                    </a>
+                  </span>
+
+                </li>
+                <li className="flex flex-col px-1 text-white py-1">
+                  <span className="text-gray-300 mt-1 italic font-bold">{`1287 Unique Participants`}</span>
+                </li>
+
+
                 <li className="flex flex-col px-1 py-1 bg-gray-800 rounded-2xl">
                   <div className="flex items-center">
                     <img
@@ -405,7 +423,7 @@ const Detail = () => {
                       onClick={open}
                       className="w-[275px] h-16 p-4 bg-blue-600 rounded-lg justify-center items-start gap-2.5 inline-flex text-white hover:bg-indigo-600 text-lg align-center"
                     >
-                     <span className=" font-semibold">Join</span>
+                      <span className=" font-semibold">Join</span>
                     </button> : null
                   }
                 </IDKitWidget>
@@ -456,8 +474,8 @@ const Detail = () => {
           </div>
         </div>
 
-        <div className="flex justify-center  space-x-4 md:mt-20">
-          <DetailFooter isPast={collectionData?.giveawayTime < moment().unix()} collectionAddress={collectionData?.contractAddress} marketplaceId={id} nftIds={NFTs} isOwner={collectionData?.owner == address} />
+        <div className="flex justify-center mt-72 space-x-4 md:mt-72">
+          <DetailFooter isPast={collectionData?.giveawayTime < moment().unix()} collectionAddress={collectionData?.contractAddress} marketplaceId={id} nftIds={NFTs} nftNumber={`40`} isOwner={collectionData?.owner == address} />
         </div>
 
 

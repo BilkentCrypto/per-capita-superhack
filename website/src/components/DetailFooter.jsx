@@ -10,7 +10,7 @@ import { generateOpenseaCollectionUrl, generateOpenseaUrl } from '../utils/marke
 import zdk from '../utils/zdk';
 import { getImageUrl } from '../utils/getWeb3';
 
-const DetailFooter = ({collectionAddress, nftIds, marketplaceId, isPast, isOwner}) => {
+const DetailFooter = ({collectionAddress, nftIds, marketplaceId, isPast, isOwner,nftNumber}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { address } = useAccount();
   const [nfts, setNfts] = useState([]);
@@ -96,7 +96,7 @@ return () => {
     <div className="flex flex-col w-full items-left bg-black py-4 px-6">
       <div className="flex items-center justify-between mb-4">
         <div className="text-white text-3xl font-bold">
-          All NFTs
+          All NFTs [{nftNumber}]
         </div>
         <div className="flex items-center">
           {!isPast && !isApproved && (
