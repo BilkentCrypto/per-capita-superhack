@@ -15,6 +15,7 @@ import { IDKitWidget } from '@worldcoin/idkit';
 import { publicClientL1 } from '../utils/viemClients';
 import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 import TrackProof from './TrackProof';
+import { CountDownTimer } from '../components/CountdownTimer';
 
 
 const EventsModal = ({ id, showModal, setShowModal }) => {
@@ -364,7 +365,7 @@ const Detail = () => {
                 </li>
                 <li className="flex flex-col px-1 text-white py-1">
                   <span className="font-bold text-slate-400">Remaining Time</span>
-                  <span className='text-white text-base font-bold capitalize'>{moment.unix(collectionData?.giveawayTime.toString()).toString()}</span>
+                  <span className='text-white text-base font-bold capitalize'><CountDownTimer targetTime={collectionData?.giveawayTime.toString()}/></span>
                 </li>
 
                

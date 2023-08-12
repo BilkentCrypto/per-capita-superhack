@@ -5,7 +5,8 @@ import contractAddresses from '../utils/addresses.json';
 import mainContractAbi from '../utils/MainAbi.json';
 import { convertToImage, getFile, getUri } from '../utils/getWeb3';
 import Image from '../assets/fire.png'
-const Card = ({ imageUri, name, contractAddress, price, deadline,time,participant, id }) => {
+import { CountDownTimer } from './CountdownTimer';
+const Card = ({ imageUri, name, contractAddress, price, deadline,targetTime,participant, id }) => {
 
   //image için nft api gerekiyor gibi
 
@@ -52,7 +53,7 @@ const Card = ({ imageUri, name, contractAddress, price, deadline,time,participan
     <div className="flex flex-col text-center items-center justify-center">
       <div className="flex items-center">
         <img src={Image} alt="Fire Icon" className="w-6 h-6 mr-2" />
-        <span className="text-white text-base font-bold capitalize">{time}</span>
+        <span className="text-white text-base font-bold capitalize"><CountDownTimer targetTime={targetTime}/></span>
       </div>
     </div>
   </div>
