@@ -15,6 +15,7 @@ import { IDKitWidget } from '@worldcoin/idkit';
 import { publicClientL1 } from '../utils/viemClients';
 import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 
+
 const EventsModal = ({ id }) => {
   const [showModal, setShowModal] = useState(false);
   return (

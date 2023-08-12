@@ -26,24 +26,23 @@ const DetailFooter = ({collectionAddress, nftIds, marketplaceId, isPast, isOwner
 
   const fetchNfts = async () => {
 
-    const args = { 
-      where: { 
-        collectionAddresses: [collectionAddress], 
-        ownerAddresses: [contractAddresses.Main] 
-      }, 
-      pagination: {limit: 50}, // Optional, limits the response size to 3 NFTs
-      includeFullDetails: false, // Optional, provides more data on the NFTs such as events
-      includeSalesHistory: false // Optional, provides sales data on the NFTs
-    };
-    
-    const response = await zdk.tokens(args);
-    console.log("nft response", response);
+    const options = {method: 'GET', headers: {accept: 'application/json'}};
+    const nftMetadatas = await Promise.all (nftIds.map( async (value) => {
+      const nftMetadata = await (await fetch(`https://testnets-api.opensea.io/v2/chain/zora_testnet/contract/${collectionAddress}/nfts/${value}`, options)).json();
+      return nftMetadata
 
-    const newNfts = response.tokens.nodes.map( value => {
+    } ));
+
+    nftMetadatas.sort( (a, b) => a.nft.identifier - b.nft.identifier );
+    console.log("filtered nfts", nftMetadatas);
+    const filteredNfts = nftMetadatas.filter((value ) => value.nft.owners[0].address.toLowerCase() === contractAddresses.Main.toLowerCase())
+
+
+    const newNfts = filteredNfts.map( value => {
       return {
-        tokenId: value.token.tokenId,
-        title: value.token.name,
-        imageUrl: getImageUrl(value.token.image?.url),
+        tokenId: value.nft.identifier,
+        title: value.nft.name,
+        imageUrl: value.nft.image_url,
       }
     } ) 
 
@@ -53,9 +52,13 @@ const DetailFooter = ({collectionAddress, nftIds, marketplaceId, isPast, isOwner
   }
   useEffect( () => {
  
+    const interval = setInterval(() => {
       fetchNfts();
+    }, 7000);
   
-
+return () => {
+  clearInterval(interval);
+}
   }, [nftIds] )
 
   const isApproved = isApprovedRequest.data;

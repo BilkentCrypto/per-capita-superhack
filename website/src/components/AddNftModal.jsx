@@ -18,24 +18,26 @@ const AddNftModal = ({ onClose, collectionAddress, marketplaceId }) => {
 
   const fetchNfts = async () => {
     if(address) {
-      const args = { 
-        where: { 
-          collectionAddresses: [collectionAddress], 
-          ownerAddresses: [address] 
-        }, 
-        pagination: {limit: 50}, // Optional, limits the response size to 3 NFTs
-        includeFullDetails: false, // Optional, provides more data on the NFTs such as events
-        includeSalesHistory: false // Optional, provides sales data on the NFTs
-      };
-      
-      const response = await zdk.tokens(args);
-      console.log("nft response", response);
+      const options = {method: 'GET', headers: {accept: 'application/json'}};
+
+      const contractNfts = await (await fetch(`https://testnets-api.opensea.io/v2/chain/zora_testnet/contract/${collectionAddress}/nfts?limit=50`, options)).json();
+      console.log("contract Nfts", contractNfts);
   
-      const newNfts = response.tokens.nodes.map( value => {
+      const nftMetadatas = await Promise.all (contractNfts.nfts.map( async (value) => {
+        const nftMetadata = await (await fetch(`https://testnets-api.opensea.io/v2/chain/zora_testnet/contract/${collectionAddress}/nfts/${value.identifier}`, options)).json();
+        return nftMetadata
+  
+      } ));
+  
+      nftMetadatas.sort( (a, b) => a.nft.identifier - b.nft.identifier );
+      const filteredNfts = nftMetadatas.filter((value ) => value.nft.owners[0].address.toLowerCase() === address.toLowerCase())
+  
+  
+      const newNfts = filteredNfts.map( value => {
         return {
-          tokenId: value.token.tokenId,
-          title: value.token.name,
-          imageUrl: getImageUrl(value.token.image?.url),
+          tokenId: value.nft.identifier,
+          title: value.nft.name,
+          imageUrl: value.nft.image_url,
         }
       } ) 
   
