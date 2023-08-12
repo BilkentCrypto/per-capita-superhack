@@ -228,6 +228,11 @@
 	{
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "_testL2Addr",
+				"type": "address"
+			},
+			{
 				"internalType": "uint256",
 				"name": "collectionId",
 				"type": "uint256"

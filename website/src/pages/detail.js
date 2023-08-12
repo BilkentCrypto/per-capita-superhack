@@ -2,14 +2,18 @@ import { useParams } from 'react-router-dom';
 import { useAccount, useContractRead } from 'wagmi';
 import contractAddresses from '../utils/addresses.json';
 import mainContractAbi from '../utils/MainAbi.json';
+import l1Abi from '../utils/L1Abi.json';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { convertToImage, getFile, getUri } from '../utils/getWeb3';
 import { writeContract, readContract, waitForTransaction } from '@wagmi/core';
 import TrackEvents from './TrackEvents';
-import { formatEther } from 'viem';
+import { decodeAbiParameters, formatEther } from 'viem';
 import DetailFooter from '../components/DetailFooter';
 import Image from '../assets/Image.png'
+import { IDKitWidget } from '@worldcoin/idkit';
+import { publicClientL1 } from '../utils/viemClients';
+import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 
 const EventsModal = ({ id }) => {
   const [showModal, setShowModal] = useState(false);
@@ -144,8 +148,8 @@ const Detail = () => {
   const isClaimed = participantData?.[2];
 
   const executorReward = rewardRequest.data;
-console.log("reward", executorReward)
-console.log("execute button test", requiredGas ,collectionData?.giveawayTime < moment().unix() , collectionData?.isDistributed )
+  console.log("reward", executorReward)
+  console.log("execute button test", requiredGas, collectionData?.giveawayTime < moment().unix(), collectionData?.isDistributed)
 
   //console.log("data", collectionData)
 
@@ -233,10 +237,57 @@ console.log("execute button test", requiredGas ,collectionData?.giveawayTime < m
   }
 
 
+  const onSuccessWorldId = async (data) => {
+
+    console.log("world data", data);
+
+    const unpackedProof = decodeAbiParameters([{ type: 'uint256[8]' }], data.proof)[0];
+    const merkleRoot = decodeAbiParameters([{ type: 'uint256' }], data.merkle_root)[0];
+    const nullifierHash = decodeAbiParameters([{ type: 'uint256' }], data.nullifier_hash)[0];
+
+
+    console.log("args", merkleRoot, nullifierHash, unpackedProof)
+
+    const blockNumber = await publicClientL1.getBlockNumber();
+    console.log("block number", blockNumber)
+
+
+    //contract
+    const isContractVerified = await publicClientL1.readContract({
+      address: contractAddresses.L1,
+      abi: l1Abi,
+      functionName: 'verifyWorldIdProof',
+      args: [id, address, merkleRoot, nullifierHash, unpackedProof],
+    })
+
+    console.log("contract verified", isContractVerified);
+
+    if(isContractVerified) {
+      enqueueSnackbar('Correct proof!');
+      const { hash } = await writeContract({
+        address: contractAddresses.Main,
+        abi: mainContractAbi,
+        functionName: 'beParticipant',
+        args: [id, merkleRoot, nullifierHash, unpackedProof],
+        value: collectionData.price,
+      });
+    } else {
+      enqueueSnackbar('Proof is wrong!');
+
+    }
+
+
+
+    
+
+  }
+
+
   console.log("test", giveawayResult, collectionData?.randomSeed > 0, isClaimed, isParticipated, giveawayResult, NFTs?.length)
 
   return (
     <section className="w-full min-h-screen bg-black flex justify-center items-center">
+      <SnackbarProvider />
       <div className="w-full  max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
         <div className="flex md:mt-20 mt-20 flex-col md:flex-row gap-4">
           <div className=" p-4 flex items-center justify-center w-full md:w-1/2"> {/* Change to w-full md:w-1/2 */}
@@ -272,21 +323,35 @@ console.log("execute button test", requiredGas ,collectionData?.giveawayTime < m
                 </li>
 
               </ul>
+
               <div className="flex items-start gap-5 justify-start mt-5">
-                {!isParticipated && collectionData?.giveawayTime > moment().unix() ? <button
-                  onClick={handleBeParticipant}
-                  className="w-[275px] h-16 p-4 bg-blue-600 rounded-lg justify-center items-start gap-2.5 inline-flex text-white hover:bg-indigo-600 text-lg align-center"
+
+                <IDKitWidget
+                  app_id="app_staging_2c9d462d4316977be96a258fa730570f" // must be an app set to on-chain
+                  action={"bePart_" + id} // solidityEncode the action
+                  signal={address} // only for on-chain use cases, this is used to prevent tampering with a message
+                  onSuccess={onSuccessWorldId}
+                  // no use for handleVerify, so it is removed
+                  credential_types={['orb']} // we recommend only allowing orb verification on-chain
+
                 >
-                  <span className=" font-semibold">Join</span>
+                  {({ open }) =>
+                    !isParticipated && collectionData?.giveawayTime > moment().unix() ? <button
+                      onClick={open}
+                      className="w-[275px] h-16 p-4 bg-blue-600 rounded-lg justify-center items-start gap-2.5 inline-flex text-white hover:bg-indigo-600 text-lg align-center"
+                    >
+                      <span className=" font-semibold">Join</span>
 
-                </button> : null}
+                    </button> : null
 
+                  }
+                </IDKitWidget>
                 {requiredGas >= 0 && collectionData?.giveawayTime < moment().unix() && !collectionData?.isDistributed ? <button
                   onClick={executeGiveaway}
                   className="flex items-center text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-3xl text-lg align-center"
                 >
                   <span className="mr-2 font-semibold">Execute</span>
-                  { executorReward && <span className="bg-white flex items-center rounded-3xl px-2 py-1">
+                  {executorReward && <span className="bg-white flex items-center rounded-3xl px-2 py-1">
                     <span className="text-black font-semibold">{formatEther(executorReward)} ETH</span>
                   </span>}
                 </button> : null}
@@ -330,6 +395,8 @@ console.log("execute button test", requiredGas ,collectionData?.giveawayTime < m
         <div className="flex justify-center  space-x-4 md:mt-20">
           <DetailFooter isPast={collectionData?.giveawayTime < moment().unix()} collectionAddress={collectionData?.contractAddress} marketplaceId={id} nftIds={NFTs} isOwner={collectionData?.owner == address} />
         </div>
+
+
       </div>
     </section>
   );

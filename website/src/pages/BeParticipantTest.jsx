@@ -31,7 +31,6 @@ const blockNumber = await publicClientL1.getBlockNumber();
 console.log("block number", blockNumber)
 
 
-
 //contract
 const isContractVerified = await publicClientL1.readContract({
     address: contractAddresses.L1,
