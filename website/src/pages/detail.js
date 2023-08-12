@@ -140,13 +140,15 @@ const Detail = () => {
 
   const giveawayResult = giveawayResultRequest.data;
 
-  const NFTs = fetchNFTsOfMarketplaceRequest.data;
+  const NFTs = fetchNFTsOfMarketplaceRequest.data; //kontrattaki nft'leri buna göre yap
 
   const participantData = isParticipatedRequest?.data;
   const isParticipated = participantData?.[0];
   const participantNonce = participantData?.[1];
   const isClaimed = participantData?.[2];
   const wantedVerification = participantData?.[3];
+
+  console.log("verificatipn", wantedVerification, isParticipated);
 
   const executorReward = rewardRequest.data;
   console.log("reward", executorReward)
