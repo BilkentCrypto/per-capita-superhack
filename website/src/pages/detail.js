@@ -432,9 +432,9 @@ const Detail = () => {
                 </IDKitWidget>
                 {requiredGas >= 0 && collectionData?.giveawayTime < moment().unix() && !collectionData?.isDistributed ? <button
                   onClick={executeGiveaway}
-                  className="flex items-center text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-3xl text-lg align-center"
+                  className="flex space-x-2 items-center text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-3xl text-lg align-center"
                 >
-                  <span className="mr-2 font-semibold">Execute</span>
+                  <span className="font-semibold">Execute</span>
                   {executorReward && <span className="bg-white flex items-center rounded-3xl px-2 py-1">
                     <span className="text-black font-semibold">{formatEther(executorReward)} ETH</span>
                   </span>}
