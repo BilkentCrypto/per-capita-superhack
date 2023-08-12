@@ -34,7 +34,14 @@ const Card = ({ imageUri, name, contractAddress, price, deadline, targetTime, pa
   }
 
   return (
-    <div className=" w-[350px] h-[550px] mb-5 mt-5 bg-gray-800 rounded-3xl p-6 flex flex-col items-start justify-between shadow-lg">
+    <div className="w-[350px]  overflow-hidden overflow h-[550px] mb-5 mt-5 bg-gray-800 rounded-3xl p-6 flex flex-col items-start justify-between shadow-lg relative">
+       <div class="absolute right-0 top-0 h-16 w-16">
+    <div
+      class="absolute transform rotate-45 bg-green-600 text-center text-white font-semibold py-1 right-[-35px] top-[32px] w-[170px]">
+      WINNER
+    </div>
+  </div>
+
       <img
         src={image}
         className="select-none self-center w-[336px] h-[352px] object-contain mb-5 rounded-xl"
@@ -75,7 +82,7 @@ const Card = ({ imageUri, name, contractAddress, price, deadline, targetTime, pa
           >
             {inoType}  "0.21616" ETH
           </button>
-}
+        }
       </div>
     </div>
   );
