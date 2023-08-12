@@ -127,7 +127,7 @@ const CreateNewINO = () => {
               onChange={(e) => handleDescription(e)}
             />
             <div>
-            <p className="pt-3 pb-2 text-white">INO Image</p>
+            <p className="pt-3 pb-2 text-white">Image of the INO</p>
               <div class="flex items-center justify-center w-full">
                 <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                   {isFilePicked ? (
@@ -171,7 +171,7 @@ const CreateNewINO = () => {
             <p className="pt-2 text-white">NFT Price (in ETH)</p>
 
             <input
-              type="text"
+              type='number'
               className="block mt-1 p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Price in ETH"
               required
@@ -180,7 +180,7 @@ const CreateNewINO = () => {
 
             <button
               onClick={() => createNewINO()}
-              className="text-white bg-[#7316ff] border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg align-center w-full mt-5"
+              className="text-white font-semibold bg-[#7316ff] border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg align-center w-full mt-5"
             >
               Create
             </button>
