@@ -21,7 +21,7 @@ function INO() {
       id: 'joined',
       name: 'Joined INOs',
     },
-   
+
     {
       id: 'myINOs',
       name: 'My INOs',
@@ -34,7 +34,7 @@ function INO() {
       id: 'past',
       name: 'Past INOs',
     },
-   
+
   ];
 
 
@@ -92,7 +92,7 @@ function INO() {
 
   if (selectedProvider === 'joined')
     filteredMarketplaces = marketplaces.filter((value) => {
-  console.log("single", isParticipated[value.id]);
+      console.log("single", isParticipated[value.id]);
       return isParticipated[value.id];
     });
   else if (selectedProvider === 'myINOs')
@@ -115,7 +115,7 @@ function INO() {
 
   const marketplaceCards = filteredMarketplaces.map((value, index) => {
     if (value.marketType == 0) return null;
-    return <Card key={value.id} imageUri={value.imageUri} name={value.name} contractAddress={value.contractAddress} price={formatEther(value.price)} targetTime= {value.giveawayTime.toString()} id={value.id} participant= {`1238 Unique Participants`}/>
+    return <Card key={value.id} imageUri={value.imageUri} name={value.name} contractAddress={value.contractAddress} price={formatEther(value.price)} targetTime={value.giveawayTime.toString()} id={value.id} participant={`1238 Unique Participants`} />
   });
 
 
@@ -124,26 +124,30 @@ function INO() {
       <div className="container w-full flex bg-red">
         <div className="w-full flex flex-wrap">
           <div className="w-full">
-           
-            <div className="mb-10 mt-16 flex justify-start">
+            <div className="mb-10 mt-16 flex justify-start overflow-x-auto">
               <div className="rounded-lg shadow-zinc-700 shadow-2xl">
-                <ul className="space-y-1">
-                  <Link
-                    to="/INO"
-                    className={`px-4 py-2 w-[116px] h-14 rounded-lg mr-5  font-medium mb-5 ${selectedProvider === '' ? 'bg-[#7316ff] text-white rounded-3xl ' : 'border border-[#7316ff] text-white rounded-3xl'}`}
-                    onClick={() => setSelectedProvider('')}
-                  >
-                    Active INOs
-                  </Link>
-                  {providers.map((provider, index) => (
+                <ul className="flex space-x-3 p-3">
+                  <div className="flex items-center">
                     <Link
-                      key={provider.id}
-                      to={`/INO?provider=${provider.id}`}
-                      className={`px-4 py-2 w-[116px] h-14 mr-5 rounded-lg font-medium mb-5 ${selectedProvider === provider.id ? 'bg-[#7316ff] text-white rounded-3xl ' : 'border border-[#7316ff] text-white rounded-3xl'}`}
-                      onClick={() => setSelectedProvider(provider.id)}
+                      to="/INO"
+                      className={`flex justify-center items-center px-4 py-2 w-[160px] h-14 rounded-lg mr-3  font-medium ${selectedProvider === '' ? 'bg-[#7316ff] text-white rounded-3xl' : 'border border-[#7316ff] text-white rounded-3xl'
+                        }`}
+                      onClick={() => setSelectedProvider('')}
                     >
-                      {provider.name}
+                      Active INOs
                     </Link>
+                  </div>
+                  {providers.map((provider, index) => (
+                    <div className="flex items-center" key={provider.id}>
+                      <Link
+                        to={`/INO?provider=${provider.id}`}
+                        className={`flex justify-center items-center px-4 py-2 w-[160px] h-14 mr-3 rounded-lg font-medium ${selectedProvider === provider.id ? 'bg-[#7316ff] text-white rounded-3xl' : 'border border-[#7316ff] text-white rounded-3xl'
+                          }`}
+                        onClick={() => setSelectedProvider(provider.id)}
+                      >
+                        {provider.name}
+                      </Link>
+                    </div>
                   ))}
                 </ul>
               </div>
@@ -153,12 +157,16 @@ function INO() {
 
 
 
+
           </div>
-          <div className="w-full">
-            <div className="grid mt-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div className="w-full flex justify-center">
+            <div className="grid mt-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-10">
               {marketplaceCards}
             </div>
           </div>
+
+
+
         </div>
       </div>
     </section>
