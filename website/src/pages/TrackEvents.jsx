@@ -128,7 +128,7 @@ const TrackEvents = ({id}) => {
       <div className="flex flex-col items-start gap-4 justify-center">
   
         <span className="text-base  text-white">
-          Sent L2-L1 message with hyperlane: {vrfRequestL1 ? "true " + moment.unix(vrfRequestL1.timestamp.toString()).toDate() : <span className="text-red-500"> <FaTimes className="inline w-6 h-6 text-red-500 mr-1" /></span>}
+          Sent L2-L1 message with Hyperlane: {vrfRequestL1 ? "true " + moment.unix(vrfRequestL1.timestamp.toString()).toDate() : <span className="text-red-500"> <FaTimes className="inline w-6 h-6 text-red-500 mr-1" /></span>}
           {vrfRequestL1 && <a href={L2Explorer + vrfRequestL1.transactionHash} target="_blank" className="text-blue-400 ml-2">Go to transaction</a>}
         </span>
         <span className="text-base text-white">

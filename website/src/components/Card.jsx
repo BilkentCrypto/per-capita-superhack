@@ -7,7 +7,7 @@ import { convertToImage, getFile, getUri } from '../utils/getWeb3';
 import Image from '../assets/fire.png'
 import { CountDownTimer } from './CountdownTimer';
 import inoTypes from '../utils/inoTypes';
-const Card = ({ imageUri, name, contractAddress, price, deadline, targetTime, participant, id, inoType }) => {
+const Card = ({ imageUri, name, contractAddress, price, deadline, targetTime, participant, id, inoType, isWinner }) => {
 
   //image için nft api gerekiyor gibi
 
@@ -32,7 +32,6 @@ const Card = ({ imageUri, name, contractAddress, price, deadline, targetTime, pa
     console.log("testaa", `/details/${id}`)
     navigate(`/detail/${id}`)
   }
-  const [isWinner, setIsWinner] = useState(true);
 
   return (
     <div className="w-[350px]  overflow-hidden overflow h-[550px] mb-5 mt-5 bg-gray-800 rounded-3xl p-6 flex flex-col items-start justify-between shadow-lg relative">
