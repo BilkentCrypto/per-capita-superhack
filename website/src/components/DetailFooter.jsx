@@ -90,7 +90,7 @@ const DetailFooter = ({collectionAddress, nftIds, marketplaceId, isPast, isOwner
   } )
 
   return (
-    <div className="flex flex-col items-left bg-black py-4 px-6">
+    <div className="flex flex-col w-full items-left bg-black py-4 px-6">
       <div className="flex items-center justify-between mb-4">
         <div className="text-white text-3xl font-bold">
           All NFTs

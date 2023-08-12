@@ -318,13 +318,14 @@ const Detail = () => {
                   <span>{moment.unix(collectionData?.giveawayTime.toString()).toString()}</span>
                 </li>
 
-                <li className="flex flex-col px-1 text-white py-1">
-                  <span className="font-bold text-slate-400 ">Join Price</span>
-                  {collectionData && <span className="text-white text-xl font-bold"> {formatEther(collectionData?.price)} ETH</span>}
-                </li>
+               
                 <li className="flex flex-col px-1 text-white py-1">
                   <span className="font-bold text-slate-400 ">Active Pool</span>
-                  {collectionData && <span className="text-white text-xl font-bold"> 10000 ETH</span>}
+                  {collectionData && <span className="text-white text-[22px] font-semibold "> 10000 ETH</span>}
+                </li>
+                <li className="flex flex-col px-1 text-white py-1">
+                  <span className="font-bold text-slate-400 ">Join Price</span>
+                  {collectionData && <span className="text-white text-[22px] font-semibold"> {formatEther(collectionData?.price)} ETH</span>}
                 </li>
                 <li className="flex flex-col px-1 py-1 bg-gray-800 rounded-2xl">
                   <div className="flex items-center">
@@ -339,17 +340,8 @@ const Detail = () => {
                     </div>
                   </div>
                 </li>
-              
-
-
-
-
-
               </ul>
-
               <div className="flex items-start gap-5 justify-start mt-5">
-                
-
                 <IDKitWidget
                   app_id="app_staging_2c9d462d4316977be96a258fa730570f" // must be an app set to on-chain
                   action={"bePart_" + id} // solidityEncode the action
@@ -357,17 +349,14 @@ const Detail = () => {
                   onSuccess={onSuccessWorldId}
                   // no use for handleVerify, so it is removed
                   credential_types={['orb']} // we recommend only allowing orb verification on-chain
-
                 >
                   {({ open }) =>
                     !isParticipated && !wantedVerification && collectionData?.giveawayTime > moment().unix() ? <button
                       onClick={open}
                       className="w-[275px] h-16 p-4 bg-blue-600 rounded-lg justify-center items-start gap-2.5 inline-flex text-white hover:bg-indigo-600 text-lg align-center"
                     >
-                      <span className=" font-semibold">Join</span>
-
+                     <span className=" font-semibold">Join</span>
                     </button> : null
-
                   }
                 </IDKitWidget>
                 {requiredGas >= 0 && collectionData?.giveawayTime < moment().unix() && !collectionData?.isDistributed ? <button

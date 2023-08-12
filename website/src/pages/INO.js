@@ -105,7 +105,7 @@ function INO() {
 
   const marketplaceCards = filteredMarketplaces.map((value, index) => {
     if (value.marketType == 0) return null;
-    return <Card key={value.id} imageUri={value.imageUri} name={value.name} contractAddress={value.contractAddress} price={formatEther(value.price)} id={value.id} />
+    return <Card key={value.id} imageUri={value.imageUri} name={value.name} contractAddress={value.contractAddress} price={formatEther(value.price)} time="05 : 12 : 07 : 45" id={value.id} />
   });
 
 
