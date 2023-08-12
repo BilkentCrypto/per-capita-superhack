@@ -354,6 +354,7 @@ const Detail = () => {
 
   let statusText;
   if(collectionData?.giveawayTime < moment().unix() && !collectionData?.isDistributed) statusText = <span className="font-bold text-yellow-400 text-xl italic">Executable</span>;
+  else if(collectionData?.giveawayTime < moment().unix() && collectionData?.isDistributed && collectionData?.randomSeed == 0) statusText = <span className="font-bold text-orange-400 text-xl italic">Pending Random Seed...</span>;
   else if(collectionData?.randomSeed > 0 && !isClaimed && isParticipated && giveawayResult >= NFTs?.length) statusText = <span className="font-bold text-red-500 text-xl italic">Not Won</span>;
   else if(collectionData?.randomSeed > 0 && !isClaimed && isParticipated && giveawayResult < NFTs?.length) statusText = <span className="font-bold text-green-500 text-xl italic">Won NFT!</span>;
   else if(collectionData?.giveawayTime < moment().unix() && collectionData?.isDistributed) statusText = <span className="font-bold text-red-400 text-xl italic">Done</span>;
