@@ -13,7 +13,7 @@ import inoTypes from '../utils/inoTypes';
 
 function INO() {
   const [query] = useSearchParams();
-  const [selectedProvider, setSelectedProvider] = useState(query.get('provider') || '');
+  const [selectedProvider, setSelectedProvider] = useState(query.get('filter') || '');
   const [marketplaces, setMarketplaces] = useState([]);
   const { address } = useAccount();
 
@@ -149,7 +149,7 @@ function INO() {
                 <ul className="flex space-x-3 p-3">
                   <div className="flex items-center">
                     <Link
-                      to="/INO"
+                      to="/INOs"
                       className={`flex justify-center items-center px-4 py-2 w-[160px] h-14 rounded-lg mr-3  font-medium ${selectedProvider === '' ? 'bg-[#7316ff] text-white rounded-3xl' : 'border border-[#7316ff] text-white rounded-3xl'
                         }`}
                       onClick={() => setSelectedProvider('')}
@@ -160,7 +160,7 @@ function INO() {
                   {providers.map((provider, index) => (
                     <div className="flex items-center" key={provider.id}>
                       <Link
-                        to={`/INO?provider=${provider.id}`}
+                        to={`/INOs?filter=${provider.id}`}
                         className={`flex justify-center items-center px-4 py-2 w-[160px] h-14 mr-3 rounded-lg font-medium ${selectedProvider === provider.id ? 'bg-[#7316ff] text-white rounded-3xl' : 'border border-[#7316ff] text-white rounded-3xl'
                           }`}
                         onClick={() => setSelectedProvider(provider.id)}
