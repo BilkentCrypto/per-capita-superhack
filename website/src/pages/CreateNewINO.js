@@ -6,8 +6,8 @@ import { decodeEventLog, parseEther } from 'viem';
 import { useAccount } from 'wagmi';
 import { useNavigate } from 'react-router-dom';
 import { storeFile, getFile, storeUri } from '../utils/getWeb3';
+import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 
-import DatePicker from 'react-datepicker';
 
 const CreateNewINO = () => {
   const [name, setName] = useState(''); //sets name
@@ -15,6 +15,12 @@ const CreateNewINO = () => {
   const [giveawayTime, setGiveawayTime] = useState('');
   const [contractAddr, setContractAddr] = useState('');
   const [price, setPrice] = useState('');
+
+  const [nameRequired, setNameRequired] = useState(false);
+  const [descriptionRequired, setDescriptionRequired] = useState(false);
+  const [giveawayTimeRequired, setGiveawayTimeRequired] = useState(false);
+  const [contractAddrRequired, setContractAddrRequired] = useState(false);
+  const [priceRequired, setPriceRequired] = useState(false);
 
 
   const [selectedFile, setSelectedFile] = useState();
@@ -25,10 +31,34 @@ const CreateNewINO = () => {
   const navigate = useNavigate();
 
   const createNewINO = async () => {
+
+    if(name) setNameRequired(false);
+    else setNameRequired(true)
+
+    if(description) setDescriptionRequired(false);
+    else setDescriptionRequired(true)
+
+    if(giveawayTime) setGiveawayTimeRequired(false);
+    else setGiveawayTimeRequired(true)
+
+    if(contractAddr) setContractAddrRequired(false);
+    else setContractAddrRequired(true)
+
+    if(price) setPriceRequired(false);
+    else setPriceRequired(true)
+
+    if(name && description && giveawayTime && contractAddr && price) {
+
+    } else {
+      enqueueSnackbar('Fill all inputs!', {variant: 'error'});
+      return;
+    }
+
     try {
 
       const imageCid = await storeFile(selectedFile)
 
+      
       const { hash } = await writeContract({
         address: contractAddresses.Main,
         abi: mainContractAbi,
@@ -44,6 +74,9 @@ const CreateNewINO = () => {
         ]
       });
       console.log(hash);
+
+      enqueueSnackbar('Successfully launched!', {variant: 'success'});
+
       const transactionResult = await waitForTransaction({
         hash: hash,
       })
@@ -58,6 +91,7 @@ const CreateNewINO = () => {
       navigate(`/detail/${id}`)
 
     } catch (e) {
+      enqueueSnackbar('Wrong parameters given!', {variant: 'error'});
       console.log("error on creating new INO!", e);
     }
   }
@@ -75,14 +109,17 @@ const CreateNewINO = () => {
   };
 
   const handleName = (e) => {
+    setNameRequired(false);
     setName(e.target.value);
   };
 
   const handleDescription = (e) => {
+    setDescriptionRequired(false);
     setDescription(e.target.value);
   };
 
   const handleGiveawayTime = (e) => {
+    setGiveawayTimeRequired(false);
     const dateObj = new Date(e.target.value);
     let epochTime = dateObj.getTime();
     epochTime = Math.floor(epochTime / 1000);
@@ -90,10 +127,12 @@ const CreateNewINO = () => {
   };
 
   const handleContract = (e) => {
+    setContractAddrRequired(false);
     setContractAddr(e.target.value);
   };
 
   const handlePrice = (e) => {
+    setPriceRequired(false);
     setPrice(parseEther(e.target.value));
   };
 
@@ -103,7 +142,7 @@ const CreateNewINO = () => {
 
   return (
     <div className="h-full pb-12 bg-black">
-
+  <SnackbarProvider/>
       <section className=" flex  items-center justify-center">
         <div className=" mt-20 items-center overflow-hidden shadow-2xl rounded-xl ">
           <div className="bg-gray-800 w-96  p-10 mt-10 border  border-[#7316ff] rounded-xl">
@@ -113,17 +152,19 @@ const CreateNewINO = () => {
             <p className="pt-3 text-white">Name of the INO</p>
             <input
               type="text"
-              className="block mt-1 p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="block mt-1 p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 
+              focus:placeholder-gray-400 required:border-red-600 required:placeholder-red-400"
               placeholder="Project's Name"
-              required
+              required={nameRequired}
               onChange={(e) => handleName(e)}
             />
             <p className="pt-3 text-white">Description</p>
             <input
               type="text"
-              className="block p-2 mt-1 text-white w-full text-sm  bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="block p-2 mt-1 text-white w-full text-sm  bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
+              focus:placeholder-gray-400 required:border-red-600 required:placeholder-red-400"
               placeholder="Project's description"
-              required
+              required={descriptionRequired}
               onChange={(e) => handleDescription(e)}
             />
             <div>
@@ -155,26 +196,29 @@ const CreateNewINO = () => {
             <input
               type="datetime-local"
               id="meeting-time"
-              className="block mt-1 p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="block mt-1 p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
+              focus:placeholder-gray-400 required:border-red-600 required:placeholder-red-400"
               label="Giveaway deadline"
-              required
+              required={giveawayTimeRequired}
               onChange={(e) => handleGiveawayTime(e)}
             />
             <p className="pt-3 text-white">NFT Contract Address</p>
             <input
               type="text"
-              className="block mt-1 p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="block mt-1 p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
+              focus:placeholder-gray-400 required:border-red-600 required:placeholder-red-400"
               placeholder="Contract Address"
-              required
+              required={contractAddrRequired}
               onChange={(e) => handleContract(e)}
             />
             <p className="pt-2 text-white">NFT Price (in ETH)</p>
 
             <input
               type='number'
-              className="block mt-1 p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="block mt-1 p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
+              focus:placeholder-gray-400 required:border-red-600 required:placeholder-red-400"
               placeholder="Price in ETH"
-              required
+              required={priceRequired}
               onChange={(e) => handlePrice(e)}
             />
 
