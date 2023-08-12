@@ -14,10 +14,14 @@ export const CountDownTimer = ({ targetTime }) => {
         let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         let seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        if (days) setRemainingText(`${days}:${hours}:${minutes}:${seconds}`)
-        else if (hours) setRemainingText(`${hours}:${minutes}:${seconds}`)
-        else if (minutes) setRemainingText(`${minutes}:${seconds}`)
-        else setRemainingText(`${seconds}`)
+        let daysStr = days.toString();
+        let hoursStr = hours.toString().padStart(2, '0');
+        let minutesStr = minutes.toString().padStart(2, '0');
+        let secondsStr = seconds.toString().padStart(2, '0');
+
+        if (days) setRemainingText(`${daysStr}:${hoursStr}:${minutesStr}:${secondsStr}`)
+        else if (hours) setRemainingText(`${hoursStr}:${minutesStr}:${secondsStr}`)
+        else if (minutes) setRemainingText(`${minutesStr}:${secondsStr}`)
 
         if (distance < 0) {
             setRemainingText(`EXPIRED`);
