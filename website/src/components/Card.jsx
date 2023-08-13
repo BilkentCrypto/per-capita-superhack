@@ -74,20 +74,12 @@ const Card = ({ imageUri, name, contractAddress, price, deadline, targetTime, pa
 
 
       <div className="flex items-center justify-end">
-        {inoType != inoTypes.Executable ? // will be different if it is executable
           <button
             onClick={() => handleClick()}
             className="bg-[#7316ff] mb-3 w-[300px] mt-2 text-white text-base font-medium px-4 py-2 rounded-lg hover:bg-[#7d27ff] hover:scale-[1.03]"
           >
             {inoType}
-          </button> :
-          <button
-            onClick={() => handleClick()}
-            className="bg-[#7316ff] mb-3 w-[300px] mt-2 text-white text-base font-medium px-4 py-2 rounded-lg hover:bg-[#7d27ff] hover:scale-[1.03]"
-          >
-            {inoType}  "0.21616" ETH
-          </button>
-        }
+          </button> 
       </div>
     </div>
   );
