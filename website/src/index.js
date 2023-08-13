@@ -64,7 +64,6 @@ root.render(
               {/* <Route path="/exchange" element={<Exchange />}></Route> */}
               <Route path="/INOs" element={<INO />}></Route>
               <Route path="/LaunchINO" element={<CreateNewINO />}></Route>
-              <Route path="/track" element={<TrackEvents />}></Route>
               <Route path="/detail/:id" element={<Detail />}></Route>
               {/* <Route path="/voting" element={<Voting />}></Route>
               <Route path="/staking" element={<Staking />}></Route> */}
