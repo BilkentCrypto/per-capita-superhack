@@ -13,6 +13,7 @@ Below, you can see a brief description of how PerCapita utilizes the sponsor pro
 
 [**Hyperlane**](https://www.hyperlane.xyz/): Building decentralized apps that hash to ensure fairness and randomness for the functionality of the protocol may require devs to use other protocols like Worldcoin and Chainlink. These key protocols are not supported in Zora, so PerCapita deployed a custom Hyperlane protocol between Goerli-Zora where cross-chain messaging is used to utilize Worldcoin and Chainlink- very crucial for the functionality of PerCapita.
 
+
 ## Description (Go in as much detail as you can about what this project is. Please be as clear as possible!): 
 
 PerCapita is a Decentralized Initial NFT Offering platform built on Zora. Collection owners can utilize PerCapita contract to create a collection offering where the owners can set X amount of ETH  for participant staking to take place in the offering, and set a deadline for the offering to end. Collection owners need to call the createGiveawayMarketplace() function from the PerCapita contract which can be easily done from the PerCapita website. When the offering is created, collection owners need to batch transfer NFTs to the PerCapita contract. 
@@ -37,3 +38,6 @@ In order to join an offering, a participant needs to stake X amount of ETH, and 
 Because Zora is not supported by Hyperlane, a custom Hyperlane network (relayer & validator) was deployed for Zora -> Goerli communication lane by the PerCapita team. 
 
 In the PerCapita website, OpenSea API is used to demonstrate the NFTs to the users, and collection owners for a better UI and UX.
+
+Here is a diagram that breaks down how PerCapita works: 
+[PerCapitaDiagram](https://github.com/BilkentCrypto/per-capita-superhack/blob/main/per-capita-diagram.png)
