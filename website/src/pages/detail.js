@@ -33,7 +33,7 @@ const EventsModal = ({ id, showModal, setShowModal }) => {
                 {/*header*/}
                 <div className="flex items-start justify-between p-5   rounded-t">
                   <h3 className="text-2xl text-white font-semibold">
-                    Track Events
+                    Track Cross Chain Events (VRF Random)
                   </h3>
                   <div className="border-b border-gray-100"></div>
 
@@ -83,7 +83,7 @@ const ProofEventsModal = ({ address, showModal, setShowModal }) => {
                 {/*header*/}
                 <div className="flex items-start justify-between p-5   rounded-t">
                   <h3 className="text-2xl text-white font-semibold">
-                    Track Events
+                  Track Cross Chain Events (Personhood Proof)
                   </h3>
                   <button
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-xl leading-none font-semibold outline-none focus:outline-none"
@@ -123,7 +123,7 @@ const Detail = () => {
 
   const [image, setImage] = useState();
   const [shouldGetImage, setGetImage] = useState(true);
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const [showProofModal, setShowProofModal] = useState(false);
 
 
@@ -348,7 +348,7 @@ const Detail = () => {
     }
 
   }
-
+console.log("giveaway result", giveawayResult)
 
   console.log("test", giveawayResult, collectionData?.randomSeed > 0, isClaimed, isParticipated, giveawayResult, NFTs?.length)
 
@@ -371,7 +371,7 @@ const Detail = () => {
               <img
                 src={image}
                 alt={collectionData?.name}
-                className="w-full mt-7 h-full rounded-3xl object-contain"
+                className="w-full mt-7 h-full rounded-3xl object-cover"
               />
             </div>
 
@@ -499,7 +499,7 @@ const Detail = () => {
         </div>
 
         <div className="flex justify-center mt-72 space-x-4 md:mt-72">
-          <DetailFooter isPast={collectionData?.giveawayTime < moment().unix()} collectionAddress={collectionData?.contractAddress} marketplaceId={id} nftIds={NFTs} nftNumber={`40`} isOwner={isOwner} />
+          <DetailFooter isPast={collectionData?.giveawayTime < moment().unix()} giveawayResult={giveawayResult} collectionAddress={collectionData?.contractAddress} marketplaceId={id} nftIds={NFTs} nftNumber={`40`} isOwner={isOwner} />
         </div>
 
 

@@ -22,6 +22,7 @@ export const CountDownTimer = ({ targetTime }) => {
         if (days) setRemainingText(`${daysStr}:${hoursStr}:${minutesStr}:${secondsStr}`)
         else if (hours) setRemainingText(`${hoursStr}:${minutesStr}:${secondsStr}`)
         else if (minutes) setRemainingText(`${minutesStr}:${secondsStr}`)
+        else setRemainingText(`${minutesStr}:${secondsStr}`)
 
         if (distance < 0) {
             setRemainingText(`EXPIRED`);

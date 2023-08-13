@@ -4,19 +4,18 @@ import { parseAbiItem } from "viem";
 import contractAddresses from '../utils/addresses.json';
 import { publicClientL1, publicClientL2 } from "../utils/viemClients";
 import moment from "moment";
+import { FaTimes } from 'react-icons/fa'; 
 
 const L1Explorer = "https://goerli.etherscan.io/tx/";
 const L2Explorer = "https://testnet.explorer.zora.energy/tx/";
 
 const TrackProof = ({participant}) => {
-  const [proofWanted, setProofWanted] = useState();
   const [proofChecked, setProofChecked] = useState();
   const [proofReceived, setProofReceived] = useState();
 
   //Event Flow: Randomness Request sent to L1 -> Randomness Requested from Chainlink
   // ->Randomness Generated, waiting for Automation -> Randomness Sent to L2 -> Giveaway Executed.
 
-  const proofWantedEvent = 'event ParticipantSentProof(address indexed participant, uint256 indexed collectionId)';
   const proofCheckedEvent = 'event L1GotProof(uint indexed collectionId, address indexed participant, bool proofResult)';
   const proofReceivedEvent = 'event ParticipantAdded(address indexed participant, uint256 indexed collectionId)';
 
@@ -46,17 +45,6 @@ const TrackProof = ({participant}) => {
 
     // ********** EVENT TRACKING **********
 
-    const proofWantedListener = publicClientL2.watchEvent({
-      address: contractAddresses.L2,
-      event: parseAbiItem(proofWantedEvent),
-      args: {
-        participant: participant
-      },
-      onLogs: logs => {
-        console.log("proofWantedListener: ", logs);
-        getL2Data(logs, setProofWanted);
-      }
-    });
 
     const proofCheckedListener = publicClientL1.watchEvent({
       address: contractAddresses.L1,
@@ -84,7 +72,6 @@ const TrackProof = ({participant}) => {
     });
 
     return () => {
-        proofWantedListener();
         proofCheckedListener();
         proofReceivedListener();
     }
@@ -93,17 +80,12 @@ const TrackProof = ({participant}) => {
   return (
     <div className="flex items-center justify-center">
       <div className="flex flex-col items-start gap-4 justify-center">
-  
         <span className="text-base text-white">
-          Submitted proof and sent to L1 to verify: {proofWanted ? "true " + moment.unix(proofWanted.timestamp.toString()).toDate() : <span className="text-red-500">false</span>}
-          {proofWanted && <a href={L2Explorer + proofWanted.transactionHash} target="_blank" className="text-blue-400 ml-2">Go to transaction</a>}
-        </span>
-        <span className="text-base text-white">
-          Proof verified on World ID L1(Goerli): {proofChecked ? "true " + moment.unix(proofChecked.timestamp.toString()).toDate() : <span className="text-red-500">false</span>}
+          Proof verified on World ID L1(Goerli): {proofChecked ? moment.unix(proofChecked.timestamp.toString()).format("hh:mm A") : <span className="text-red-500"><FaTimes className="inline w-6 h-6 text-red-500 mr-1" /></span>}
           {proofChecked && <a href={L1Explorer + proofChecked.transactionHash} target="_blank" className="text-blue-400 ml-2">Go to transaction</a>}
         </span>
         <span className="text-base text-white">
-          Proof received and participant added to INO: {proofReceived ? "true " + moment.unix(proofReceived.timestamp.toString()).toDate() : <span className="text-red-500">false</span>}
+          Proof received and participant added to INO: {proofReceived ?  moment.unix(proofReceived.timestamp.toString()).format("hh:mm A") : <span className="text-red-500"><FaTimes className="inline w-6 h-6 text-red-500 mr-1" /></span>}
           {proofReceived && <a href={L2Explorer + proofReceived.transactionHash} target="_blank" className="text-blue-400 ml-2">Go to transaction</a>}
         </span>
       </div>

@@ -35,6 +35,8 @@ const Card = ({ imageUri, name, contractAddress, price, deadline, targetTime, pa
 
   return (
     <div className="w-[350px]  overflow-hidden overflow h-[550px] mb-5 mt-5 bg-gray-800 rounded-3xl p-6 flex flex-col items-start justify-between shadow-lg relative">
+
+    
       {isWinner && (
       <div className="absolute right-0 top-0 h-16 w-16">
         <div
@@ -47,7 +49,7 @@ const Card = ({ imageUri, name, contractAddress, price, deadline, targetTime, pa
 
       <img
         src={image}
-        className="select-none self-center w-[336px] h-[352px] object-contain mb-5 rounded-xl"
+        className="select-none self-center w-[336px] h-[280px] object-cover mb-5 rounded-xl"
       />
       <p className="text-white text-xl font-bold capitalize leading-loose">{name}</p>
       <div className="w-full flex items-center justify-between">

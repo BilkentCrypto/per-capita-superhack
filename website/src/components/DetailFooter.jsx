@@ -10,7 +10,7 @@ import { generateOpenseaCollectionUrl, generateOpenseaUrl } from '../utils/marke
 import zdk from '../utils/zdk';
 import { getImageUrl } from '../utils/getWeb3';
 
-const DetailFooter = ({collectionAddress, nftIds, marketplaceId, isPast, isOwner}) => {
+const DetailFooter = ({collectionAddress, nftIds, marketplaceId, isPast, isOwner, giveawayResult}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { address } = useAccount();
   const [nfts, setNfts] = useState([]);
@@ -85,8 +85,8 @@ return () => {
 
   console.log("approve", isApproved)
 
-  const nftComponents = nfts.map( (value, index) => {
-    return <NftCard key={value.tokenId} onClick={() => handleImageClick(value.tokenId)} title={value.title} imageUrl={value.imageUrl} index={index}/>
+  const nftComponents = nfts.map( (value, index) => {  
+    return <NftCard isWinner={index === Number(giveawayResult)} key={value.tokenId} onClick={() => handleImageClick(value.tokenId)} title={value.title} imageUrl={value.imageUrl} index={index}/>
   } )
 
   return (

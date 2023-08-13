@@ -91,7 +91,7 @@ const CreateNewINO = () => {
       navigate(`/detail/${id}`)
 
     } catch (e) {
-      enqueueSnackbar('Wrong parameters given!', {variant: 'error'});
+      enqueueSnackbar('An error occured!', {variant: 'error'});
       console.log("error on creating new INO!", e);
     }
   }
