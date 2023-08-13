@@ -40,4 +40,4 @@ Because Zora is not supported by Hyperlane, a custom Hyperlane network (relayer 
 In the PerCapita website, OpenSea API is used to demonstrate the NFTs to the users, and collection owners for a better UI and UX.
 
 Here is a diagram that breaks down how PerCapita works: 
-[PerCapitaDiagram](https://github.com/BilkentCrypto/per-capita-superhack/blob/main/per-capita-diagram.png)
+![PerCapitaDiagram](https://github.com/BilkentCrypto/per-capita-superhack/blob/main/per-capita-diagram.png)
