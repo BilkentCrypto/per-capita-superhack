@@ -10,7 +10,6 @@ import { writeContract, readContract, waitForTransaction } from '@wagmi/core';
 import TrackEvents from './TrackEvents';
 import { decodeAbiParameters, formatEther } from 'viem';
 import DetailFooter from '../components/DetailFooter';
-import Image from '../assets/Image.png'
 import { IDKitWidget } from '@worldcoin/idkit';
 import { publicClientL1 } from '../utils/viemClients';
 import { SnackbarProvider, enqueueSnackbar } from 'notistack';
