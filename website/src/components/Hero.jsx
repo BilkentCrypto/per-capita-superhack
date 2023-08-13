@@ -8,11 +8,16 @@ import { formatUnits } from 'viem';
 import { readContract, writeContract } from '@wagmi/core';
 import { useContractRead } from 'wagmi';
 import inoTypes from '../utils/inoTypes';
-
+import { useNavigate } from 'react-router-dom';
 
 
 function Home() {
 
+  const navigate = useNavigate();
+
+  const navigateInos = () => {
+    navigate('/INOs')
+  }
 
   const readContract = useContractRead({
     address: contractAddresses.Main,
@@ -42,8 +47,9 @@ function Home() {
             You can efficiently distribute NFTs per person in a way that is resistant to Sybil attacks.
           </p>
 
-          <button className="bg-[#7316ff] mb-5 text-white text-base font-medium px-6 py-3 rounded-lg">
-            Discover INO
+          <button onClick={navigateInos} className="bg-[#7316ff] mb-5 text-white text-base font-medium px-6 py-3 rounded-lg
+          hover:bg-[#7d27ff] hover:scale-[1.03]">
+            Discover INOs
           </button>
         </div>
         <div className="lg:max-w-lg w-full md:w-1/2 md:mr-28  mb-6 md:mt-20 flex justify-center items-center">
