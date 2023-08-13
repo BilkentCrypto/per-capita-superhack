@@ -3,7 +3,7 @@ import React from 'react';
 
 const AboutCard = ({ logo, title, subTitle }) => {
   return (
-    <div className="w-full h-auto md:h-96 md:w-80 bg-gray-700 rounded-3xl p-6 flex flex-col items-center justify-center mx-4 md:mx-10">
+    <div className="w-full h-96 md:h-96 md:w-80 bg-gray-700 rounded-3xl p-6 flex flex-col items-center justify-center mx-4 md:mx-10">
       {logo && (
         <img
           src={logo}
