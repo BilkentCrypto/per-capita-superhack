@@ -89,7 +89,7 @@ return () => {
   console.log("approve", isApproved)
 
   const nftComponents = nfts.map( (value, index) => {
-    return <NftCard key={value.tokenId} onClick={() => handleImageClick(value.tokenId)} title={value.title} imageUrl={value.imageUrl} index={index}/>
+    return <NftCard key={value.tokenId} isWinner={index === Number(giveawayResult)} onClick={() => handleImageClick(value.tokenId)} title={value.title} imageUrl={value.imageUrl} index={index}/>
   } )
 
   return (
