@@ -12,7 +12,7 @@ const About = () => {
         <AboutCard
           logo="./images/worldcoin.png"
           title="WorldCoin"
-          subTitle="It is important to protect against Sybil attacks in giveaways, and that's why we use WorldCoin. Thanks to WorldCoin, the same person cannot participate in NFT giveaways multiple times."
+          subTitle="It is important to protect against Sybil attacks in giveaways, and that's why we use WorldCoin. Thanks to WorldCoin, the same person cannot participate in same NFT giveaways multiple times."
         />
         <AboutCard
           logo="./images/zora.png"
@@ -23,7 +23,7 @@ const About = () => {
         
           logo="./images/hyperline.png"
           title="Hyperlane"
-          subTitle="In order to safeguard our application from Sybil attacks, we wanted to utilize WorldCoin, and for fair selection, we aimed to use ChainLink VRF. However, this Dapp was not available on Zora. Fortunately, thanks to Hyperlane, we were able to acquire these Dapps from other chains and integrate them into Zora."
+          subTitle="In order to safeguard our application from Sybil attacks, we wanted to utilize WorldCoin, and for fair selection, we aimed to use ChainLink VRF. However, these contracts were not available on Zora. Fortunately, thanks to Hyperlane, we were able to acquire these Dapps from other chains and integrate them into Zora."
         />
         <AboutCard
           logo="./images/chainlink.png"
