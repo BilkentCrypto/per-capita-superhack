@@ -38,7 +38,7 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatib
     event RandomNumberRequested(uint indexed collectionId);
     event RandomNumberGenerated(uint indexed collectionId);
     event RandomSentToL2(uint indexed collectionId);
-    event L1GotProof(uint indexed collectionId, address indexed userAddress, bool proofResult);
+    event L1GotProof(uint indexed collectionId, address indexed participant, bool proofResult);
 
     //ZORA - L1CrossDomainMessenger
     address constant MESSENGER_ADDRESS = 0xD87342e16352D33170557A7dA1e5fB966a60FafC;

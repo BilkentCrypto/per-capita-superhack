@@ -6,12 +6,12 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-contract MyToken is ERC721, Ownable {
+contract MyToken3 is ERC721, Ownable {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
 
-    constructor() ERC721("MyToken", "MTK") {}
+    constructor() ERC721("Example Collection 3", "ECL") {}
 
     function safeMint() public onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
@@ -24,7 +24,7 @@ contract MyToken is ERC721, Ownable {
     //Collection3 - 4 items: bafybeidv2anlomhe2hklnlji6fpk3iq4vmaymiq2xugqi5iuylt2ek4dbe
 
     function _baseURI() internal pure override returns (string memory) {
-        return "ipfs://bafybeiequh7ru4fxtl52fhwsznhiq2xxqjsqqe23pbmmpxz7cqoenpcw6a/";
+        return "ipfs://bafybeidv2anlomhe2hklnlji6fpk3iq4vmaymiq2xugqi5iuylt2ek4dbe/";
     }
 
     function mintAmount(uint amount) public onlyOwner {

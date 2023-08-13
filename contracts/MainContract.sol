@@ -164,11 +164,11 @@ signal: abi.encode(receiver) (current metamask wallet address)
 
    
     participants[ marketplaceId ][ msgSender ].wantedVerification = true;
-    marketplaces[ marketplaceId ].pool += msgValue; // if unsuccessful send it back to user with secure command like call
+    marketplaces[ marketplaceId ].pool += marketplace.price; // if unsuccessful send it back to user with secure command like call
 
     emit ParticipantSentProof(msgSender, marketplaceId);
 
-    hyperlaneBroadcaster.getProof{value: msg.value}(marketplaceId, msgSender, root, nullifierHash, proof);
+    hyperlaneBroadcaster.getProof{value: msg.value - marketplace.price}(marketplaceId, msgSender, root, nullifierHash, proof);
 
     //query(marketPlaceId, root ,...)
 //will be query with hyperlane to L1 contract with verifyWorldIdProof() function and continuation of this will be done in query repsonse
@@ -348,10 +348,11 @@ signal: abi.encode(receiver) (current metamask wallet address)
         require( nfts.length > result, "not winner" );
 
         participants[ marketplaceId ][ msgSender ].isClaimed = true;
+
         IERC721( marketplace.contractAddress ).transferFrom( 
             address( this ),
             msgSender,
-            result
+            nfts[result]
         );
 
         emit NFTClaimed(marketplaceId, msg.sender);
