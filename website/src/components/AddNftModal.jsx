@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
-import { alchemy } from '../utils/getAlchemy';
 import { useAccount } from 'wagmi';
 import NftCard from './NftCard';
 import ModalNftCard from './ModalNftCard';
 import { writeContract } from '@wagmi/core'
 import contractAddresses from '../utils/addresses.json';
 import mainContractAbi from '../utils/MainAbi.json';
+import { getImageUrl } from '../utils/getWeb3';
+import zdk from '../utils/zdk';
 
 const AddNftModal = ({ onClose, collectionAddress, marketplaceId }) => {
   const [selectedImages, setSelectedImages] = useState([]);
@@ -17,10 +18,31 @@ const AddNftModal = ({ onClose, collectionAddress, marketplaceId }) => {
 
   const fetchNfts = async () => {
     if(address) {
-    console.log(collectionAddress)
-    const newMyNfts = await alchemy.nft.getNftsForOwner(address, {contractAddresses: [collectionAddress] });
-    console.log("nfts", newMyNfts)
-    setMyNfts(newMyNfts.ownedNfts);
+      const options = {method: 'GET', headers: {accept: 'application/json'}};
+
+      const contractNfts = await (await fetch(`https://testnets-api.opensea.io/v2/chain/zora_testnet/contract/${collectionAddress}/nfts?limit=50`, options)).json();
+      console.log("contract Nfts", contractNfts);
+  
+      const nftMetadatas = await Promise.all (contractNfts.nfts.map( async (value) => {
+        const nftMetadata = await (await fetch(`https://testnets-api.opensea.io/v2/chain/zora_testnet/contract/${collectionAddress}/nfts/${value.identifier}`, options)).json();
+        return nftMetadata
+  
+      } ));
+  
+      nftMetadatas.sort( (a, b) => a.nft.identifier - b.nft.identifier );
+      const filteredNfts = nftMetadatas.filter((value ) => value.nft.owners[0].address.toLowerCase() === address.toLowerCase())
+  
+  
+      const newNfts = filteredNfts.map( value => {
+        return {
+          tokenId: value.nft.identifier,
+          title: value.nft.name,
+          imageUrl: value.nft.image_url,
+        }
+      } ) 
+  
+      console.log("formatted nfts", newNfts);
+      setMyNfts(newNfts);
   }
   }
   useEffect( () => {
@@ -69,7 +91,7 @@ const AddNftModal = ({ onClose, collectionAddress, marketplaceId }) => {
 
 console.log(myNfts)
   const nftComponents = myNfts.map( (value) => {
-    return <ModalNftCard key={value.tokenId} selected={ selectedImages.includes(value.tokenId) } onClick={() => handleImageClick(value.tokenId)} title={value.title} imageUrl={value.media[0].gateway}/>
+    return <ModalNftCard key={value.tokenId} selected={ selectedImages.includes(value.tokenId) } onClick={() => handleImageClick(value.tokenId)} title={value.title} imageUrl={value.imageUrl}/>
   } )
   console.log("comps", nftComponents)
 

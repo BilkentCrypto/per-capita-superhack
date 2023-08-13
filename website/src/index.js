@@ -15,7 +15,6 @@ import {
   optimismGoerli,
   zoraTestnet,
 } from 'wagmi/chains';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 
 // pages
@@ -23,7 +22,7 @@ import Home from './pages/home';
 // import Exchange from './pages/exchange.js';
 import INO from './pages/INO';
 import Detail from './pages/detail';
-import CreateNewNIO from './pages/CreateNewINO';
+import CreateNewINO from './pages/CreateNewINO';
 import TrackEvents from './pages/TrackEvents';
 import Error from './pages/error';
 // import Voting from './pages/voting.js';
@@ -63,9 +62,8 @@ root.render(
             <Routes>
               <Route path="/" element={<Home />}></Route>
               {/* <Route path="/exchange" element={<Exchange />}></Route> */}
-              <Route path="/INO" element={<INO />}></Route>
-              <Route path="/CreateNewNIO" element={<CreateNewNIO />}></Route>
-              <Route path="/track" element={<TrackEvents />}></Route>
+              <Route path="/INOs" element={<INO />}></Route>
+              <Route path="/LaunchINO" element={<CreateNewINO />}></Route>
               <Route path="/detail/:id" element={<Detail />}></Route>
               {/* <Route path="/voting" element={<Voting />}></Route>
               <Route path="/staking" element={<Staking />}></Route> */}

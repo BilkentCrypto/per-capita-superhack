@@ -7,11 +7,17 @@ import { formatEther, parseGwei } from 'viem';
 import { formatUnits } from 'viem';
 import { readContract, writeContract } from '@wagmi/core';
 import { useContractRead } from 'wagmi';
-
+import inoTypes from '../utils/inoTypes';
+import { useNavigate } from 'react-router-dom';
 
 
 function Home() {
 
+  const navigate = useNavigate();
+
+  const navigateInos = () => {
+    navigate('/INOs')
+  }
 
   const readContract = useContractRead({
     address: contractAddresses.Main,
@@ -21,11 +27,11 @@ function Home() {
   }) 
 
   const collectionData = readContract.data;
-  
+
   return (
     <>
       <section className="w-full pt-24 md:pt-0 md:h-screen bg-[#02050E] relative flex flex-col md:flex-row justify-center items-center">
-        <div className="container mt-10 md:w-1/2 lg:pl-18 xl:pl-24 mt-5 md:pl-16 flex flex-col md:items-start md:text-left items-center text-center md:ml-10">
+        <div className="container mt-10 md:w-1/2 lg:pl-18 xl:pl-24  md:pl-16 flex flex-col md:items-start md:text-left items-center text-center md:ml-24">
           <h1 className="text-4xl mt-10 leading-[44px] md:text-4xl text-white md:leading-tight lg:text-6xl lg:leading-[1.2] font-bold md:tracking-[-2px]">
             NFT distribution that is{' '}
           </h1>
@@ -41,13 +47,15 @@ function Home() {
             You can efficiently distribute NFTs per person in a way that is resistant to Sybil attacks.
           </p>
 
-          <button className="bg-[#7316ff] mb-5 text-white text-base font-medium px-6 py-3 rounded-lg">
-            Discover INO
+          <button onClick={navigateInos} className="bg-[#7316ff] mb-5 text-white text-base font-medium px-6 py-3 rounded-lg
+          hover:bg-[#7d27ff] hover:scale-[1.03]">
+            Discover INOs
           </button>
         </div>
-        <div className="lg:max-w-lg lg:w-5/12 md:w-1/2 w-5/6 mb-6 md:mt-10 max-w-[400px]">
-          <div style={{ width: '100%', maxWidth: '400px', height: '400px' }}>
-            {collectionData && <Card imageUri={collectionData.imageUri} name={collectionData.name} contractAddress={ collectionData.contractAddress} price={formatEther(collectionData.price)} id={1} />}
+        <div className="lg:max-w-lg w-full md:w-1/2 md:mr-28  mb-6 md:mt-20 flex justify-center items-center">
+          <div className="w-full md:max-w-[400px] max-w-[100vw] flex justify-center items-center">
+
+            {collectionData && <Card imageUri={collectionData.imageUri} name={collectionData.name} contractAddress={ collectionData.contractAddress} targetTime={collectionData.giveawayTime.toString()} price={formatEther(collectionData.price)} id={1} participant={collectionData.participantNumber.toString()} inoType={inoTypes.Normal}/>}
 
           </div>
         </div>
