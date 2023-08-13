@@ -44,7 +44,7 @@ function Home() {
           />
 
           <p className="pt-4 pb-8 md:pt-6 text-gray-400 md:pb-12 max-w-[480px] text-lg text-center lg:text-left">
-            You can efficiently distribute NFTs per person in a way that is resistant to Sybil attacks.
+            You can efficiently distribute NFTs per person in a way that is resistant to Sybil attacks by Initial NFT Offerings.
           </p>
 
           <button onClick={navigateInos} className="bg-[#7316ff] mb-5 text-white text-base font-medium px-6 py-3 rounded-lg
