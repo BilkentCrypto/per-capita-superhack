@@ -3,6 +3,8 @@
 
 PerCapita is a Decentralized Initial NFT Offering platform built on Zora in Superhack 2023 Hackathon by Bilkent Blockchain Society. (Explain all of it shortly as introduction. First describe what is INO)
 
+[PerCapita Website](https://per-capita-superhack.vercel.app/)
+
 Below, you can see a brief description of how PerCapita utilizes the sponsor projects of the Superhack hackathon (For more details, scroll below):
 
 [**Zora**](https://docs.zora.co/docs/zora-network/intro): PerCapita Main Contract is built on Zora - OP Stack chain. Zora has built-in NFT marketplace, and NFT Creating contracts which makes creating and trading NFT collections easier in terms of UX. Also, thanks to its OP Stack architecture, these actions with NFTs are scalable and cost-efficient.
