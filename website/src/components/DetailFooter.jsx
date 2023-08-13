@@ -10,7 +10,7 @@ import { generateOpenseaCollectionUrl, generateOpenseaUrl } from '../utils/marke
 import zdk from '../utils/zdk';
 import { getImageUrl } from '../utils/getWeb3';
 
-const DetailFooter = ({collectionAddress, nftIds, marketplaceId, isPast, isOwner, giveawayResult}) => {
+const DetailFooter = ({collectionAddress, nftIds, marketplaceId, isPast, isOwner}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { address } = useAccount();
   const [nfts, setNfts] = useState([]);
@@ -34,8 +34,11 @@ const DetailFooter = ({collectionAddress, nftIds, marketplaceId, isPast, isOwner
     } ));
 
     nftMetadatas.sort( (a, b) => a.nft.identifier - b.nft.identifier );
+    console.log("filtered nfts", nftMetadatas);
+    const filteredNfts = nftMetadatas.filter((value ) => value.nft.owners[0].address.toLowerCase() === contractAddresses.Main.toLowerCase())
 
-    const newNfts = nftMetadatas.map( value => {
+
+    const newNfts = filteredNfts.map( value => {
       return {
         tokenId: value.nft.identifier,
         title: value.nft.name,
@@ -85,8 +88,8 @@ return () => {
 
   console.log("approve", isApproved)
 
-  const nftComponents = nfts.map( (value, index) => {  
-    return <NftCard isWinner={index === Number(giveawayResult)} key={value.tokenId} onClick={() => handleImageClick(value.tokenId)} title={value.title} imageUrl={value.imageUrl} index={index}/>
+  const nftComponents = nfts.map( (value, index) => {
+    return <NftCard key={value.tokenId} onClick={() => handleImageClick(value.tokenId)} title={value.title} imageUrl={value.imageUrl} index={index}/>
   } )
 
   return (
@@ -111,7 +114,7 @@ return () => {
         </div>
       </div>
   
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 md:mt-16 gap-y-12 gap-x-28 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 md:mt-16 gap-y-12 gap-x-20 mb-8">
         {nftComponents}
       </div>
   

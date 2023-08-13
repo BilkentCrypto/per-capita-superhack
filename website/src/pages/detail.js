@@ -83,7 +83,7 @@ const ProofEventsModal = ({ address, showModal, setShowModal }) => {
                 {/*header*/}
                 <div className="flex items-start justify-between p-5   rounded-t">
                   <h3 className="text-2xl text-white font-semibold">
-                  Track Cross Chain Events (Personhood Proof)
+                    Track Cross Chain Events (Personhood Proof)
                   </h3>
                   <button
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-xl leading-none font-semibold outline-none focus:outline-none"
@@ -327,37 +327,37 @@ const Detail = () => {
     console.log("contract verified", isContractVerified);
 
     if (isContractVerified) {
-      enqueueSnackbar('Correct proof!', { variant: 'success'} );
-      try{
-      const { hash } = await writeContract({
-        address: contractAddresses.Main,
-        abi: mainContractAbi,
-        functionName: 'beParticipant',
-        args: [id, merkleRoot, nullifierHash, unpackedProof],
-        value: collectionData.price,
-      });
-      setShowProofModal(true);
+      enqueueSnackbar('Correct proof!', { variant: 'success' });
+      try {
+        const { hash } = await writeContract({
+          address: contractAddresses.Main,
+          abi: mainContractAbi,
+          functionName: 'beParticipant',
+          args: [id, merkleRoot, nullifierHash, unpackedProof],
+          value: collectionData.price,
+        });
+        setShowProofModal(true);
 
-    } catch(e) {
-      enqueueSnackbar('Person already participated!', { variant: 'error'} )
-    }
+      } catch (e) {
+        enqueueSnackbar('Person already participated!', { variant: 'error' })
+      }
 
     } else {
-      enqueueSnackbar('Proof is wrong!', { variant: 'error'} );
+      enqueueSnackbar('Proof is wrong!', { variant: 'error' });
 
     }
 
   }
-console.log("giveaway result", giveawayResult)
+  console.log("giveaway result", giveawayResult)
 
   console.log("test", giveawayResult, collectionData?.randomSeed > 0, isClaimed, isParticipated, giveawayResult, NFTs?.length)
 
   let statusText;
-  if(collectionData?.giveawayTime < moment().unix() && !collectionData?.isDistributed) statusText = <span className="font-bold text-yellow-400 text-xl italic">Executable</span>;
-  else if(collectionData?.giveawayTime < moment().unix() && collectionData?.isDistributed && collectionData?.randomSeed == 0) statusText = <span className="font-bold text-orange-400 text-xl italic">Pending Random Seed...</span>;
-  else if(collectionData?.randomSeed > 0 && !isClaimed && isParticipated && giveawayResult >= NFTs?.length) statusText = <span className="font-bold text-red-500 text-xl italic">Not Won</span>;
-  else if(collectionData?.randomSeed > 0 && !isClaimed && isParticipated && giveawayResult < NFTs?.length) statusText = <span className="font-bold text-green-500 text-xl italic">Won NFT!</span>;
-  else if(collectionData?.giveawayTime < moment().unix() && collectionData?.isDistributed) statusText = <span className="font-bold text-red-400 text-xl italic">Done</span>;
+  if (collectionData?.giveawayTime < moment().unix() && !collectionData?.isDistributed) statusText = <span className="font-bold text-yellow-400 text-xl italic">Executable</span>;
+  else if (collectionData?.giveawayTime < moment().unix() && collectionData?.isDistributed && collectionData?.randomSeed == 0) statusText = <span className="font-bold text-orange-400 text-xl italic">Pending Random Seed...</span>;
+  else if (collectionData?.randomSeed > 0 && !isClaimed && isParticipated && giveawayResult >= NFTs?.length) statusText = <span className="font-bold text-red-500 text-xl italic">Not Won</span>;
+  else if (collectionData?.randomSeed > 0 && !isClaimed && isParticipated && giveawayResult < NFTs?.length) statusText = <span className="font-bold text-green-500 text-xl italic">Won NFT!</span>;
+  else if (collectionData?.giveawayTime < moment().unix() && collectionData?.isDistributed) statusText = <span className="font-bold text-red-400 text-xl italic">Done</span>;
   else statusText = <span className="font-bold text-green-400 text-xl italic">Active</span>;
 
   return (
@@ -389,23 +389,25 @@ console.log("giveaway result", giveawayResult)
                   <span className="font-bold text-slate-400 ">Collection Status</span>
                   {statusText}
                 </li>
-                { collectionData?.giveawayTime > moment().unix() &&
-                <li className="flex flex-col px-1 text-white py-1">
-                  <span className="font-bold text-slate-400">Remaining Time</span>
-                  <span className='text-white text-base font-bold capitalize'><CountDownTimer targetTime={collectionData?.giveawayTime.toString()}/></span>
-                </li>}
+                {collectionData?.giveawayTime > moment().unix() &&
+                  <li className="flex flex-col px-1 text-white py-1">
+                    <span className="font-bold text-slate-400">Remaining Time</span>
+                    <span className='text-white text-base font-bold capitalize'><CountDownTimer targetTime={collectionData?.giveawayTime.toString()} /></span>
+                  </li>}
 
                 <li className="flex flex-col px-1 text-white py-1">
                   <span className="font-bold text-slate-400 ">Join Price</span>
                   {collectionData && <span className="text-white text-[22px] text-base font-bold capitalize"> {formatEther(collectionData?.price)} ETH</span>}
                 </li>
-               
+
                 <li className="flex flex-col px-1 text-white py-1">
                   <span className="font-bold text-slate-200 ">Collection Addres</span>
-                  <span className="font-bold italic hover:text-gray-400 text-white">
+                  <span className="font-bold italic hover:text-gray-400 text-white block md:inline whitespace-nowrap overflow-hidden overflow-ellipsis">
                     <a href={generateOpenseaCollectionUrl(collectionData?.contractAddress)} target="_blank" rel="noopener noreferrer">
-                    {collectionData?.contractAddress}</a>
+                      {collectionData?.contractAddress}
+                    </a>
                   </span>
+
 
                 </li>
                 <li className="flex flex-col px-1 text-white py-1">
@@ -414,7 +416,7 @@ console.log("giveaway result", giveawayResult)
 
 
                 <li className="flex flex-col px-1 py-1 bg-gray-800 rounded-2xl  hover:scale-[1.02] hover:cursor-pointer"
-                onClick={navigateToAddress}
+                  onClick={navigateToAddress}
                 >
                   <div className="flex items-center">
                     <img
@@ -424,9 +426,9 @@ console.log("giveaway result", giveawayResult)
                     />
                     <div className="flex flex-col overflow-hidden ">
                       <span className="font-bold text-slate-400 ">Owner</span>
-                      { isOwner ? 
-                      <span className="text-slate-200 text-xl truncate font-bold opacity-85 ml-1">You</span> :
-                      <span className="text-slate-200 truncate font-semibold opacity-95">{collectionData?.owner}</span>
+                      {isOwner ?
+                        <span className="text-slate-200 text-xl truncate font-bold opacity-85 ml-1">You</span> :
+                        <span className="text-slate-200 truncate font-semibold opacity-95">{collectionData?.owner}</span>
                       }
                     </div>
                   </div>

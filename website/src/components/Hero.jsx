@@ -46,8 +46,8 @@ function Home() {
             Discover INO
           </button>
         </div>
-        <div className="lg:max-w-lg lg:w-5/12 md:w-1/2 w-5/6 mb-6 md:mt-10 max-w-[400px]">
-          <div style={{ width: '100%', maxWidth: '400px', height: '400px' }}>
+        <div className="lg:max-w-lg w-full md:w-1/2 mb-6 md:mt-10 flex justify-center items-center">
+          <div className="w-full md:max-w-[400px] max-w-[100vw] flex justify-center items-center">
 
             {collectionData && <Card imageUri={collectionData.imageUri} name={collectionData.name} contractAddress={ collectionData.contractAddress} targetTime={collectionData.giveawayTime.toString()} price={formatEther(collectionData.price)} id={1} participant={collectionData.participantNumber.toString()} inoType={inoTypes.Normal}/>}
 
