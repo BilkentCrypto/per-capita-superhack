@@ -1,7 +1,7 @@
 
 # PerCapita
 
-PerCapita is a Decentralized Initial NFT Offering platform built on Zora in Superhack 2023 Hackathon by Bilkent Blockchain Society.
+PerCapita is a Decentralized Initial NFT Offering platform built on Zora in Superhack 2023 Hackathon by Bilkent Blockchain Society. (Explain all of it shortly)
 
 Below, you can see a brief description of how PerCapita utilizes the sponsor projects of the Superhack hackathon (For more details, scroll below):
 
@@ -11,20 +11,22 @@ Below, you can see a brief description of how PerCapita utilizes the sponsor pro
 
 [**Chainlink**](https://chain.link/): The participant count for the offerings can be more than the supply of the collection, so verifiable randomness should be used to ensure fair distribution of the offered NFTs. Chainlink VRF is used for verifiable randomness (Chainlink VRF is not supported in Zora. We made this possible in Zora with Hyperlane; see below for more)
 
-[**Hyperlane**](https://www.hyperlane.xyz/): Building decentralized apps that hash to ensure fairness and randomness for the functionality of the protocol may require devs to use other protocols like Worldcoin and Chainlink. These key protocols are not supported in Zora, so PerCapita deployed a custom Hyperlane protocol between Goerli-Zora where cross-chain messaging is used to utilize Worldcoin and Chainlink- very crucial for the functionality of PerCapita. Hyperlane validator and relayers for Zora running 24/7 on a dedicated server.
+[**Hyperlane**](https://www.hyperlane.xyz/): Building decentralized apps that hash to ensure fairness and randomness for the functionality of the protocol may require devs to use other protocols like Worldcoin and Chainlink. These key protocols are not supported in Zora, so the PerCapita team deployed a custom Hyperlane protocol between Goerli-Zora where cross-chain messaging is used to utilize Worldcoin and Chainlink- very crucial for the functionality of PerCapita. Hyperlane deployment on Zora could be done by the PerCapita team thanks to the permissionless interoperability of Hyperlane. Hyperlane validator and relayers for Zora running 24/7 on a dedicated server.
 
 
 ## Description: 
 
 PerCapita is a Decentralized Initial NFT Offering platform built on Zora. Collection owners can utilize PerCapita contract to create a collection offering where the owners can set X amount of ETH  for participant staking to take place in the offering and set a deadline for the offering to end. Collection owners need to call the "Create Giveaway Marketplace" function from the PerCapita contract which can be easily done from the PerCapita website. When the offering is created, collection owners need to batch transfer NFTs to the PerCapita contract. 
 
-In order to join the offering, participants can stake X ETH and they can claim their ETH back if they are not the winners. The winners can claim the NFT they earn; however, they can’t claim their deposited ETH back. Staking can be done via the PerCapita website, and participants can see if they are the winners and which NFT they won. Although there is a limited number of NFTs, there are many people who can participate. Therefore, fair, verifiable and randomized selection systems and proof of personhood protocols should be used (Chainlink VRF and Worldcoin, explained in depth in the next section).
+In order to join the offering, participants should prove their personhood by World ID and their participation for the first and only time. After verification, participants can stake X ETH and they can claim their ETH back if they are not the winners. The winners can claim the NFT they earn; however, they can’t claim their deposited ETH back. Staking can be done via the PerCapita website, and participants can see if they are the winners and which NFT they won. Although there is a limited number of NFTs, there are many people who can participate. Therefore, fair, verifiable and randomized selection systems and proof of personhood protocols should be used (Chainlink VRF and Worldcoin, explained in depth in the next section).
 
-When the deadline is over for the offering, anyone is incentivized to call the "Execute Giveaway" function. A successful executor is rewarded (EXPLAIN IN DETAIL HERE!) that is funded from the staked ETH of the winners. Successful and decentralized execution occurs when Chainlink VRF and Worldcoin is utilized, but these protocols are not supported in Zora. Therefore, Hyperlane (Zora -> Goerli lane) is used by PerCapita for cross-chain communication to use Chainlink VRF for random selection and Worldcoin for sybil-prevention. The output from the mentioned protocols are communicated back to PerCapita Main contract on Zora via CrossChainMessagingL1 (Goerli -> Zora).
+When the deadline is over for the offering, anyone is incentivized to call the "Execute Giveaway" function. A successful executor is rewarded. Since smart contracts can't call themselves autonomously, PerCapita incentivizes people to execute giveaways by execution rewards. Execution rewards are funded from the staked ETH of the potential winner amount of the offering. The reward increases over time, and when it is more than the gas fee, individuals are expected to run the function and receive the reward, as per game theory. Successful and decentralized execution requests a random seed from Chainlink from L1 (Goerli) via Hyperlane for determining winners.
+
+PerCapita uses Chainlink VRF and Worldcoin protocols; however, these protocols are not supported in Zora. Therefore, Hyperlane (Zora -> Goerli lane) is deployed and used by PerCapita for cross-chain communication to use Chainlink VRF for random selection and Worldcoin for Sybil attack prevention. The output from the mentioned protocols is communicated back to PerCapita Main contract on Zora via CrossChainMessagingL1 (Goerli -> Zora).
 
 
 ## How it’s made:
-
+(randomu da anlat burada)
 PerCapita platform consists of 3 smart contracts written in Solidity, and a website written in React.js. PerCapita Main Contract is in the Zora Testnet. Another contract called L2HyperlaneBroadcaster is also in Zora. Third contract called L1HyperlaneReceiver is in the Goerli Testnet. 
 
 MainContract.sol: This is the contract where offerings are registered, and where offered NFTs are held. Collection owners can create new offerings with deadline, and Offering Executors can execute the offerings and ensure a fair and randomized offering with an incentive. Calling executeGiveaway() function from this contract does one thing: letting the L2HyperlaneBroadcaster contract know that a collection is ready for retrieving a Chainlink VRF output.  
@@ -35,7 +37,7 @@ L1HyperlaneReceiver.sol: This contract handles incoming messages from the Zora T
 
 In order to join an offering, a participant needs to stake X amount of ETH, and provide a ZK-proof and nullifierHash for Proof of Humanity in the Worldcoin protocol. In this part, Hyperlane Queries API is used to query the Worldcoin contract in the Goerli Testnet to verify the proof, and nullifierHash is stored to prevent participants from joining more than once for an offering. 
 
-Because Zora is not supported by Hyperlane, a custom Hyperlane network (relayer & validator) was deployed for Zora -> Goerli communication lane by the PerCapita team. 
+Because Zora is not supported by Hyperlane, custom Hyperlane operators (relayer & validator) were deployed for the Zora -> Goerli communication lane by the PerCapita team. 
 
 In the PerCapita website, OpenSea API is used to demonstrate the NFTs to the users, and collection owners for a better UI and UX.
 
