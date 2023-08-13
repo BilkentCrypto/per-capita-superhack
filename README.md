@@ -1,7 +1,7 @@
 
 # PerCapita
 
-PerCapita is a Decentralized Initial NFT Offering platform built on Zora in Superhack 2023 Hackathon by Bilkent Blockchain Society. (Explain all of it shortly)
+PerCapita is a Decentralized Initial NFT Offering platform built on Zora in Superhack 2023 Hackathon by Bilkent Blockchain Society. (Explain all of it shortly as introduction. First describe what is INO)
 
 Below, you can see a brief description of how PerCapita utilizes the sponsor projects of the Superhack hackathon (For more details, scroll below):
 
@@ -25,7 +25,7 @@ When the deadline is over for the offering, anyone is incentivized to call the "
 PerCapita uses Chainlink VRF and Worldcoin protocols; however, these protocols are not supported in Zora. Therefore, Hyperlane (Zora -> Goerli lane) is deployed and used by PerCapita for cross-chain communication to use Chainlink VRF for random selection and Worldcoin for Sybil attack prevention. The output from the mentioned protocols is communicated back to PerCapita Main contract on Zora via CrossChainMessagingL1 (Goerli -> Zora).
 
 
-## How it’s made: (randomu da anlat burada)
+## How it’s made:
 
 PerCapita platform consists of three smart contracts written in Solidity, and a website written in React.js. PerCapita Main Contract is in the Zora Testnet. Another contract called L2HyperlaneBroadcaster is also in Zora. Third contract called L1HyperlaneReceiver is in the Goerli Testnet. 
 
@@ -37,9 +37,11 @@ L1HyperlaneReceiver.sol: This contract handles incoming messages from the Zora T
 
 In order to join an offering, a participant needs to stake X amount of ETH, and provide a ZK-proof and nullifierHash for Proof of Personhood in the Worldcoin protocol. In this part, Hyperlane technology is used to verify personhood proof on the Worldcoin contract in the Goerli Testnet, and nullifierHash is stored to prevent participants from joining more than once for an offering. External nullifier hash is used by Worldcoin app to establish proof for unique actions. We have used dynamic external nullifier hashes to join each offering once but to join multiple offerings. Hashes are determined as "bePart_" + offeringId for each offering.
 
+In PerCapita, it is used an infrequent method for determining winners of the offerings. Frequently, iterative methods are used by contracts to determine multiple winners. However, if there are N NFTs, there should be N winners and iterative methods solve this problem in linear time complexity, such as O(N). In PerCapita, Lehmer random number generation algorithm is used. A function f(x) is generated deterministically using a random seed received from Chainlink VRF. While each user participates in the offerings, a number is determined according to the order of participation, like a lottery ticket. Let's assume there are M participants and N NFTs; our random function y = f(x) generates 0 <= y < M if inputs are between 0 <= x < M. If f(lottery ticket) function output is smaller than N, which we assume as NFT amount, the individual wins NFT which is indexed as the output of f(lottery ticket) function. In contrast, if f(lottery ticket) >= N, it shows that the participant didn't win any NFT and can claim their deposit back. Thanks to Lehmer random number generator, determining winners of offering has constant time complexity, which is O(1).
+
 Because Zora is not supported by Hyperlane, custom Hyperlane operators (relayer & validator) were deployed for the Zora -> Goerli communication lane by the PerCapita team. These operators run 24/7 on a dedicated server.
 
-In the PerCapita website, OpenSea API is used to demonstrate the NFTs to the users, and collection owners for a better UI and UX.
+In the PerCapita website, OpenSea API is used to demonstrate the NFTs to the users and collection owners for a better UI and UX.
 
 Here is a diagram that breaks down how PerCapita works: 
 ![PerCapitaDiagram](https://github.com/BilkentCrypto/per-capita-superhack/blob/main/per-capita-diagram.png)
