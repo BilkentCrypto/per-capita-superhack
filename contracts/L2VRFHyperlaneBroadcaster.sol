@@ -43,17 +43,35 @@ contract L2VRFHyperlaneBroadcaster {
         bytes32 messageId = IMailbox(zoraMailbox).dispatch(
             goerliDomain,
             addressToBytes32(hyperlaneReceiver),
-            abi.encode(collectionId)
+            abi.encode(false, collectionId)
         );
 
 
-/*
-        // Get the required payment from the IGP.
-        uint256 quote = igp.quoteGasPayment(
+        // Pay from the contract's balance
+        igp.payForGas{ value: msg.value }(
+            messageId, // The ID of the message that was just dispatched
+            goerliDomain, // The destination domain of the message
+            1200000,
+            address(tx.origin) // refunds are returned to transaction executer
+        );
+
+        emit RandomnessRequestSentToL1(collectionId);
+    }
+
+        function getProof(            
+            uint256 collectionId,
+            address userAddress,
+            uint256 root,
+            uint256 nullifierHash,
+            uint256[8] memory proof
+            ) external payable {
+
+        bytes32 messageId = IMailbox(zoraMailbox).dispatch(
             goerliDomain,
-            gasAmount
+            addressToBytes32(hyperlaneReceiver),
+            abi.encode(true, collectionId, userAddress, root, nullifierHash, proof)
         );
-*/
+
 
         // Pay from the contract's balance
         igp.payForGas{ value: msg.value }(
