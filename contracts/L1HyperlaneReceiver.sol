@@ -2,8 +2,10 @@
 
 pragma solidity >=0.8.2 <0.9.0;
 
-import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
-import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
+import {LinkTokenInterface} from "@chainlink/contracts/src/v0.8/shared/interfaces/LinkTokenInterface.sol";
+import {IVRFCoordinatorV2Plus} from "@chainlink/contracts/src/v0.8/vrf/dev/interfaces/IVRFCoordinatorV2Plus.sol";
+import {VRFConsumerBaseV2Plus} from "@chainlink/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol";
+import {VRFV2PlusClient} from "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
 import "@chainlink/contracts/src/v0.8/AutomationCompatible.sol";
 import {IInterchainSecurityModule, ISpecifiesInterchainSecurityModule} from "https://github.com/hyperlane-xyz/hyperlane-monorepo/blob/main/solidity/contracts/interfaces/IInterchainSecurityModule.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
@@ -26,9 +28,8 @@ interface Messenger {
     ) external;
 }
 
-//Goerli ISM: 0x56EBcF35f09879C41b7eb9F6FBA4b9fEb1926244
-//Ege - VRF Subscription ID: 13173
-contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatibleInterface, ISpecifiesInterchainSecurityModule {
+
+contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2Plus, AutomationCompatibleInterface, ISpecifiesInterchainSecurityModule {
     using ByteHasher for bytes;
 
     address public L2HyperlaneBroadcaster;
@@ -56,13 +57,13 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatib
 
     //CHAINLINK
     uint64 s_subscriptionId;
-    bytes32 keyHash = 0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15; 
+    bytes32 keyHash = 0x787d74caea10b2b357790d5b5247c2f63d1d91572a9846f780606e4d953677ae; 
     uint32 callbackGasLimit = 350000;
     uint16 requestConfirmations = 3;
     uint32 numWords = 1;
-    VRFCoordinatorV2Interface COORDINATOR;
+    IVRFCoordinatorV2Plus COORDINATOR;
 
-    address constant VRFCoordinatorAddress = 0x2Ca8E0C643bDe4C2E08ab1fA0da3401AdAD7734D;
+    address constant VRFCoordinatorAddress = 0x9DdfaCa8183c41ad55329BdeeD9F6A8d53168B1B;
 
     uint256 public TEST_INT;
 
@@ -70,16 +71,14 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatib
     uint256[] pendingCollections;
     mapping(uint256 => uint256) collectionIdToSeed;
 
-    address owner;
 
     Messenger messenger;
 
-     constructor(uint64 _subscriptionId) VRFConsumerBaseV2(VRFCoordinatorAddress) {
+     constructor(uint64 _subscriptionId) VRFConsumerBaseV2Plus(VRFCoordinatorAddress) {
         messenger = Messenger(MESSENGER_ADDRESS);
         s_subscriptionId = _subscriptionId;
-        COORDINATOR = VRFCoordinatorV2Interface(VRFCoordinatorAddress);
+        COORDINATOR = IVRFCoordinatorV2Plus(VRFCoordinatorAddress);
         worldId = IWorldID(WORLD_ID_ADDRESS);
-        owner = msg.sender;
     }
 
     function bytes32ToAddress(bytes32 _buf) internal pure returns (address) {
@@ -123,6 +122,7 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatib
         }
 
     function setL2HyperlaneBroadcasterAndMain(address newBroadcastAddress, address newMainAddress) external { //set to once
+        address owner = owner();
         require(msg.sender == owner, "not owner");
         owner = address(0);
         L2HyperlaneBroadcaster = newBroadcastAddress;
@@ -163,12 +163,14 @@ contract L1Hyperlane is IMessageRecipient, VRFConsumerBaseV2, AutomationCompatib
     }
 
     function requestRandomWords(uint collectionId) internal {
-        uint256 requestId = COORDINATOR.requestRandomWords(
-            keyHash,
-            s_subscriptionId,
-            requestConfirmations,
-            callbackGasLimit,
-            numWords
+        uint256 requestId = s_vrfCoordinator.requestRandomWords(VRFV2PlusClient.RandomWordsRequest({
+            keyHash: keyHash,
+            subId: s_subscriptionId,
+            requestConfirmations: requestConfirmations,
+            callbackGasLimit: callbackGasLimit,
+            numWords: numWords,
+            extraArgs: VRFV2PlusClient._argsToBytes(VRFV2PlusClient.ExtraArgsV1({nativePayment: false}))
+          })
         );
 
         requestIdToCollectionId[requestId] = collectionId;
