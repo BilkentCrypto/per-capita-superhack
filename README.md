@@ -35,6 +35,8 @@ PerCapita uses Chainlink VRF and Worldcoin protocols; however, these protocols a
 
 ## How it’s made:
 
+UPDATE: We have migrated our contract from Goerli to Sepolia.
+
 PerCapita platform consists of three smart contracts written in Solidity, and a website written in React.js. PerCapita Main Contract is in the Zora Testnet. Another contract called L2HyperlaneBroadcaster is also in Zora. Third contract called L1HyperlaneReceiver is in the Goerli Testnet. 
 
 MainContract.sol: This is the contract where offerings are created, and where offered NFTs are held. Collection owners can create new offerings with deadline, and Offering Executors can execute the offerings and ensure a fair and randomized offering with an incentive. Calling executeGiveaway() function from this contract does one thing: letting the L2HyperlaneBroadcaster contract know that a collection is ready for retrieving a Chainlink VRF output. In addition, being participant in offerings is done with this contract. After submitting personhood proof and staking the required ETH, the proof is sent to L1 (Goerli) via L2 L2HyperlaneBroadcaster contract.
