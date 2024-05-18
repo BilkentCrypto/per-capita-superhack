@@ -35,7 +35,7 @@ PerCapita uses Chainlink VRF and Worldcoin protocols; however, these protocols a
 
 ## How it’s made:
 
-UPDATE: We have migrated our contract from Goerli to Sepolia.
+UPDATE: We have migrating our contract from Goerli to Sepolia. Some addresses can differ.
 
 PerCapita platform consists of three smart contracts written in Solidity, and a website written in React.js. PerCapita Main Contract is in the Zora Testnet. Another contract called L2HyperlaneBroadcaster is also in Zora. Third contract called L1HyperlaneReceiver is in the Sepolia Testnet. 
 
