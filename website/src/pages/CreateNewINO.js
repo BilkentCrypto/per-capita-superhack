@@ -5,7 +5,7 @@ import mainContractAbi from '../utils/MainAbi.json';
 import { decodeEventLog, parseEther } from 'viem';
 import { useAccount } from 'wagmi';
 import { useNavigate } from 'react-router-dom';
-import { storeFile, getFile, storeUri } from '../utils/getWeb3';
+import { storeFile, getFile, storeUri, storeFileNFT } from '../utils/getWeb3';
 import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 
 
@@ -56,8 +56,8 @@ const CreateNewINO = () => {
 
     try {
 
-      const imageCid = await storeFile(selectedFile)
-
+      const imageCid = await storeFileNFT(selectedFile)
+      console.log("image cid", imageCid)
       
       const { hash } = await writeContract({
         address: contractAddresses.Main,
@@ -161,7 +161,7 @@ const CreateNewINO = () => {
             <p className="pt-3 text-white">Description</p>
             <input
               type="text"
-              className="block p-2 mt-1 text-white w-full text-sm  bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
+              className="block p-2 mt-1 text-gray-900 w-full text-sm  bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
               focus:placeholder-gray-400 required:border-red-600 required:placeholder-red-400"
               placeholder="Project's description"
               required={descriptionRequired}

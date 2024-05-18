@@ -32,10 +32,44 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
+const zoraSepolia = {
+   id: 999999999,
+   name: "Zora Sepolia Testnet",
+   network: "zora-sepolia",
+   nativeCurrency: {
+       decimals: 18,
+       name: "Zora Sepolia",
+       symbol: "ETH",
+  },
+   rpcUrls: {
+       default: {
+           http:  ["https://sepolia.rpc.zora.energy"],
+           webSocket:  ["wss://sepolia.rpc.zora.energy"],
+      },
+       public: {
+           http:  ["https://sepolia.rpc.zora.energy"],
+           webSocket:  ["wss://sepolia.rpc.zora.energy"],
+      },
+  },
+   blockExplorers: {
+       default: {
+           name: "Explorer",
+           url: "https://sepolia.explorer.zora.energy",
+      },
+  },
+   contracts: {
+       multicall3: {
+           address: "0xcA11bde05977b3631167028862bE2a173976CA11",
+           blockCreated: 189123,
+      },
+  },
+   testnet: true,
+};
+ 
 
 //WAGMI
 const { chains, publicClient } = configureChains(
-  [zoraTestnet],
+  [zoraSepolia],
   [
     publicProvider()
   ]

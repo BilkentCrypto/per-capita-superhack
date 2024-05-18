@@ -1,10 +1,10 @@
 
 const generateOpenseaUrl = (collectionAddress, nftId) => {
-    return `https://testnets.opensea.io/assets/zora-testnet/${collectionAddress}/${nftId}`
+    return `https://testnets.opensea.io/assets/zora-sepolia/${collectionAddress}/${nftId}`
 }
 
 const generateOpenseaCollectionUrl = (collectionAddress) => {
-    return `https://testnets.opensea.io/assets/zora-testnet/${collectionAddress}`
+    return `https://testnets.opensea.io/assets/zora-sepolia/${collectionAddress}`
 }
 
 const generateOpenseaAccountUrl = (address) => {

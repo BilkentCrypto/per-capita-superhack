@@ -7,7 +7,7 @@ import { formatEther, parseGwei } from 'viem';
 import { formatUnits } from 'viem';
 import Card from '../components/Card';
 import moment from 'moment';
-import { useContractInfiniteReads, paginatedIndexesConfig, useAccount } from 'wagmi';
+import { useContractInfiniteReads, paginatedIndexesConfig, useAccount, useBlockNumber } from 'wagmi';
 import inoTypes from '../utils/inoTypes';
 
 
@@ -16,6 +16,9 @@ function INO() {
   const [selectedProvider, setSelectedProvider] = useState(query.get('filter') || '');
   const [marketplaces, setMarketplaces] = useState([]);
   const { address } = useAccount();
+
+  const blockNumber = useBlockNumber()
+  console.log(blockNumber);
 
   const providers = [
     {
@@ -40,6 +43,8 @@ function INO() {
 
 
   const readMarketplaces = async () => {
+
+
     const newData = await readContract({
       address: contractAddresses.Main,
       abi: mainContractAbi,

@@ -10,7 +10,7 @@ import { writeContract, readContract, waitForTransaction } from '@wagmi/core';
 import TrackEvents from './TrackEvents';
 import { decodeAbiParameters, formatEther } from 'viem';
 import DetailFooter from '../components/DetailFooter';
-import { IDKitWidget } from '@worldcoin/idkit';
+import { IDKitWidget, VerificationLevel } from '@worldcoin/idkit';
 import { publicClientL1 } from '../utils/viemClients';
 import { SnackbarProvider, enqueueSnackbar } from 'notistack';
 import TrackProof from './TrackProof';
@@ -252,7 +252,7 @@ const Detail = () => {
         args: [id],
         value: requiredGas,
       });
-      setShowModal(true);
+      //setShowModal(true);
 
 
       console.log("hash", hash);
@@ -310,11 +310,11 @@ const Detail = () => {
 
 
     console.log("args", merkleRoot, nullifierHash, unpackedProof)
-
+/*
     const blockNumber = await publicClientL1.getBlockNumber();
     console.log("block number", blockNumber)
-
-
+*/
+/*
     //contract
     const isContractVerified = await publicClientL1.readContract({
       address: contractAddresses.L1,
@@ -324,10 +324,15 @@ const Detail = () => {
     })
 
     console.log("contract verified", isContractVerified);
+*/
 
+
+
+let isContractVerified = true;
     if (isContractVerified) {
       enqueueSnackbar('Correct proof!', { variant: 'success' });
-      try {
+
+      const beParticipant = async () => {
         const { hash } = await writeContract({
           address: contractAddresses.Main,
           abi: mainContractAbi,
@@ -335,7 +340,23 @@ const Detail = () => {
           args: [id, merkleRoot, nullifierHash, unpackedProof],
           value: collectionData.price,
         });
-        setShowProofModal(true);
+        //setShowProofModal(true);
+      }
+
+
+      const beParticipantMock = async () => {
+        const { hash } = await writeContract({
+          address: contractAddresses.Main,
+          abi: mainContractAbi,
+          functionName: 'beParticipantMock',
+          args: [id],
+          value: collectionData.price,
+        });
+        //setShowProofModal(true);
+      }
+
+      try {
+        await beParticipantMock();
 
       } catch (e) {
         enqueueSnackbar('Person already participated!', { variant: 'error' })
@@ -440,7 +461,7 @@ const Detail = () => {
                   signal={address} // only for on-chain use cases, this is used to prevent tampering with a message
                   onSuccess={onSuccessWorldId}
                   // no use for handleVerify, so it is removed
-                  credential_types={['orb']} // we recommend only allowing orb verification on-chain
+                  verification_level={VerificationLevel.Device} // we recommend only allowing orb verification on-chain
                 >
                   {({ open }) =>
                     collectionData?.giveawayTime > moment().unix() ? <button

@@ -28,7 +28,7 @@ const DetailFooter = ({collectionAddress, nftIds, marketplaceId, isPast, isOwner
 
     const options = {method: 'GET', headers: {accept: 'application/json'}};
     const nftMetadatas = await Promise.all (nftIds.map( async (value) => {
-      const nftMetadata = await (await fetch(`https://testnets-api.opensea.io/v2/chain/zora_testnet/contract/${collectionAddress}/nfts/${value}`, options)).json();
+      const nftMetadata = await (await fetch(`https://testnets-api.opensea.io/v2/chain/zora_sepolia/contract/${collectionAddress}/nfts/${value}`, options)).json();
       return nftMetadata
 
     } ));

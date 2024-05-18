@@ -39,10 +39,10 @@ export const chains: ChainMap<ChainMetadata> = {
   zora: {
     name: 'zora',
     protocol: ProtocolType.Ethereum,
-    chainId: 999,
+    chainId: 999999999,
     rpcUrls: [
       {
-        http: 'https://testnet.rpc.zora.co/',
+        http: 'https://lb.drpc.org/ogrpc?network=zora-sepolia&dkey=Al2polr-Uk8roo3jqdKJEHOiMeTyFK4R77h6svbGyHm5',
       },
     ],
     blocks: {
